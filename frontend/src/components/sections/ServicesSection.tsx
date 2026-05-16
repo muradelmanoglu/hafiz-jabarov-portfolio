@@ -2,11 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import { publicApi, type PortfolioService } from '@/lib/api'
-import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/lib/navigation'
 
 export default function ServicesSection() {
+  const t = useTranslations('services')
   const [services, setServices] = useState<PortfolioService[]>([])
 
   useEffect(() => {
@@ -20,11 +22,11 @@ export default function ServicesSection() {
       <div className="container-main">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
-            <span className="section-label">Services</span>
-            <h2 className="display-md text-fg">How I can help</h2>
+            <span className="section-label">{t('label')}</span>
+            <h2 className="display-md text-fg">{t('heading')}</h2>
           </div>
           <Link href="/services" className="btn-ghost text-sm whitespace-nowrap">
-            All services <ArrowRight size={14} />
+            {t('viewAll')} <ArrowRight size={14} />
           </Link>
         </div>
 
@@ -63,7 +65,7 @@ export default function ServicesSection() {
           ))}
 
           {services.length === 0 && (
-            <div className="col-span-3 text-center text-muted py-12">Loading services...</div>
+            <div className="col-span-3 text-center text-muted py-12">{t('loading')}</div>
           )}
         </div>
       </div>

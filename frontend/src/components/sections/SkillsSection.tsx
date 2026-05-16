@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { publicApi, type Skill } from '@/lib/api'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { useTranslations } from 'next-intl'
 
 const categoryLabels: Record<string, string> = {
   PROJECT_MANAGEMENT: 'Project Mgmt',
@@ -22,6 +23,7 @@ const proficiencyDots: Record<string, number> = {
 }
 
 export default function SkillsSection() {
+  const t = useTranslations('skills')
   const [skills, setSkills] = useState<Skill[]>([])
   const [activeCategory, setActiveCategory] = useState<string>('ALL')
 
@@ -39,11 +41,10 @@ export default function SkillsSection() {
       <div className="container-main">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
-            <span className="section-label">Skills & Tools</span>
-            <h2 className="display-md text-fg">What I work with</h2>
+            <span className="section-label">{t('label')}</span>
+            <h2 className="display-md text-fg">{t('heading')}</h2>
           </div>
 
-          {/* Category filter */}
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button
@@ -57,7 +58,7 @@ export default function SkillsSection() {
                 )}
                 style={activeCategory === cat ? { backgroundColor: 'var(--accent)' } : {}}
               >
-                {cat === 'ALL' ? 'All' : categoryLabels[cat] || cat}
+                {cat === 'ALL' ? t('all') : categoryLabels[cat] || cat}
               </button>
             ))}
           </div>

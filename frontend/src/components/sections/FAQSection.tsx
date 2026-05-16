@@ -4,8 +4,10 @@ import { useEffect, useState } from 'react'
 import { publicApi, type FAQ } from '@/lib/api'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Minus } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 
 export default function FAQSection({ page }: { page?: 'HOME' | 'SERVICES' | 'CONTACT' }) {
+  const t = useTranslations('faq')
   const [faqs, setFAQs] = useState<FAQ[]>([])
   const [open, setOpen] = useState<number | null>(null)
 
@@ -21,8 +23,8 @@ export default function FAQSection({ page }: { page?: 'HOME' | 'SERVICES' | 'CON
     <section className="section border-t border-border">
       <div className="container-main max-w-3xl">
         <div className="mb-12">
-          <span className="section-label">FAQ</span>
-          <h2 className="display-md text-fg">Common questions</h2>
+          <span className="section-label">{t('label')}</span>
+          <h2 className="display-md text-fg">{t('heading')}</h2>
         </div>
 
         <div className="space-y-3">

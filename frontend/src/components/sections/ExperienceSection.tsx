@@ -3,19 +3,11 @@
 import { useEffect, useState } from 'react'
 import { publicApi, type Experience } from '@/lib/api'
 import { motion } from 'framer-motion'
-
-function formatPeriod(startDate: string, endDate?: string, current?: boolean): string {
-  const fmt = (d: string) => {
-    const [year, month] = d.split('-')
-    return new Date(Number(year), Number(month) - 1).toLocaleDateString('en-US', {
-      month: 'short',
-      year: 'numeric',
-    })
-  }
-  return `${fmt(startDate)} — ${current ? 'Present' : endDate ? fmt(endDate) : ''}`
-}
+import { useTranslations, useLocale } from 'next-intl'
 
 export default function ExperienceSection() {
+  const t = useTranslations('experience')
+  const locale = useLocale()
   const [experiences, setExperiences] = useState<Experience[]>([])
 
   useEffect(() => {
@@ -24,12 +16,25 @@ export default function ExperienceSection() {
     })
   }, [])
 
+  const localeMap: Record<string, string> = { en: 'en-US', az: 'az-Latn-AZ', ru: 'ru-RU' }
+
+  function formatPeriod(startDate: string, endDate?: string, current?: boolean): string {
+    const fmt = (d: string) => {
+      const [year, month] = d.split('-')
+      return new Date(Number(year), Number(month) - 1).toLocaleDateString(
+        localeMap[locale] || 'en-US',
+        { month: 'short', year: 'numeric' }
+      )
+    }
+    return `${fmt(startDate)} — ${current ? t('present') : endDate ? fmt(endDate) : ''}`
+  }
+
   return (
     <section className="section border-t border-border">
       <div className="container-main">
         <div className="mb-12">
-          <span className="section-label">Experience</span>
-          <h2 className="display-md text-fg">Where I&apos;ve worked</h2>
+          <span className="section-label">{t('label')}</span>
+          <h2 className="display-md text-fg">{t('heading')}</h2>
         </div>
 
         <div className="space-y-8 max-w-3xl">
@@ -42,7 +47,6 @@ export default function ExperienceSection() {
               transition={{ duration: 0.5, delay: i * 0.06 }}
               className="flex gap-6"
             >
-              {/* Timeline dot */}
               <div className="flex flex-col items-center">
                 <div
                   className="w-2.5 h-2.5 rounded-full mt-1.5 shrink-0"
@@ -53,7 +57,6 @@ export default function ExperienceSection() {
                 )}
               </div>
 
-              {/* Content */}
               <div className="pb-8">
                 <p className="text-muted text-xs mb-1 font-mono">
                   {formatPeriod(exp.startDate, exp.endDate, exp.current)}

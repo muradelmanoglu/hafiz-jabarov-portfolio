@@ -1,0 +1,304 @@
+{
+  "nav": {
+    "work": "Work",
+    "services": "Services",
+    "about": "About",
+    "resume": "Resume",
+    "letsTalk": "Let's talk",
+    "contact": "Contact"
+  },
+  "footer": {
+    "tagline": "Senior Project Manager · Available for new engagements",
+    "rights": "All rights reserved.",
+    "builtWith": "Built with Next.js & Spring Boot."
+  },
+  "hero": {
+    "available": "Available for new engagements",
+    "headline1": "I turn complex",
+    "headlineAccent": "problems",
+    "headline2": "into shipped products",
+    "subheadline": "Senior PM with 7+ years delivering e-commerce, SaaS and fintech products from 0→1 and 1→scale.",
+    "viewWork": "View my work",
+    "bookCall": "Book a call",
+    "stats": {
+      "yearsExp": "Years PM experience",
+      "products": "Products shipped",
+      "revenue": "Revenue influenced",
+      "teams": "Teams led"
+    }
+  },
+  "about": {
+    "label": "About",
+    "heading": "PM who's actually been in the room",
+    "p1": "Started as a product designer, crossed over into PM when I realised I spent more time arguing about what to build than designing how it should look. That was 7 years ago.",
+    "p2": "Since then I've shipped checkout systems, marketplace platforms, mobile apps and internal tools — mostly in e-commerce and fintech, always in fast-moving teams.",
+    "p3": "I'm based in Baku but work fully remotely across CET and GMT+4.",
+    "cta": "More about me",
+    "traits": {
+      "t1": "Discovery first",
+      "t1desc": "I always start with the problem, not the solution.",
+      "t2": "Delivery focused",
+      "t2desc": "Strategy without execution is just a presentation.",
+      "t3": "Data-informed",
+      "t3desc": "Opinions are useful; numbers are better.",
+      "t4": "Clear communicator",
+      "t4desc": "Engineering and exec should hear the same thing."
+    }
+  },
+  "work": {
+    "label": "Selected Work",
+    "heading": "Recent case studies",
+    "viewAll": "View all work",
+    "pageLabel": "Case Studies",
+    "pageHeading": "Selected work",
+    "pageDesc": "A selection of projects I've led end-to-end — from discovery and roadmap to launch and iteration.",
+    "loading": "Loading...",
+    "loadingCaseStudies": "Loading case studies...",
+    "backToWork": "Back to work",
+    "notFound": "Case study not found.",
+    "viewProject": "View project",
+    "toolsUsed": "Tools used",
+    "present": "Present",
+    "people": "people",
+    "sections": {
+      "problem": "The problem",
+      "myRole": "My role",
+      "approach": "Approach",
+      "outcome": "Outcome",
+      "reflection": "Reflection"
+    }
+  },
+  "services": {
+    "label": "Services",
+    "heading": "How I can help",
+    "viewAll": "All services",
+    "pageDesc": "Focused engagements designed for startups and scale-ups that need senior PM capacity without the overhead.",
+    "deliverables": "Deliverables",
+    "duration": "Duration",
+    "startingFrom": "Starting from",
+    "notSure": "Not sure which service fits?",
+    "notSureDesc": "Book a free 30-minute call. We'll figure out the right engagement together.",
+    "bookFreeCall": "Book a free call",
+    "loading": "Loading services..."
+  },
+  "experience": {
+    "label": "Experience",
+    "heading": "Where I've worked",
+    "present": "Present"
+  },
+  "skills": {
+    "label": "Skills & Tools",
+    "heading": "What I work with",
+    "all": "All"
+  },
+  "testimonials": {
+    "label": "Testimonials",
+    "heading": "What clients say"
+  },
+  "faq": {
+    "label": "FAQ",
+    "heading": "Common questions"
+  },
+  "contact": {
+    "label": "Contact",
+    "heading": "Let's work together",
+    "desc": "If you have a product challenge, a team that needs structure, or just want to explore whether I'm a fit — I'd love to hear from you.",
+    "bookCall": "Book a free 30-min call",
+    "pageLabel": "Get in touch",
+    "pageHeading": "Let's work together",
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Your name",
+      "email": "Email",
+      "emailPlaceholder": "you@company.com",
+      "company": "Company",
+      "companyPlaceholder": "Optional",
+      "projectType": "Project type",
+      "projectTypePlaceholder": "Select...",
+      "budgetRange": "Budget range",
+      "budgetDefault": "Prefer not to say",
+      "message": "Message",
+      "messagePlaceholder": "Tell me about the challenge you're trying to solve...",
+      "send": "Send message",
+      "sending": "Sending...",
+      "successTitle": "Message sent!",
+      "successDesc": "I'll get back to you within 1 business day.",
+      "sendAnother": "Send another",
+      "errorGeneric": "Something went wrong. Please try again or email me directly."
+    },
+    "validation": {
+      "nameMin": "Name must be at least 2 characters",
+      "emailInvalid": "Please enter a valid email",
+      "projectTypeRequired": "Please select a project type",
+      "messageMin": "Message must be at least 20 characters"
+    },
+    "projectTypes": {
+      "FRACTIONAL_PM": "Fractional PM",
+      "ECOMMERCE_DELIVERY": "E-Commerce Delivery",
+      "DELIVERY_AUDIT": "Delivery Audit",
+      "DESIGN_COACHING": "Design Coaching",
+      "TEAM_SETUP": "Team Setup",
+      "OTHER": "Other"
+    },
+    "budgetRanges": {
+      "UNDER_2K": "Under $2,000",
+      "TWO_TO_FIVE_K": "$2,000 – $5,000",
+      "FIVE_TO_TEN_K": "$5,000 – $10,000",
+      "OVER_TEN_K": "$10,000+",
+      "PREFER_NOT_TO_SAY": "Prefer not to say"
+    }
+  },
+  "aboutPage": {
+    "label": "About",
+    "heading": "Hafiz Jabarov",
+    "p1": "Senior Project Manager based in Baku. I've spent the last 7 years helping product teams ship things — from checkout flows to full platform overhauls.",
+    "p2": "Before PM, I was a product designer. That background still shapes how I work: I care about the user experience of the product and the team building it.",
+    "p3": "Outside of work I read obsessively (mostly product books, some fiction), run twice a week, and occasionally take on mentoring calls for junior PMs.",
+    "letsWork": "Let's work together",
+    "experience": "Experience",
+    "education": "Education",
+    "skills": "Skills & Tools"
+  },
+  "resumePage": {
+    "label": "Resume",
+    "title": "Hafiz Jabarov",
+    "subtitle": "Senior Project Manager",
+    "pdf": "PDF",
+    "hire": "Hire me",
+    "experience": "Experience",
+    "education": "Education",
+    "skills": "Skills & Tools"
+  },
+  "admin": {
+    "login": {
+      "title": "Sign in",
+      "subtitle": "Access the admin panel",
+      "username": "Username",
+      "password": "Password",
+      "submit": "Sign in",
+      "loading": "Loading...",
+      "errors": {
+        "usernameRequired": "Username is required",
+        "passwordRequired": "Password is required",
+        "invalid": "Invalid username or password.",
+        "locked": "Account is temporarily locked. Try again in 30 minutes.",
+        "rateLimit": "Too many failed attempts. Please wait a moment.",
+        "generic": "An error occurred. Please try again."
+      }
+    },
+    "nav": {
+      "dashboard": "Dashboard",
+      "caseStudies": "Case Studies",
+      "skills": "Skills",
+      "experience": "Experience",
+      "submissions": "Submissions",
+      "settings": "Settings",
+      "logout": "Logout"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Overview of your portfolio site",
+      "quickLinks": "Quick links",
+      "newCaseStudy": "New case study",
+      "editSkills": "Edit skills",
+      "viewSubmissions": "View submissions",
+      "viewSite": "View site",
+      "stats": {
+        "newSubmissions": "New submissions",
+        "caseStudies": "Case studies",
+        "services": "Services",
+        "skills": "Skills",
+        "experience": "Experience",
+        "testimonials": "Testimonials",
+        "companies": "Companies"
+      }
+    },
+    "skills": {
+      "title": "Skills",
+      "newSkill": "New skill",
+      "editSkill": "Edit skill",
+      "name": "Name",
+      "category": "Category",
+      "proficiency": "Proficiency",
+      "yearsUsed": "Years used",
+      "orderWeight": "Order weight",
+      "save": "Save",
+      "cancel": "Cancel",
+      "deleteConfirm": "Delete this skill?"
+    },
+    "experience": {
+      "title": "Experience",
+      "new": "New",
+      "newEntry": "New experience",
+      "edit": "Edit",
+      "company": "Company name",
+      "role": "Role",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "location": "Location",
+      "orderWeight": "Order weight",
+      "summary": "Summary",
+      "current": "Current position",
+      "save": "Save",
+      "cancel": "Cancel",
+      "present": "Present",
+      "deleteConfirm": "Delete this experience entry?"
+    },
+    "messages": {
+      "title": "Submissions",
+      "noSubmissions": "No submissions yet.",
+      "selectSubmission": "Select a submission",
+      "replyByEmail": "Reply by email",
+      "deleteConfirm": "Delete this submission?"
+    },
+    "settings": {
+      "title": "Site Settings",
+      "subtitle": "Global configuration for the portfolio site",
+      "save": "Save changes",
+      "saved": "Saved!",
+      "identity": "Identity",
+      "availability": "Availability",
+      "contactSocial": "Contact & Social",
+      "branding": "Branding",
+      "fields": {
+        "siteTitle": "Site title",
+        "tagline": "Tagline",
+        "heroHeadline": "Hero headline",
+        "metaDescription": "Meta description",
+        "heroSubheadline": "Hero subheadline",
+        "status": "Status",
+        "availabilityMessage": "Availability message",
+        "email": "Email",
+        "phone": "Phone",
+        "linkedIn": "LinkedIn URL",
+        "github": "GitHub URL",
+        "calendly": "Calendly URL",
+        "twitter": "Twitter / X URL",
+        "resumeUrl": "Resume PDF URL",
+        "logoUrl": "Logo URL",
+        "faviconUrl": "Favicon URL",
+        "defaultOgImageUrl": "Default OG image URL",
+        "copyrightText": "Copyright text",
+        "colophonText": "Colophon / built-with text"
+      }
+    },
+    "projects": {
+      "title": "Case Studies",
+      "newCaseStudy": "New case study",
+      "editCaseStudy": "Edit case study",
+      "fields": {
+        "title": "Title",
+        "slug": "Slug (auto-generated if empty)",
+        "role": "Role",
+        "status": "Status",
+        "startDate": "Start date",
+        "orderWeight": "Order weight",
+        "summary": "Summary",
+        "featured": "Featured"
+      },
+      "save": "Save",
+      "cancel": "Cancel",
+      "deleteConfirm": "Delete this case study?"
+    }
+  }
+}

@@ -1,0 +1,304 @@
+{
+  "nav": {
+    "work": "İşlər",
+    "services": "Xidmətlər",
+    "about": "Haqqında",
+    "resume": "CV",
+    "letsTalk": "Danışaq",
+    "contact": "Əlaqə"
+  },
+  "footer": {
+    "tagline": "Böyük Layihə Meneceri · Yeni proyektlər üçün mövcuddur",
+    "rights": "Bütün hüquqlar qorunur.",
+    "builtWith": "Next.js və Spring Boot ilə qurulmuşdur."
+  },
+  "hero": {
+    "available": "Yeni müqavilələr üçün mövcuddur",
+    "headline1": "Mən mürəkkəb",
+    "headlineAccent": "problemləri",
+    "headline2": "hazır məhsullara çevirirəm",
+    "subheadline": "7+ illik təcrübəyə malik böyük PM olaraq e-ticarət, SaaS və fintech məhsullarını 0→1 və 1→miqyasında çatdırıram.",
+    "viewWork": "İşlərimə baxın",
+    "bookCall": "Zəng planla",
+    "stats": {
+      "yearsExp": "İllik PM təcrübəsi",
+      "products": "Buraxılmış məhsul",
+      "revenue": "Gəlirə təsir",
+      "teams": "İdarə olunan komanda"
+    }
+  },
+  "about": {
+    "label": "Haqqında",
+    "heading": "Gerçəkdən içindən keçmiş PM",
+    "p1": "Məhsul dizayneri kimi başladım, PM-ə keçdim — çünki nəyi qurmaq lazım olduğunu mübahisə etməyə dizayn etməkdən daha çox vaxt sərf edirdim. Bu 7 il əvvəl idi.",
+    "p2": "O vaxtdan bəri checkout sistemləri, marketplace platformaları, mobil tətbiqlər və daxili alətlər göndərdim — əsasən e-ticarət və fintech sahələrində, həmişə sürətlə hərəkət edən komandalarla.",
+    "p3": "Bakıda yaşayıram, lakin CET və GMT+4 üzrə tam uzaqdan işləyirəm.",
+    "cta": "Mənim haqqımda daha çox",
+    "traits": {
+      "t1": "Əvvəlcə kəşf",
+      "t1desc": "Həmişə həllə deyil, problemə başlayıram.",
+      "t2": "Çatdırmağa yönəlmiş",
+      "t2desc": "İcrasız strategiya sadəcə prezentasiyadır.",
+      "t3": "Məlumatla dəstəklənmiş",
+      "t3desc": "Fikirlər faydalıdır; rəqəmlər daha yaxşıdır.",
+      "t4": "Aydın kommunikator",
+      "t4desc": "Mühəndislik və rəhbərlik eyni şeyi eşitməlidir."
+    }
+  },
+  "work": {
+    "label": "Seçilmiş İşlər",
+    "heading": "Son işlər",
+    "viewAll": "Bütün işlərə baxın",
+    "pageLabel": "Keys tədqiqatları",
+    "pageHeading": "Seçilmiş işlər",
+    "pageDesc": "Kəşfdən yol xəritəsinə, buraxılışdan iterasiyaya qədər başdan sona rəhbərlik etdiyim layihələrdən seçki.",
+    "loading": "Yüklənir...",
+    "loadingCaseStudies": "Keys tədqiqatları yüklənir...",
+    "backToWork": "İşlərə qayıt",
+    "notFound": "Keys tədqiqatı tapılmadı.",
+    "viewProject": "Layihəyə baxın",
+    "toolsUsed": "İstifadə olunan alətlər",
+    "present": "İndi",
+    "people": "nəfər",
+    "sections": {
+      "problem": "Problem",
+      "myRole": "Mənim rolum",
+      "approach": "Yanaşma",
+      "outcome": "Nəticə",
+      "reflection": "Əks etdirmə"
+    }
+  },
+  "services": {
+    "label": "Xidmətlər",
+    "heading": "Necə kömək edə bilərəm",
+    "viewAll": "Bütün xidmətlər",
+    "pageDesc": "Əlavə xərclər olmadan böyük PM gücünə ehtiyac duyan startaplar və böyüyən şirkətlər üçün hazırlanmış fokuslanmış əməkdaşlıqlar.",
+    "deliverables": "Təslimatlar",
+    "duration": "Müddət",
+    "startingFrom": "Başlayan qiymət",
+    "notSure": "Hansı xidmətin uyğun olduğundan əmin deyilsiniz?",
+    "notSureDesc": "Pulsuz 30 dəqiqəlik zəng planla. Uyğun əməkdaşlığı birlikdə müəyyənləşdirəcəyik.",
+    "bookFreeCall": "Pulsuz zəng planla",
+    "loading": "Xidmətlər yüklənir..."
+  },
+  "experience": {
+    "label": "Təcrübə",
+    "heading": "Harada işləmişəm",
+    "present": "İndi"
+  },
+  "skills": {
+    "label": "Bacarıqlar və Alətlər",
+    "heading": "Nə ilə işləyirəm",
+    "all": "Hamısı"
+  },
+  "testimonials": {
+    "label": "Rəylər",
+    "heading": "Müştərilər nə deyir"
+  },
+  "faq": {
+    "label": "SSS",
+    "heading": "Tez-tez verilən suallar"
+  },
+  "contact": {
+    "label": "Əlaqə",
+    "heading": "Birlikdə işləyək",
+    "desc": "Bir məhsul probleminiz, struktura ehtiyacı olan bir komandanız varsa və ya sadəcə uyğun olub olmadığımı araşdırmaq istəyirsinizsə — sizdən eşitmək istərdim.",
+    "bookCall": "Pulsuz 30 dəqiqəlik zəng planla",
+    "pageLabel": "Əlaqə saxlayın",
+    "pageHeading": "Birlikdə işləyək",
+    "form": {
+      "name": "Ad",
+      "namePlaceholder": "Adınız",
+      "email": "E-poçt",
+      "emailPlaceholder": "siz@sirket.com",
+      "company": "Şirkət",
+      "companyPlaceholder": "İstəyə bağlı",
+      "projectType": "Layihə növü",
+      "projectTypePlaceholder": "Seçin...",
+      "budgetRange": "Büdcə aralığı",
+      "budgetDefault": "Deməyə üstünlük vermirəm",
+      "message": "Mesaj",
+      "messagePlaceholder": "Həll etməyə çalışdığınız problem haqqında məlumat verin...",
+      "send": "Mesaj göndər",
+      "sending": "Göndərilir...",
+      "successTitle": "Mesaj göndərildi!",
+      "successDesc": "1 iş günü ərzində sizinlə əlaqə saxlayacağam.",
+      "sendAnother": "Başqa mesaj göndər",
+      "errorGeneric": "Bir xəta baş verdi. Yenidən cəhd edin və ya birbaşa e-poçt göndərin."
+    },
+    "validation": {
+      "nameMin": "Ad ən azı 2 simvol olmalıdır",
+      "emailInvalid": "Düzgün e-poçt ünvanı daxil edin",
+      "projectTypeRequired": "Layihə növü seçin",
+      "messageMin": "Mesaj ən azı 20 simvol olmalıdır"
+    },
+    "projectTypes": {
+      "FRACTIONAL_PM": "Fraksional PM",
+      "ECOMMERCE_DELIVERY": "E-Ticarət Çatdırılması",
+      "DELIVERY_AUDIT": "Çatdırılma Auditi",
+      "DESIGN_COACHING": "Dizayn Kouçinqi",
+      "TEAM_SETUP": "Komanda Qurulması",
+      "OTHER": "Digər"
+    },
+    "budgetRanges": {
+      "UNDER_2K": "$2,000-dən az",
+      "TWO_TO_FIVE_K": "$2,000 – $5,000",
+      "FIVE_TO_TEN_K": "$5,000 – $10,000",
+      "OVER_TEN_K": "$10,000+",
+      "PREFER_NOT_TO_SAY": "Deməyə üstünlük vermirəm"
+    }
+  },
+  "aboutPage": {
+    "label": "Haqqında",
+    "heading": "Hafiz Cəbbarov",
+    "p1": "Bakıda yaşayan böyük Layihə Meneceri. Son 7 ili məhsul komandalarına işlər göndərməkdə kömək etməklə keçirdim — checkout axınlarından tam platforma yenidənqurmasına qədər.",
+    "p2": "PM-dən əvvəl məhsul dizayneri idim. O təcrübə hələ də işimə təsir edir: məhsulun istifadəçi təcrübəsinə və onu quran komandaya diqqət yetirirəm.",
+    "p3": "İşdən kənarda həvəslə oxuyuram (əsasən məhsul kitabları, bəzən bədii ədəbiyyat), həftədə iki dəfə qaçıram və bəzən junior PM-lər üçün mentorluq zəngləri aparıram.",
+    "letsWork": "Birlikdə işləyək",
+    "experience": "Təcrübə",
+    "education": "Təhsil",
+    "skills": "Bacarıqlar və Alətlər"
+  },
+  "resumePage": {
+    "label": "CV",
+    "title": "Hafiz Cəbbarov",
+    "subtitle": "Böyük Layihə Meneceri",
+    "pdf": "PDF",
+    "hire": "Məni işə götürün",
+    "experience": "Təcrübə",
+    "education": "Təhsil",
+    "skills": "Bacarıqlar və Alətlər"
+  },
+  "admin": {
+    "login": {
+      "title": "Giriş",
+      "subtitle": "İdarəetmə panelinə daxil olun",
+      "username": "İstifadəçi adı",
+      "password": "Şifrə",
+      "submit": "Daxil ol",
+      "loading": "Yüklənir...",
+      "errors": {
+        "usernameRequired": "İstifadəçi adı tələb olunur",
+        "passwordRequired": "Şifrə tələb olunur",
+        "invalid": "İstifadəçi adı və ya şifrə yanlışdır.",
+        "locked": "Hesab müvəqqəti olaraq bloklanmışdır. 30 dəqiqə sonra yenidən cəhd edin.",
+        "rateLimit": "Çox sayda uğursuz cəhd. Zəhmət olmasa bir az gözləyin.",
+        "generic": "Xəta baş verdi. Yenidən cəhd edin."
+      }
+    },
+    "nav": {
+      "dashboard": "İdarə paneli",
+      "caseStudies": "Keys tədqiqatları",
+      "skills": "Bacarıqlar",
+      "experience": "Təcrübə",
+      "submissions": "Müraciətlər",
+      "settings": "Parametrlər",
+      "logout": "Çıxış"
+    },
+    "dashboard": {
+      "title": "İdarə paneli",
+      "subtitle": "Portfel saytınıza ümumi baxış",
+      "quickLinks": "Sürətli keçidlər",
+      "newCaseStudy": "Yeni keys tədqiqatı",
+      "editSkills": "Bacarıqları redaktə et",
+      "viewSubmissions": "Müraciətlərə bax",
+      "viewSite": "Sayta bax",
+      "stats": {
+        "newSubmissions": "Yeni müraciətlər",
+        "caseStudies": "Keys tədqiqatları",
+        "services": "Xidmətlər",
+        "skills": "Bacarıqlar",
+        "experience": "Təcrübə",
+        "testimonials": "Rəylər",
+        "companies": "Şirkətlər"
+      }
+    },
+    "skills": {
+      "title": "Bacarıqlar",
+      "newSkill": "Yeni bacarıq",
+      "editSkill": "Bacarığı redaktə et",
+      "name": "Ad",
+      "category": "Kateqoriya",
+      "proficiency": "Səriştə",
+      "yearsUsed": "İstifadə illəri",
+      "orderWeight": "Sıralama çəkisi",
+      "save": "Yadda saxla",
+      "cancel": "Ləğv et",
+      "deleteConfirm": "Bu bacarığı silinsin?"
+    },
+    "experience": {
+      "title": "Təcrübə",
+      "new": "Yeni",
+      "newEntry": "Yeni təcrübə",
+      "edit": "Redaktə",
+      "company": "Şirkət adı",
+      "role": "Vəzifə",
+      "startDate": "Başlama tarixi",
+      "endDate": "Bitmə tarixi",
+      "location": "Yer",
+      "orderWeight": "Sıralama çəkisi",
+      "summary": "Xülasə",
+      "current": "Hazırkı iş yeri",
+      "save": "Yadda saxla",
+      "cancel": "Ləğv et",
+      "present": "İndi",
+      "deleteConfirm": "Bu təcrübə qeydi silinsin?"
+    },
+    "messages": {
+      "title": "Müraciətlər",
+      "noSubmissions": "Hələ müraciət yoxdur.",
+      "selectSubmission": "Müraciət seçin",
+      "replyByEmail": "E-poçtla cavab ver",
+      "deleteConfirm": "Bu müraciəti silinsin?"
+    },
+    "settings": {
+      "title": "Sayt Parametrləri",
+      "subtitle": "Portfel saytı üçün qlobal konfiqurasiya",
+      "save": "Dəyişiklikləri saxla",
+      "saved": "Saxlandı!",
+      "identity": "Şəxsiyyət",
+      "availability": "Mövcudluq",
+      "contactSocial": "Əlaqə və Sosial",
+      "branding": "Brendinq",
+      "fields": {
+        "siteTitle": "Sayt başlığı",
+        "tagline": "Şüar",
+        "heroHeadline": "Hero başlığı",
+        "metaDescription": "Meta təsviri",
+        "heroSubheadline": "Hero alt başlığı",
+        "status": "Status",
+        "availabilityMessage": "Mövcudluq mesajı",
+        "email": "E-poçt",
+        "phone": "Telefon",
+        "linkedIn": "LinkedIn URL",
+        "github": "GitHub URL",
+        "calendly": "Calendly URL",
+        "twitter": "Twitter / X URL",
+        "resumeUrl": "CV PDF URL",
+        "logoUrl": "Logo URL",
+        "faviconUrl": "Favicon URL",
+        "defaultOgImageUrl": "Standart OG şəkil URL",
+        "copyrightText": "Müəllif hüquqları mətni",
+        "colophonText": "Kolofon mətni"
+      }
+    },
+    "projects": {
+      "title": "Keys Tədqiqatları",
+      "newCaseStudy": "Yeni keys tədqiqatı",
+      "editCaseStudy": "Keys tədqiqatını redaktə et",
+      "fields": {
+        "title": "Başlıq",
+        "slug": "Slug (boş olarsa avtomatik yaranır)",
+        "role": "Rol",
+        "status": "Status",
+        "startDate": "Başlama tarixi",
+        "orderWeight": "Sıralama çəkisi",
+        "summary": "Xülasə",
+        "featured": "Öne çıxarılmış"
+      },
+      "save": "Yadda saxla",
+      "cancel": "Ləğv et",
+      "deleteConfirm": "Bu keys tədqiqatı silinsin?"
+    }
+  }
+}

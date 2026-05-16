@@ -7,38 +7,47 @@ import { z } from 'zod'
 import { publicApi, type ContactFormData } from '@/lib/api'
 import { Send, CheckCircle, CalendarDays } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 
-const PROJECT_TYPES = [
-  { value: 'FRACTIONAL_PM', label: 'Fractional PM' },
-  { value: 'ECOMMERCE_DELIVERY', label: 'E-Commerce Delivery' },
-  { value: 'DELIVERY_AUDIT', label: 'Delivery Audit' },
-  { value: 'DESIGN_COACHING', label: 'Design Coaching' },
-  { value: 'TEAM_SETUP', label: 'Team Setup' },
-  { value: 'OTHER', label: 'Other' },
-]
-
-const BUDGET_RANGES = [
-  { value: 'UNDER_2K', label: 'Under $2,000' },
-  { value: 'TWO_TO_FIVE_K', label: '$2,000 – $5,000' },
-  { value: 'FIVE_TO_TEN_K', label: '$5,000 – $10,000' },
-  { value: 'OVER_TEN_K', label: '$10,000+' },
-  { value: 'PREFER_NOT_TO_SAY', label: 'Prefer not to say' },
-]
-
-const schema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters').max(100),
-  email: z.string().email('Please enter a valid email'),
-  company: z.string().max(100).optional(),
-  projectType: z.string().min(1, 'Please select a project type'),
-  budgetRange: z.string().optional(),
-  message: z.string().min(20, 'Message must be at least 20 characters').max(1000),
-})
-
-type FormData = z.infer<typeof schema>
+type FormData = {
+  name: string
+  email: string
+  company?: string
+  projectType: string
+  budgetRange?: string
+  message: string
+}
 
 export default function ContactSection() {
+  const t = useTranslations('contact')
   const [sent, setSent] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const schema = z.object({
+    name: z.string().min(2, t('validation.nameMin')).max(100),
+    email: z.string().email(t('validation.emailInvalid')),
+    company: z.string().max(100).optional(),
+    projectType: z.string().min(1, t('validation.projectTypeRequired')),
+    budgetRange: z.string().optional(),
+    message: z.string().min(20, t('validation.messageMin')).max(1000),
+  })
+
+  const PROJECT_TYPES = [
+    { value: 'FRACTIONAL_PM', label: t('projectTypes.FRACTIONAL_PM') },
+    { value: 'ECOMMERCE_DELIVERY', label: t('projectTypes.ECOMMERCE_DELIVERY') },
+    { value: 'DELIVERY_AUDIT', label: t('projectTypes.DELIVERY_AUDIT') },
+    { value: 'DESIGN_COACHING', label: t('projectTypes.DESIGN_COACHING') },
+    { value: 'TEAM_SETUP', label: t('projectTypes.TEAM_SETUP') },
+    { value: 'OTHER', label: t('projectTypes.OTHER') },
+  ]
+
+  const BUDGET_RANGES = [
+    { value: 'UNDER_2K', label: t('budgetRanges.UNDER_2K') },
+    { value: 'TWO_TO_FIVE_K', label: t('budgetRanges.TWO_TO_FIVE_K') },
+    { value: 'FIVE_TO_TEN_K', label: t('budgetRanges.FIVE_TO_TEN_K') },
+    { value: 'OVER_TEN_K', label: t('budgetRanges.OVER_TEN_K') },
+    { value: 'PREFER_NOT_TO_SAY', label: t('budgetRanges.PREFER_NOT_TO_SAY') },
+  ]
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -51,7 +60,7 @@ export default function ContactSection() {
       setSent(true)
       reset()
     } catch {
-      setError('Something went wrong. Please try again or email me directly.')
+      setError(t('form.errorGeneric'))
     }
   }
 
@@ -66,12 +75,9 @@ export default function ContactSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <span className="section-label">Contact</span>
-            <h2 className="display-md text-fg mb-6">Let&apos;s work together</h2>
-            <p className="text-muted-2 leading-relaxed mb-8">
-              If you have a product challenge, a team that needs structure, or just want to explore
-              whether I&apos;m a fit — I&apos;d love to hear from you.
-            </p>
+            <span className="section-label">{t('label')}</span>
+            <h2 className="display-md text-fg mb-6">{t('heading')}</h2>
+            <p className="text-muted-2 leading-relaxed mb-8">{t('desc')}</p>
             <a
               href="https://calendly.com/hafizjabarov"
               target="_blank"
@@ -79,7 +85,7 @@ export default function ContactSection() {
               className="btn-outline inline-flex"
             >
               <CalendarDays size={16} />
-              Book a free 30-min call
+              {t('bookCall')}
             </a>
           </motion.div>
 
@@ -93,36 +99,36 @@ export default function ContactSection() {
             {sent ? (
               <div className="card text-center py-12">
                 <CheckCircle size={40} className="mx-auto mb-4" style={{ color: 'var(--accent)' }} />
-                <h3 className="text-fg text-xl font-semibold mb-2">Message sent!</h3>
-                <p className="text-muted text-sm mb-6">I&apos;ll get back to you within 1 business day.</p>
+                <h3 className="text-fg text-xl font-semibold mb-2">{t('form.successTitle')}</h3>
+                <p className="text-muted text-sm mb-6">{t('form.successDesc')}</p>
                 <button onClick={() => setSent(false)} className="btn-outline text-sm">
-                  Send another
+                  {t('form.sendAnother')}
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm text-muted-2 mb-1.5">Name *</label>
-                    <input {...register('name')} className="input-field" placeholder="Your name" />
+                    <label className="block text-sm text-muted-2 mb-1.5">{t('form.name')} *</label>
+                    <input {...register('name')} className="input-field" placeholder={t('form.namePlaceholder')} />
                     {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>}
                   </div>
                   <div>
-                    <label className="block text-sm text-muted-2 mb-1.5">Email *</label>
-                    <input {...register('email')} type="email" className="input-field" placeholder="you@company.com" />
+                    <label className="block text-sm text-muted-2 mb-1.5">{t('form.email')} *</label>
+                    <input {...register('email')} type="email" className="input-field" placeholder={t('form.emailPlaceholder')} />
                     {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm text-muted-2 mb-1.5">Company</label>
-                  <input {...register('company')} className="input-field" placeholder="Optional" />
+                  <label className="block text-sm text-muted-2 mb-1.5">{t('form.company')}</label>
+                  <input {...register('company')} className="input-field" placeholder={t('form.companyPlaceholder')} />
                 </div>
 
                 <div>
-                  <label className="block text-sm text-muted-2 mb-1.5">Project type *</label>
+                  <label className="block text-sm text-muted-2 mb-1.5">{t('form.projectType')} *</label>
                   <select {...register('projectType')} className="input-field">
-                    <option value="">Select...</option>
+                    <option value="">{t('form.projectTypePlaceholder')}</option>
                     {PROJECT_TYPES.map((p) => (
                       <option key={p.value} value={p.value}>{p.label}</option>
                     ))}
@@ -131,9 +137,9 @@ export default function ContactSection() {
                 </div>
 
                 <div>
-                  <label className="block text-sm text-muted-2 mb-1.5">Budget range</label>
+                  <label className="block text-sm text-muted-2 mb-1.5">{t('form.budgetRange')}</label>
                   <select {...register('budgetRange')} className="input-field">
-                    <option value="">Prefer not to say</option>
+                    <option value="">{t('form.budgetDefault')}</option>
                     {BUDGET_RANGES.map((b) => (
                       <option key={b.value} value={b.value}>{b.label}</option>
                     ))}
@@ -141,11 +147,11 @@ export default function ContactSection() {
                 </div>
 
                 <div>
-                  <label className="block text-sm text-muted-2 mb-1.5">Message *</label>
+                  <label className="block text-sm text-muted-2 mb-1.5">{t('form.message')} *</label>
                   <textarea
                     {...register('message')}
                     className="textarea-field"
-                    placeholder="Tell me about the challenge you're trying to solve..."
+                    placeholder={t('form.messagePlaceholder')}
                   />
                   {errors.message && <p className="text-red-400 text-xs mt-1">{errors.message.message}</p>}
                 </div>
@@ -158,7 +164,7 @@ export default function ContactSection() {
 
                 <button type="submit" disabled={isSubmitting} className="btn-accent w-full justify-center">
                   <Send size={15} />
-                  {isSubmitting ? 'Sending...' : 'Send message'}
+                  {isSubmitting ? t('form.sending') : t('form.send')}
                 </button>
               </form>
             )}

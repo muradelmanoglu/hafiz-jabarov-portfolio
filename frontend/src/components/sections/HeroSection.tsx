@@ -1,21 +1,23 @@
 'use client'
 
-import Link from 'next/link'
 import { ArrowRight, CalendarDays } from 'lucide-react'
 import { motion } from 'framer-motion'
-
-const stats = [
-  { value: '7+', label: 'Years PM experience' },
-  { value: '30+', label: 'Products shipped' },
-  { value: '$50M+', label: 'Revenue influenced' },
-  { value: '15+', label: 'Teams led' },
-]
+import { useTranslations } from 'next-intl'
+import { Link } from '@/lib/navigation'
 
 export default function HeroSection() {
+  const t = useTranslations('hero')
+
+  const stats = [
+    { value: '7+', label: t('stats.yearsExp') },
+    { value: '30+', label: t('stats.products') },
+    { value: '$50M+', label: t('stats.revenue') },
+    { value: '15+', label: t('stats.teams') },
+  ]
+
   return (
     <section className="section min-h-screen flex flex-col justify-center pt-20 md:pt-28">
       <div className="container-main">
-        {/* Availability badge */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -23,35 +25,31 @@ export default function HeroSection() {
           className="inline-flex items-center gap-2 mb-8"
         >
           <span className="dot-available" />
-          <span className="text-sm text-muted-2">Available for new engagements</span>
+          <span className="text-sm text-muted-2">{t('available')}</span>
         </motion.div>
 
-        {/* Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
           className="display-xl text-fg mb-6 max-w-4xl"
         >
-          I turn complex{' '}
+          {t('headline1')}{' '}
           <em className="not-italic" style={{ color: 'var(--accent)' }}>
-            problems
+            {t('headlineAccent')}
           </em>{' '}
-          into shipped products
+          {t('headline2')}
         </motion.h1>
 
-        {/* Subheadline */}
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-lg md:text-xl text-muted-2 max-w-xl mb-10 leading-relaxed"
         >
-          Senior PM with 7+ years delivering e-commerce, SaaS and fintech products
-          from 0→1 and 1→scale.
+          {t('subheadline')}
         </motion.p>
 
-        {/* CTAs */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -59,7 +57,7 @@ export default function HeroSection() {
           className="flex flex-wrap gap-4 mb-20"
         >
           <Link href="/work" className="btn-accent">
-            View my work <ArrowRight size={16} />
+            {t('viewWork')} <ArrowRight size={16} />
           </Link>
           <a
             href="https://calendly.com/hafizjabarov"
@@ -68,11 +66,10 @@ export default function HeroSection() {
             className="btn-outline"
           >
             <CalendarDays size={16} />
-            Book a call
+            {t('bookCall')}
           </a>
         </motion.div>
 
-        {/* Stats */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
