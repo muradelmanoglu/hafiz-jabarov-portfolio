@@ -4,18 +4,19 @@ import { useEffect, useState } from 'react'
 import { publicApi, type FAQ } from '@/lib/api'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Plus, Minus } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 
 export default function FAQSection({ page }: { page?: 'HOME' | 'SERVICES' | 'CONTACT' }) {
   const t = useTranslations('faq')
+  const locale = useLocale()
   const [faqs, setFAQs] = useState<FAQ[]>([])
   const [open, setOpen] = useState<number | null>(null)
 
   useEffect(() => {
-    publicApi.getFAQs(page).then((res) => {
+    publicApi.getFAQs(page, locale).then((res) => {
       if (res.data.data) setFAQs(res.data.data)
     })
-  }, [page])
+  }, [page, locale])
 
   if (faqs.length === 0) return null
 

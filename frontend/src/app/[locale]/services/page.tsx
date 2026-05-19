@@ -8,17 +8,18 @@ import { publicApi, type PortfolioService, type SiteSettings } from '@/lib/api'
 import { Link } from '@/lib/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CalendarDays } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { cn } from '@/lib/utils'
 
 export default function ServicesPage() {
   const t = useTranslations('services')
+  const locale = useLocale()
   const [services, setServices] = useState<PortfolioService[]>([])
   const [settings, setSettings] = useState<SiteSettings | null>(null)
   const [activeFilter, setActiveFilter] = useState('All')
 
   useEffect(() => {
-    publicApi.getServices().then((res) => {
+    publicApi.getServices(locale).then((res) => {
       if (res.data.data) setServices(res.data.data)
     })
     publicApi.getSettings().then((res) => {

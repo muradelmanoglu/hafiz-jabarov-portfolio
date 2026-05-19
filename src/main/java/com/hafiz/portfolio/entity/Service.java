@@ -56,6 +56,9 @@ public class Service {
     @Builder.Default
     private Status status = Status.PUBLISHED;
 
+    @Column(columnDefinition = "TEXT")
+    private String translations;
+
     public enum Status {
         DRAFT, PUBLISHED, ARCHIVED
     }

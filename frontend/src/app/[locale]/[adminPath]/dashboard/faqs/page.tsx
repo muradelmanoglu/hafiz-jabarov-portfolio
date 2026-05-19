@@ -4,21 +4,34 @@ import { useEffect, useState } from 'react'
 import { adminApi, type FAQ } from '@/lib/api'
 import { Plus, Pencil, Trash2, Check } from 'lucide-react'
 
+type LangTab = 'en' | 'az' | 'ru'
+const LANG_TABS: { key: LangTab; label: string }[] = [
+  { key: 'en', label: 'EN' },
+  { key: 'az', label: 'AZ' },
+  { key: 'ru', label: 'RU' },
+]
+
+type FAQWithTranslations = Partial<FAQ> & {
+  translations: Record<string, Record<string, string>>
+}
+
 const CATEGORIES: FAQ['category'][] = ['GENERAL', 'SERVICES', 'PROCESS', 'PRICING']
 const VISIBLE_OPTIONS: Array<'HOME' | 'SERVICES' | 'CONTACT'> = ['HOME', 'SERVICES', 'CONTACT']
 
-const emptyForm = (): Partial<FAQ> => ({
+const emptyForm = (): FAQWithTranslations => ({
   question: '',
   answer: '',
   category: 'GENERAL',
   orderWeight: 0,
   visibleOn: ['HOME'],
+  translations: { az: {}, ru: {} },
 })
 
 export default function FAQsPage() {
   const [faqs, setFaqs] = useState<FAQ[]>([])
-  const [editing, setEditing] = useState<Partial<FAQ> | null>(null)
+  const [editing, setEditing] = useState<FAQWithTranslations | null>(null)
   const [editingId, setEditingId] = useState<number | null>(null)
+  const [langTab, setLangTab] = useState<LangTab>('en')
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
 
@@ -34,10 +47,14 @@ export default function FAQsPage() {
     setSaving(true)
     setSaveError(null)
     try {
+      const payload = {
+        ...editing,
+        translations: editing.translations as unknown as Record<string, Record<string, unknown>>,
+      }
       if (editingId) {
-        await adminApi.updateFAQ(editingId, editing)
+        await adminApi.updateFAQ(editingId, payload)
       } else {
-        await adminApi.createFAQ(editing)
+        await adminApi.createFAQ(payload)
       }
       setEditing(null)
       setEditingId(null)
@@ -57,8 +74,18 @@ export default function FAQsPage() {
   }
 
   const openEdit = (f?: FAQ) => {
-    setEditing(f ? { ...f } : emptyForm())
+    setEditing(
+      f
+        ? {
+            ...f,
+            translations: (() => {
+              try { return JSON.parse(f.translations || '{}') } catch { return { az: {}, ru: {} } }
+            })(),
+          }
+        : emptyForm()
+    )
     setEditingId(f?.id || null)
+    setLangTab('en')
     setSaveError(null)
   }
 
@@ -67,6 +94,22 @@ export default function FAQsPage() {
     const current = editing.visibleOn || []
     const next = current.includes(page) ? current.filter((p) => p !== page) : [...current, page]
     setEditing({ ...editing, visibleOn: next })
+  }
+
+  const tField = (field: 'question' | 'answer'): string => {
+    if (langTab === 'en') return ''
+    return (editing?.translations?.[langTab]?.[field] as string) || ''
+  }
+
+  const setTField = (field: 'question' | 'answer', val: string) => {
+    if (!editing) return
+    setEditing({
+      ...editing,
+      translations: {
+        ...editing.translations,
+        [langTab]: { ...editing.translations[langTab], [field]: val },
+      },
+    })
   }
 
   return (
@@ -83,27 +126,70 @@ export default function FAQsPage() {
 
       {editing && (
         <div className="card mb-6">
-          <h2 className="text-white font-semibold mb-4">{editingId ? 'Edit FAQ' : 'New FAQ'}</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-white font-semibold">{editingId ? 'Edit FAQ' : 'New FAQ'}</h2>
+            <div className="flex gap-1 bg-gray-800 rounded-lg p-1">
+              {LANG_TABS.map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setLangTab(tab.key)}
+                  className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
+                    langTab === tab.key ? 'bg-gray-600 text-white' : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <div className="space-y-4">
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Question *</label>
-              <input
-                value={editing.question || ''}
-                onChange={(e) => setEditing({ ...editing, question: e.target.value })}
-                className="admin-input"
-                placeholder="What does a fractional PM engagement look like?"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Answer *</label>
-              <textarea
-                value={editing.answer || ''}
-                onChange={(e) => setEditing({ ...editing, answer: e.target.value })}
-                rows={4}
-                className="admin-input resize-none"
-                placeholder="It typically starts with a discovery week..."
-              />
-            </div>
+            {langTab === 'en' ? (
+              <>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">Question *</label>
+                  <input
+                    value={editing.question || ''}
+                    onChange={(e) => setEditing({ ...editing, question: e.target.value })}
+                    className="admin-input"
+                    placeholder="What does a fractional PM engagement look like?"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">Answer *</label>
+                  <textarea
+                    value={editing.answer || ''}
+                    onChange={(e) => setEditing({ ...editing, answer: e.target.value })}
+                    rows={4}
+                    className="admin-input resize-none"
+                    placeholder="It typically starts with a discovery week..."
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">Question ({langTab.toUpperCase()})</label>
+                  <input
+                    value={tField('question')}
+                    onChange={(e) => setTField('question', e.target.value)}
+                    className="admin-input"
+                    placeholder={`Question in ${langTab.toUpperCase()}...`}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-500 mb-1">Answer ({langTab.toUpperCase()})</label>
+                  <textarea
+                    value={tField('answer')}
+                    onChange={(e) => setTField('answer', e.target.value)}
+                    rows={4}
+                    className="admin-input resize-none"
+                    placeholder={`Answer in ${langTab.toUpperCase()}...`}
+                  />
+                </div>
+              </>
+            )}
+
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs text-gray-500 mb-1">Category</label>
@@ -144,6 +230,7 @@ export default function FAQsPage() {
               </div>
             </div>
           </div>
+
           {saveError && (
             <p className="text-red-400 text-sm mt-4 bg-red-950/50 px-3 py-2 rounded-lg">{saveError}</p>
           )}

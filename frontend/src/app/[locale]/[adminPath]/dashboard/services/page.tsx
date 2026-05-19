@@ -4,13 +4,24 @@ import { useEffect, useState } from 'react'
 import { adminApi, type PortfolioService } from '@/lib/api'
 import { Plus, Pencil, Trash2, Check, X } from 'lucide-react'
 
+type LangTab = 'en' | 'az' | 'ru'
+const LANG_TABS: { key: LangTab; label: string }[] = [
+  { key: 'en', label: 'EN' },
+  { key: 'az', label: 'AZ' },
+  { key: 'ru', label: 'RU' },
+]
+
+type ServiceWithTranslations = Partial<PortfolioService> & {
+  translations: Record<string, Record<string, string>>
+}
+
 const STATUS_BADGE: Record<string, string> = {
   PUBLISHED: 'bg-green-900/50 text-green-400',
   DRAFT: 'bg-gray-800 text-gray-400',
   ARCHIVED: 'bg-yellow-900/50 text-yellow-400',
 }
 
-const emptyForm = (): Partial<PortfolioService> => ({
+const emptyForm = (): ServiceWithTranslations => ({
   title: '',
   slug: '',
   category: '',
@@ -24,12 +35,14 @@ const emptyForm = (): Partial<PortfolioService> => ({
   orderWeight: 0,
   featured: false,
   status: 'DRAFT',
+  translations: { az: {}, ru: {} },
 })
 
 export default function ServicesPage() {
   const [services, setServices] = useState<PortfolioService[]>([])
-  const [editing, setEditing] = useState<Partial<PortfolioService> | null>(null)
+  const [editing, setEditing] = useState<ServiceWithTranslations | null>(null)
   const [editingId, setEditingId] = useState<number | null>(null)
+  const [langTab, setLangTab] = useState<LangTab>('en')
   const [newDeliverable, setNewDeliverable] = useState('')
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -69,10 +82,36 @@ export default function ServicesPage() {
   }
 
   const openEdit = (svc?: PortfolioService) => {
-    setEditing(svc ? { ...svc } : emptyForm())
+    setEditing(
+      svc
+        ? {
+            ...svc,
+            translations: (() => {
+              try { return JSON.parse(svc.translations || '{}') } catch { return { az: {}, ru: {} } }
+            })(),
+          }
+        : emptyForm()
+    )
     setEditingId(svc?.id || null)
+    setLangTab('en')
     setSaveError(null)
     setNewDeliverable('')
+  }
+
+  const tField = (field: 'shortDescription' | 'longDescription'): string => {
+    if (langTab === 'en') return ''
+    return (editing?.translations?.[langTab]?.[field] as string) || ''
+  }
+
+  const setTField = (field: 'shortDescription' | 'longDescription', val: string) => {
+    if (!editing) return
+    setEditing({
+      ...editing,
+      translations: {
+        ...editing.translations,
+        [langTab]: { ...editing.translations[langTab], [field]: val },
+      },
+    })
   }
 
   const addDeliverable = () => {
@@ -103,7 +142,22 @@ export default function ServicesPage() {
 
       {editing && (
         <div className="card mb-6">
-          <h2 className="text-white font-semibold mb-4">{editingId ? 'Edit Service' : 'New Service'}</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-white font-semibold">{editingId ? 'Edit Service' : 'New Service'}</h2>
+            <div className="flex gap-1 bg-gray-800 rounded-lg p-1">
+              {LANG_TABS.map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setLangTab(tab.key)}
+                  className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
+                    langTab === tab.key ? 'bg-gray-600 text-white' : 'text-gray-400 hover:text-white'
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
             <div>
@@ -192,25 +246,51 @@ export default function ServicesPage() {
                 className="admin-input"
               />
             </div>
-            <div className="sm:col-span-2">
-              <label className="block text-xs text-gray-500 mb-1">Short Description *</label>
-              <input
-                value={editing.shortDescription || ''}
-                onChange={(e) => setEditing({ ...editing, shortDescription: e.target.value })}
-                className="admin-input"
-                placeholder="Embedded PM leadership for early-stage teams..."
-              />
-            </div>
-            <div className="sm:col-span-2">
-              <label className="block text-xs text-gray-500 mb-1">Long Description</label>
-              <textarea
-                value={editing.longDescription || ''}
-                onChange={(e) => setEditing({ ...editing, longDescription: e.target.value })}
-                rows={4}
-                className="admin-input resize-none"
-                placeholder="Full description shown on the services page..."
-              />
-            </div>
+            {langTab === 'en' ? (
+              <>
+                <div className="sm:col-span-2">
+                  <label className="block text-xs text-gray-500 mb-1">Short Description *</label>
+                  <input
+                    value={editing.shortDescription || ''}
+                    onChange={(e) => setEditing({ ...editing, shortDescription: e.target.value })}
+                    className="admin-input"
+                    placeholder="Embedded PM leadership for early-stage teams..."
+                  />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="block text-xs text-gray-500 mb-1">Long Description</label>
+                  <textarea
+                    value={editing.longDescription || ''}
+                    onChange={(e) => setEditing({ ...editing, longDescription: e.target.value })}
+                    rows={4}
+                    className="admin-input resize-none"
+                    placeholder="Full description shown on the services page..."
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="sm:col-span-2">
+                  <label className="block text-xs text-gray-500 mb-1">Short Description ({langTab.toUpperCase()})</label>
+                  <input
+                    value={tField('shortDescription')}
+                    onChange={(e) => setTField('shortDescription', e.target.value)}
+                    className="admin-input"
+                    placeholder={`Short description in ${langTab.toUpperCase()}...`}
+                  />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className="block text-xs text-gray-500 mb-1">Long Description ({langTab.toUpperCase()})</label>
+                  <textarea
+                    value={tField('longDescription')}
+                    onChange={(e) => setTField('longDescription', e.target.value)}
+                    rows={4}
+                    className="admin-input resize-none"
+                    placeholder={`Long description in ${langTab.toUpperCase()}...`}
+                  />
+                </div>
+              </>
+            )}
             <div className="sm:col-span-2">
               <label className="block text-xs text-gray-500 mb-2">Deliverables</label>
               <div className="flex flex-wrap gap-2 mb-2">

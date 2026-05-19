@@ -3,10 +3,12 @@ package com.hafiz.portfolio.service;
 import com.hafiz.portfolio.dto.request.ServiceRequest;
 import com.hafiz.portfolio.entity.Service;
 import com.hafiz.portfolio.repository.ServiceRepository;
+import com.hafiz.portfolio.util.TranslationHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @org.springframework.stereotype.Service
@@ -17,6 +19,20 @@ public class PortfolioServiceService {
 
     public List<Service> getAllPublished() {
         return serviceRepository.findByStatusOrderByOrderWeightAsc(Service.Status.PUBLISHED);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Service> getAllPublished(String lang) {
+        List<Service> list = getAllPublished();
+        if (lang != null && !lang.equals("en")) list.forEach(s -> applyTranslations(s, lang));
+        return list;
+    }
+
+    private void applyTranslations(Service s, String lang) {
+        Map<String, Map<String, Object>> t = TranslationHelper.parse(s.getTranslations());
+        s.setShortDescription(TranslationHelper.str(t, lang, "shortDescription", s.getShortDescription()));
+        s.setLongDescription(TranslationHelper.str(t, lang, "longDescription", s.getLongDescription()));
+        s.setCtaText(TranslationHelper.str(t, lang, "ctaText", s.getCtaText()));
     }
 
     public List<Service> getAll() {
@@ -45,6 +61,7 @@ public class PortfolioServiceService {
                 .orderWeight(req.getOrderWeight())
                 .featured(req.isFeatured())
                 .status(req.getStatus() != null ? req.getStatus() : Service.Status.PUBLISHED)
+                .translations(TranslationHelper.serialize(req.getTranslations()))
                 .build();
         return serviceRepository.save(s);
     }
@@ -66,6 +83,7 @@ public class PortfolioServiceService {
         s.setOrderWeight(req.getOrderWeight());
         s.setFeatured(req.isFeatured());
         if (req.getStatus() != null) s.setStatus(req.getStatus());
+        s.setTranslations(TranslationHelper.serialize(req.getTranslations()));
         return serviceRepository.save(s);
     }
 

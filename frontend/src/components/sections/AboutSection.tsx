@@ -3,12 +3,13 @@
 import { useEffect, useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { Link } from '@/lib/navigation'
 import { publicApi, type SiteSettings } from '@/lib/api'
 
 export default function AboutSection() {
   const t = useTranslations('about')
+  const locale = useLocale()
   const [settings, setSettings] = useState<Partial<SiteSettings>>({})
 
   useEffect(() => {
@@ -16,6 +17,18 @@ export default function AboutSection() {
       if (res.data.data) setSettings(res.data.data)
     }).catch(() => {})
   }, [])
+
+  // Resolve about text: check locale-specific translations, fall back to EN fields, then i18n file
+  const aboutTrans = (() => {
+    try { return JSON.parse(settings.aboutTranslationsJson || '{}') } catch { return {} }
+  })()
+
+  const locTrans = (locale !== 'en' && aboutTrans[locale]) ? aboutTrans[locale] : {}
+
+  const heading = locTrans.heading || settings.aboutHeading || t('heading')
+  const p1 = locTrans.p1 || settings.aboutP1 || t('p1')
+  const p2 = locTrans.p2 || settings.aboutP2 || t('p2')
+  const p3 = locTrans.p3 || settings.aboutP3 || t('p3')
 
   const traits = [
     { label: t('traits.t1'), desc: t('traits.t1desc') },
@@ -35,11 +48,11 @@ export default function AboutSection() {
             transition={{ duration: 0.6 }}
           >
             <span className="section-label">{t('label')}</span>
-            <h2 className="display-md text-fg mb-6">{settings.aboutHeading || t('heading')}</h2>
+            <h2 className="display-md text-fg mb-6">{heading}</h2>
             <div className="space-y-4 text-muted-2 leading-relaxed text-base">
-              <p>{settings.aboutP1 || t('p1')}</p>
-              <p>{settings.aboutP2 || t('p2')}</p>
-              <p>{settings.aboutP3 || t('p3')}</p>
+              <p>{p1}</p>
+              <p>{p2}</p>
+              <p>{p3}</p>
             </div>
             <div className="mt-8">
               <Link href="/about" className="btn-outline text-sm">

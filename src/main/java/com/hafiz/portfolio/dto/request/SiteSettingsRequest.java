@@ -49,6 +49,7 @@ public class SiteSettingsRequest {
     private String copyrightText;
     private String colophonText;
     private String customSocialLinksJson;
+    private String aboutTranslationsJson;
     private String aboutHeading;
     private String aboutP1;
     private String aboutP2;

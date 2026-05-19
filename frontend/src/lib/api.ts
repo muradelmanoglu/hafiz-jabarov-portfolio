@@ -121,6 +121,7 @@ export interface SiteSettings {
   copyrightText?: string
   colophonText?: string
   customSocialLinksJson?: string
+  aboutTranslationsJson?: string
   aboutHeading?: string
   aboutP1?: string
   aboutP2?: string
@@ -190,6 +191,7 @@ export interface PortfolioService {
   slug: string
   icon?: string
   category?: string
+  translations?: string
   shortDescription: string
   longDescription: string
   deliverables?: string[]
@@ -261,6 +263,7 @@ export interface FAQ {
   category: 'GENERAL' | 'SERVICES' | 'PROCESS' | 'PRICING'
   orderWeight: number
   visibleOn: Array<'HOME' | 'SERVICES' | 'CONTACT'>
+  translations?: string
 }
 
 export interface ContactSubmission {
@@ -310,8 +313,8 @@ export const publicApi = {
   getCaseStudy: (slug: string, lang?: string) =>
     api.get<ApiResponse<CaseStudy>>(`/public/case-studies/${slug}${lang ? `?lang=${lang}` : ''}`),
 
-  getServices: () =>
-    api.get<ApiResponse<PortfolioService[]>>('/public/services'),
+  getServices: (lang?: string) =>
+    api.get<ApiResponse<PortfolioService[]>>(`/public/services${lang ? `?lang=${lang}` : ''}`),
 
   getSkills: () =>
     api.get<ApiResponse<Skill[]>>('/public/skills'),
@@ -328,8 +331,8 @@ export const publicApi = {
   getFeaturedTestimonial: () =>
     api.get<ApiResponse<Testimonial | null>>('/public/testimonials/featured'),
 
-  getFAQs: (page?: 'HOME' | 'SERVICES' | 'CONTACT') =>
-    api.get<ApiResponse<FAQ[]>>('/public/faqs', { params: page ? { page } : {} }),
+  getFAQs: (page?: 'HOME' | 'SERVICES' | 'CONTACT', lang?: string) =>
+    api.get<ApiResponse<FAQ[]>>('/public/faqs', { params: { ...(page ? { page } : {}), ...(lang ? { lang } : {}) } }),
 
   getCompanies: () =>
     api.get<ApiResponse<Company[]>>('/public/companies'),

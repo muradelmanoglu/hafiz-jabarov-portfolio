@@ -72,6 +72,9 @@ public class SiteSettings {
     private String customSocialLinksJson;
 
     @Column(columnDefinition = "TEXT")
+    private String aboutTranslationsJson;
+
+    @Column(columnDefinition = "TEXT")
     private String aboutHeading;
 
     @Column(columnDefinition = "TEXT")

@@ -59,8 +59,9 @@ public class PublicController {
     // ─── Services ────────────────────────────────────────────────────────────
 
     @GetMapping("/services")
-    public ResponseEntity<ApiResponse<List<Service>>> getServices() {
-        return ResponseEntity.ok(ApiResponse.success(portfolioServiceService.getAllPublished()));
+    public ResponseEntity<ApiResponse<List<Service>>> getServices(
+            @RequestParam(defaultValue = "en") String lang) {
+        return ResponseEntity.ok(ApiResponse.success(portfolioServiceService.getAllPublished(lang)));
     }
 
     // ─── Skills ──────────────────────────────────────────────────────────────
@@ -104,8 +105,9 @@ public class PublicController {
 
     @GetMapping("/faqs")
     public ResponseEntity<ApiResponse<List<FAQ>>> getFAQs(
-            @RequestParam(required = false) FAQ.Page page) {
-        List<FAQ> faqs = page != null ? faqService.getByPage(page) : faqService.getAll();
+            @RequestParam(required = false) FAQ.Page page,
+            @RequestParam(defaultValue = "en") String lang) {
+        List<FAQ> faqs = page != null ? faqService.getByPage(page, lang) : faqService.getAll(lang);
         return ResponseEntity.ok(ApiResponse.success(faqs));
     }
 

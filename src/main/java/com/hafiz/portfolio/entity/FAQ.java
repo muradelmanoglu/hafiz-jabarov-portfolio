@@ -33,6 +33,9 @@ public class FAQ {
     @Column(name = "page")
     private List<Page> visibleOn;
 
+    @Column(columnDefinition = "TEXT")
+    private String translations;
+
     public enum Category {
         GENERAL, SERVICES, PROCESS, PRICING
     }

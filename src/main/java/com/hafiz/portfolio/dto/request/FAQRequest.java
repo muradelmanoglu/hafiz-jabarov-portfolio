@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class FAQRequest {
@@ -21,4 +22,5 @@ public class FAQRequest {
 
     private int orderWeight;
     private List<FAQ.Page> visibleOn;
+    private Map<String, Map<String, Object>> translations;
 }

@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class ServiceRequest {
@@ -40,4 +41,5 @@ public class ServiceRequest {
     private int orderWeight;
     private boolean featured;
     private Service.Status status;
+    private Map<String, Map<String, Object>> translations;
 }

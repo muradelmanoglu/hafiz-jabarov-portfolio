@@ -43,6 +43,7 @@ public class SiteSettingsService {
         s.setCopyrightText(req.getCopyrightText());
         s.setColophonText(req.getColophonText());
         s.setCustomSocialLinksJson(req.getCustomSocialLinksJson());
+        s.setAboutTranslationsJson(req.getAboutTranslationsJson());
         s.setAboutHeading(req.getAboutHeading());
         s.setAboutP1(req.getAboutP1());
         s.setAboutP2(req.getAboutP2());
