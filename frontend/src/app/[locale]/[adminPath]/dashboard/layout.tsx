@@ -16,6 +16,7 @@ import {
   ChevronRight,
   MessageSquare,
   HelpCircle,
+  User,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
@@ -40,6 +41,7 @@ export default function DashboardLayout({
     { label: t('skills'), href: `${base}/skills`, icon: Wrench },
     { label: t('experience'), href: `${base}/experience`, icon: Briefcase },
     { label: t('education'), href: `${base}/education`, icon: GraduationCap },
+    { label: t('about'), href: `${base}/about`, icon: User },
     { label: t('testimonials'), href: `${base}/testimonials`, icon: MessageSquare },
     { label: t('faqs'), href: `${base}/faqs`, icon: HelpCircle },
     { label: t('submissions'), href: `${base}/messages`, icon: Mail },

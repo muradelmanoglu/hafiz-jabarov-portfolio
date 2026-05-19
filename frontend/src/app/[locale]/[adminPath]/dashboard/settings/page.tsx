@@ -14,8 +14,6 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false)
   const [newMetric, setNewMetric] = useState<HeadlineMetric>({ value: '', label: '' })
   const [newSocialLink, setNewSocialLink] = useState<SocialLink>({ label: '', url: '' })
-  const [aboutLang, setAboutLang] = useState<'en' | 'az' | 'ru'>('en')
-
   // Derive parsed custom social links from JSON field
   const parsedSocialLinks: SocialLink[] = (() => {
     try { return JSON.parse(settings.customSocialLinksJson || '[]') } catch { return [] }
@@ -126,69 +124,7 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <div className="card">
-          <div className="flex items-center justify-between mb-1">
-            <h2 className="text-white font-semibold text-sm uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
-              About Section
-            </h2>
-            <div className="flex gap-1 bg-gray-800 rounded-lg p-1">
-              {(['en', 'az', 'ru'] as const).map((lang) => (
-                <button
-                  key={lang}
-                  onClick={() => setAboutLang(lang)}
-                  className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${aboutLang === lang ? 'bg-gray-600 text-white' : 'text-gray-400 hover:text-white'}`}
-                >
-                  {lang.toUpperCase()}
-                </button>
-              ))}
-            </div>
-          </div>
-          <p className="text-gray-500 text-xs mb-4">Overrides the bio text on the About page and homepage About section. Leave blank to use translation file defaults.</p>
 
-          {aboutLang === 'en' ? (
-            <div className="space-y-4">
-              {field('aboutHeading', 'Heading')}
-              {field('aboutP1', 'Paragraph 1', true)}
-              {field('aboutP2', 'Paragraph 2', true)}
-              {field('aboutP3', 'Paragraph 3', true)}
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {(['heading', 'p1', 'p2', 'p3'] as const).map((k) => {
-                const trans = (() => { try { return JSON.parse(settings.aboutTranslationsJson || '{}') } catch { return {} } })()
-                const val = (trans[aboutLang]?.[k] as string) || ''
-                const labels: Record<string, string> = { heading: 'Heading', p1: 'Paragraph 1', p2: 'Paragraph 2', p3: 'Paragraph 3' }
-                return (
-                  <div key={k}>
-                    <label className="block text-xs text-gray-500 mb-1">{labels[k]} ({aboutLang.toUpperCase()})</label>
-                    {k === 'heading' ? (
-                      <input
-                        value={val}
-                        onChange={(e) => {
-                          const t2 = (() => { try { return JSON.parse(settings.aboutTranslationsJson || '{}') } catch { return {} } })()
-                          const updated = { ...t2, [aboutLang]: { ...(t2[aboutLang] || {}), [k]: e.target.value } }
-                          setSettings({ ...settings, aboutTranslationsJson: JSON.stringify(updated) })
-                        }}
-                        className="admin-input"
-                      />
-                    ) : (
-                      <textarea
-                        value={val}
-                        onChange={(e) => {
-                          const t2 = (() => { try { return JSON.parse(settings.aboutTranslationsJson || '{}') } catch { return {} } })()
-                          const updated = { ...t2, [aboutLang]: { ...(t2[aboutLang] || {}), [k]: e.target.value } }
-                          setSettings({ ...settings, aboutTranslationsJson: JSON.stringify(updated) })
-                        }}
-                        rows={3}
-                        className="admin-input resize-none"
-                      />
-                    )}
-                  </div>
-                )
-              })}
-            </div>
-          )}
-        </div>
 
         <div className="card">
           <h2 className="text-white font-semibold mb-4 text-sm uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
