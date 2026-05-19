@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { publicApi, type CaseStudy } from '@/lib/api'
 import { ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { Link } from '@/lib/navigation'
 
 export default function FeaturedWorkSection() {
