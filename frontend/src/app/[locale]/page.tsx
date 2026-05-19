@@ -25,7 +25,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
     fetchPublic<PortfolioService[]>(`/services?lang=${locale}`),
     fetchPublic<Experience[]>(`/experience?lang=${locale}`),
     fetchPublic<Skill[]>('/skills'),
-    fetchPublic<Testimonial[]>('/testimonials/featured'),
+    fetchPublic<Testimonial[]>('/testimonials'),
     fetchPublic<FAQ[]>(`/faqs?page=HOME&lang=${locale}`),
   ])
 
