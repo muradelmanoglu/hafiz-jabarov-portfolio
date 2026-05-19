@@ -11,10 +11,10 @@ export default function ExperienceSection() {
   const [experiences, setExperiences] = useState<Experience[]>([])
 
   useEffect(() => {
-    publicApi.getExperience().then((res) => {
+    publicApi.getExperience(locale).then((res) => {
       if (res.data.data) setExperiences(res.data.data)
     })
-  }, [])
+  }, [locale])
 
   const localeMap: Record<string, string> = { en: 'en-US', az: 'az-Latn-AZ', ru: 'ru-RU' }
 

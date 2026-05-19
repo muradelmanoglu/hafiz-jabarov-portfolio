@@ -1,46 +1,42 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { adminApi, publicApi, type Experience } from '@/lib/api'
+import { adminApi, type Education } from '@/lib/api'
 import { Plus, Pencil, Trash2, Check, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 type LangTab = 'en' | 'az' | 'ru'
 
-type ExperienceWithTranslations = Partial<Experience> & {
+type EducationWithTranslations = Partial<Education> & {
   translations: Record<string, Record<string, unknown>>
 }
 
-const emptyForm = (): ExperienceWithTranslations => ({
-  companyName: '',
-  role: '',
-  summary: '',
+const emptyForm = (): EducationWithTranslations => ({
+  institution: '',
+  program: '',
+  location: '',
   startDate: '',
-  current: false,
   orderWeight: 0,
   bullets: [],
   translations: { az: {}, ru: {} },
 })
 
-function fmtDate(d?: string) {
-  if (!d) return ''
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
-}
-
-export default function ExperiencePage() {
-  const t = useTranslations('admin.experience')
-  const [experiences, setExperiences] = useState<Experience[]>([])
-  const [editing, setEditing] = useState<ExperienceWithTranslations | null>(null)
+export default function EducationPage() {
+  const t = useTranslations('admin.education')
+  const [items, setItems] = useState<Education[]>([])
+  const [editing, setEditing] = useState<EducationWithTranslations | null>(null)
   const [editingId, setEditingId] = useState<number | null>(null)
   const [langTab, setLangTab] = useState<LangTab>('en')
   const [newBullet, setNewBullet] = useState('')
   const [saveError, setSaveError] = useState<string | null>(null)
 
-  useEffect(() => { fetchExperience() }, [])
+  useEffect(() => {
+    fetchItems()
+  }, [])
 
-  const fetchExperience = async () => {
-    const res = await publicApi.getExperience()
-    if (res.data.data) setExperiences(res.data.data)
+  const fetchItems = async () => {
+    const res = await adminApi.getEducation()
+    if (res.data.data) setItems(res.data.data)
   }
 
   const handleSave = async () => {
@@ -48,24 +44,17 @@ export default function ExperiencePage() {
     setSaveError(null)
     try {
       if (editingId) {
-        await adminApi.updateExperience(editingId, editing)
+        await adminApi.updateEducation(editingId, editing)
       } else {
-        await adminApi.createExperience(editing)
+        await adminApi.createEducation(editing)
       }
       setEditing(null)
       setEditingId(null)
-      setNewBullet('')
-      fetchExperience()
+      fetchItems()
     } catch (err: unknown) {
       const e = err as { response?: { data?: { message?: string } } }
       setSaveError(e?.response?.data?.message || 'Save failed')
     }
-  }
-
-  const handleDelete = async (id: number) => {
-    if (!confirm(t('deleteConfirm'))) return
-    await adminApi.deleteExperience(id)
-    fetchExperience()
   }
 
   const tField = (field: string): string => {
@@ -106,7 +95,7 @@ export default function ExperiencePage() {
 
   const addBullet = () => {
     const b = newBullet.trim()
-    if (!b || !editing) return
+    if (!b) return
     setTBullets([...tBullets(), b])
     setNewBullet('')
   }
@@ -117,12 +106,13 @@ export default function ExperiencePage() {
     setTBullets(arr)
   }
 
-  const openEdit = (exp?: Experience, id?: number) => {
+  const openEdit = (item?: Education, id?: number) => {
     setEditing(
-      exp
+      item
         ? {
-            ...exp,
-            translations: (exp.translations as Record<string, Record<string, unknown>>) || { az: {}, ru: {} },
+            ...item,
+            translations:
+              (item.translations as Record<string, Record<string, unknown>>) || { az: {}, ru: {} },
           }
         : emptyForm()
     )
@@ -143,12 +133,9 @@ export default function ExperiencePage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-white">{t('title')}</h1>
-          <p className="text-gray-500 text-sm mt-1">{experiences.length} entries</p>
+          <p className="text-gray-500 text-sm mt-1">{items.length} entries</p>
         </div>
-        <button
-          onClick={() => openEdit()}
-          className="btn-accent flex items-center gap-2 text-sm"
-        >
+        <button onClick={() => openEdit()} className="btn-accent flex items-center gap-2 text-sm">
           <Plus size={16} /> {t('new')}
         </button>
       </div>
@@ -175,23 +162,42 @@ export default function ExperiencePage() {
           {langTab === 'en' ? (
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs text-gray-500 mb-1">{t('company')} *</label>
+                <label className="block text-xs text-gray-500 mb-1">Institution *</label>
                 <input
-                  value={editing.companyName || ''}
-                  onChange={(e) => setEditing({ ...editing, companyName: e.target.value })}
+                  value={editing.institution || ''}
+                  onChange={(e) => setEditing({ ...editing, institution: e.target.value })}
+                  className="admin-input"
+                  placeholder="Baku State University"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Program *</label>
+                <input
+                  value={editing.program || ''}
+                  onChange={(e) => setEditing({ ...editing, program: e.target.value })}
+                  className="admin-input"
+                  placeholder="BSc Computer Science"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-gray-500 mb-1">Location</label>
+                <input
+                  value={editing.location || ''}
+                  onChange={(e) => setEditing({ ...editing, location: e.target.value })}
                   className="admin-input"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">{t('role')} *</label>
+                <label className="block text-xs text-gray-500 mb-1">Order</label>
                 <input
-                  value={editing.role || ''}
-                  onChange={(e) => setEditing({ ...editing, role: e.target.value })}
+                  type="number"
+                  value={editing.orderWeight || 0}
+                  onChange={(e) => setEditing({ ...editing, orderWeight: +e.target.value })}
                   className="admin-input"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">{t('startDate')}</label>
+                <label className="block text-xs text-gray-500 mb-1">Start date</label>
                 <input
                   type="month"
                   value={editing.startDate || ''}
@@ -200,83 +206,26 @@ export default function ExperiencePage() {
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-500 mb-1">{t('endDate')}</label>
+                <label className="block text-xs text-gray-500 mb-1">End date</label>
                 <input
                   type="month"
                   value={editing.endDate || ''}
                   onChange={(e) => setEditing({ ...editing, endDate: e.target.value })}
                   className="admin-input"
-                  disabled={editing.current}
                 />
-              </div>
-              <div>
-                <label className="block text-xs text-gray-500 mb-1">{t('location')}</label>
-                <input
-                  value={editing.location || ''}
-                  onChange={(e) => setEditing({ ...editing, location: e.target.value })}
-                  className="admin-input"
-                />
-              </div>
-              <div>
-                <label className="block text-xs text-gray-500 mb-1">{t('orderWeight')}</label>
-                <input
-                  type="number"
-                  value={editing.orderWeight || 0}
-                  onChange={(e) => setEditing({ ...editing, orderWeight: +e.target.value })}
-                  className="admin-input"
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="block text-xs text-gray-500 mb-1">{t('summary')}</label>
-                <textarea
-                  value={editing.summary || ''}
-                  onChange={(e) => setEditing({ ...editing, summary: e.target.value })}
-                  rows={3}
-                  className="admin-input resize-none"
-                />
-              </div>
-              <div className="flex items-center gap-3">
-                <input
-                  type="checkbox"
-                  id="current"
-                  checked={editing.current || false}
-                  onChange={(e) =>
-                    setEditing({
-                      ...editing,
-                      current: e.target.checked,
-                      endDate: e.target.checked ? '' : editing.endDate,
-                    })
-                  }
-                  className="w-4 h-4"
-                />
-                <label htmlFor="current" className="text-gray-400 text-sm">
-                  {t('current')}
-                </label>
               </div>
             </div>
           ) : (
             <div className="grid sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs text-gray-500 mb-1">
-                  {t('role')} ({langTab.toUpperCase()})
+                  Program ({langTab.toUpperCase()})
                 </label>
                 <input
-                  value={tField('role')}
-                  onChange={(e) => setTField('role', e.target.value)}
+                  value={tField('program')}
+                  onChange={(e) => setTField('program', e.target.value)}
                   className="admin-input"
-                  placeholder={`Role in ${langTab.toUpperCase()}...`}
-                />
-              </div>
-              <div className="sm:col-span-2">
-                <label className="block text-xs text-gray-500 mb-1">
-                  {t('summary')} ({langTab.toUpperCase()})
-                </label>
-                <textarea
-                  value={tField('summary')}
-                  onChange={(e) => setTField('summary', e.target.value)}
-                  rows={3}
-                  className="admin-input resize-none"
-                  placeholder={`Summary in ${langTab.toUpperCase()}...`}
+                  placeholder={`Program name in ${langTab.toUpperCase()}...`}
                 />
               </div>
             </div>
@@ -285,7 +234,7 @@ export default function ExperiencePage() {
           {/* Bullets for current lang */}
           <div className="mt-4">
             <label className="block text-xs text-gray-500 mb-2">
-              Bullet points ({langTab.toUpperCase()})
+              Bullets ({langTab.toUpperCase()})
             </label>
             <div className="space-y-2 mb-3">
               {tBullets().map((b, i) => (
@@ -293,7 +242,7 @@ export default function ExperiencePage() {
                   <span className="text-gray-300 text-sm flex-1">{b}</span>
                   <button
                     onClick={() => removeBullet(i)}
-                    className="text-gray-500 hover:text-red-400 shrink-0 mt-0.5"
+                    className="text-gray-500 hover:text-red-400 shrink-0"
                   >
                     <X size={14} />
                   </button>
@@ -328,7 +277,6 @@ export default function ExperiencePage() {
               onClick={() => {
                 setEditing(null)
                 setEditingId(null)
-                setNewBullet('')
               }}
               className="btn-outline text-sm"
             >
@@ -339,39 +287,32 @@ export default function ExperiencePage() {
       )}
 
       <div className="space-y-3">
-        {experiences.map((exp) => (
-          <div key={exp.id} className="card flex items-start justify-between gap-4">
-            <div className="min-w-0">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-white font-medium text-sm">{exp.role}</span>
-                <span className="text-gray-500">@</span>
-                <span className="text-sm" style={{ color: 'var(--accent)' }}>
-                  {exp.companyName}
-                </span>
-                {exp.current && (
-                  <span className="text-xs bg-green-900/50 text-green-400 px-2 py-0.5 rounded-full">
-                    {t('present')}
-                  </span>
-                )}
-              </div>
-              <p className="text-gray-600 text-xs">
-                {fmtDate(exp.startDate)} — {exp.current ? t('present') : fmtDate(exp.endDate)}
+        {items.map((item) => (
+          <div key={item.id} className="card flex items-start justify-between gap-4">
+            <div>
+              <p className="text-white font-medium text-sm">{item.program}</p>
+              <p className="text-sm" style={{ color: 'var(--accent)' }}>
+                {item.institution}
               </p>
-              {exp.bullets && exp.bullets.length > 0 && (
-                <p className="text-gray-600 text-xs mt-1">
-                  {exp.bullets.length} bullet{exp.bullets.length > 1 ? 's' : ''}
-                </p>
-              )}
+              <p className="text-gray-600 text-xs mt-0.5">
+                {item.startDate?.slice(0, 7)} —{' '}
+                {item.endDate?.slice(0, 7) || 'Present'}
+              </p>
             </div>
             <div className="flex gap-2 shrink-0">
               <button
-                onClick={() => openEdit(exp, exp.id)}
+                onClick={() => openEdit(item, item.id)}
                 className="text-gray-500 hover:text-white"
               >
                 <Pencil size={16} />
               </button>
               <button
-                onClick={() => handleDelete(exp.id)}
+                onClick={async () => {
+                  if (confirm(t('deleteConfirm'))) {
+                    await adminApi.deleteEducation(item.id)
+                    fetchItems()
+                  }
+                }}
                 className="text-gray-500 hover:text-red-400"
               >
                 <Trash2 size={16} />

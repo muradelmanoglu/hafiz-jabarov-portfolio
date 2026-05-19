@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class ExperienceRequest {
@@ -27,4 +28,5 @@ public class ExperienceRequest {
     private List<String> bullets;
     private String companyUrl;
     private int orderWeight;
+    private Map<String, Map<String, Object>> translations;
 }

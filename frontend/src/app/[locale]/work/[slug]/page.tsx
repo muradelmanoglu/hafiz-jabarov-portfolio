@@ -24,11 +24,11 @@ export default function CaseStudyPage() {
 
   useEffect(() => {
     if (!slug) return
-    publicApi.getCaseStudy(slug).then((res) => {
+    publicApi.getCaseStudy(slug, locale).then((res) => {
       if (res.data.data) setCs(res.data.data)
       setLoading(false)
     })
-  }, [slug])
+  }, [slug, locale])
 
   if (loading) {
     return (

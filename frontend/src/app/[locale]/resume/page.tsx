@@ -36,15 +36,15 @@ export default function ResumePage() {
 
   useEffect(() => {
     Promise.all([
-      publicApi.getExperience(),
-      publicApi.getEducation(),
+      publicApi.getExperience(locale),
+      publicApi.getEducation(locale),
       publicApi.getSkills(),
     ]).then(([expRes, eduRes, skillRes]) => {
       if (expRes.data.data) setExperience(expRes.data.data)
       if (eduRes.data.data) setEducation(eduRes.data.data)
       if (skillRes.data.data) setSkills(skillRes.data.data)
     })
-  }, [])
+  }, [locale])
 
   const skillsByCategory = skills.reduce<Record<string, Skill[]>>((acc, s) => {
     if (!acc[s.category]) acc[s.category] = []

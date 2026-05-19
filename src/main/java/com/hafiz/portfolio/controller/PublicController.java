@@ -39,8 +39,9 @@ public class PublicController {
     // ─── Case Studies ────────────────────────────────────────────────────────
 
     @GetMapping("/case-studies")
-    public ResponseEntity<ApiResponse<List<CaseStudy>>> getCaseStudies() {
-        return ResponseEntity.ok(ApiResponse.success(caseStudyService.getAllPublished()));
+    public ResponseEntity<ApiResponse<List<CaseStudy>>> getCaseStudies(
+            @RequestParam(defaultValue = "en") String lang) {
+        return ResponseEntity.ok(ApiResponse.success(caseStudyService.getAllPublished(lang)));
     }
 
     @GetMapping("/case-studies/featured")
@@ -49,8 +50,10 @@ public class PublicController {
     }
 
     @GetMapping("/case-studies/{slug}")
-    public ResponseEntity<ApiResponse<CaseStudy>> getCaseStudy(@PathVariable String slug) {
-        return ResponseEntity.ok(ApiResponse.success(caseStudyService.getBySlug(slug)));
+    public ResponseEntity<ApiResponse<CaseStudy>> getCaseStudy(
+            @PathVariable String slug,
+            @RequestParam(defaultValue = "en") String lang) {
+        return ResponseEntity.ok(ApiResponse.success(caseStudyService.getBySlug(slug, lang)));
     }
 
     // ─── Services ────────────────────────────────────────────────────────────
@@ -70,15 +73,17 @@ public class PublicController {
     // ─── Experience ──────────────────────────────────────────────────────────
 
     @GetMapping("/experience")
-    public ResponseEntity<ApiResponse<List<Experience>>> getExperience() {
-        return ResponseEntity.ok(ApiResponse.success(experienceService.getAll()));
+    public ResponseEntity<ApiResponse<List<Experience>>> getExperience(
+            @RequestParam(defaultValue = "en") String lang) {
+        return ResponseEntity.ok(ApiResponse.success(experienceService.getAll(lang)));
     }
 
     // ─── Education ───────────────────────────────────────────────────────────
 
     @GetMapping("/education")
-    public ResponseEntity<ApiResponse<List<Education>>> getEducation() {
-        return ResponseEntity.ok(ApiResponse.success(educationService.getAll()));
+    public ResponseEntity<ApiResponse<List<Education>>> getEducation(
+            @RequestParam(defaultValue = "en") String lang) {
+        return ResponseEntity.ok(ApiResponse.success(educationService.getAll(lang)));
     }
 
     // ─── Testimonials ────────────────────────────────────────────────────────

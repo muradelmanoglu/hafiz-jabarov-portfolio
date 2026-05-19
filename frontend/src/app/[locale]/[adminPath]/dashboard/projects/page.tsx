@@ -6,7 +6,13 @@ import { Plus, Pencil, Trash2, Check, ExternalLink, X } from 'lucide-react'
 import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
 
-const emptyForm = (): Partial<CaseStudy> => ({
+type LangTab = 'en' | 'az' | 'ru'
+
+type CaseStudyWithTranslations = Partial<CaseStudy> & {
+  translations: Record<string, Record<string, unknown>>
+}
+
+const emptyForm = (): CaseStudyWithTranslations => ({
   title: '',
   slug: '',
   role: '',
@@ -21,6 +27,7 @@ const emptyForm = (): Partial<CaseStudy> => ({
   outcome: '',
   tools: [],
   tags: [],
+  translations: { az: {}, ru: {} },
 })
 
 const STATUS_BADGE: Record<string, string> = {
@@ -36,9 +43,10 @@ export default function CaseStudiesPage() {
   const tf = useTranslations('admin.projects.fields')
   const locale = useLocale()
   const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([])
-  const [editing, setEditing] = useState<Partial<CaseStudy> | null>(null)
+  const [editing, setEditing] = useState<CaseStudyWithTranslations | null>(null)
   const [editingId, setEditingId] = useState<number | null>(null)
   const [activeTab, setActiveTab] = useState<Tab>('basic')
+  const [contentLangTab, setContentLangTab] = useState<LangTab>('en')
   const [newTool, setNewTool] = useState('')
   const [newTag, setNewTag] = useState('')
   const [saveError, setSaveError] = useState<string | null>(null)
@@ -80,13 +88,46 @@ export default function CaseStudiesPage() {
   }
 
   const openEdit = (cs?: Partial<CaseStudy>, id?: number) => {
-    setEditing(cs || emptyForm())
+    setEditing(
+      cs
+        ? {
+            ...cs,
+            translations: (cs.translations as Record<string, Record<string, unknown>>) || {
+              az: {},
+              ru: {},
+            },
+          }
+        : emptyForm()
+    )
     setEditingId(id || null)
     setActiveTab('basic')
+    setContentLangTab('en')
     setSaveError(null)
     setNewTool('')
     setNewTag('')
   }
+
+  const tCsField = (field: string): string => {
+    if (contentLangTab === 'en') return ''
+    return (editing?.translations?.[contentLangTab]?.[field] as string) || ''
+  }
+
+  const setTCsField = (field: string, val: string) => {
+    if (!editing) return
+    setEditing({
+      ...editing,
+      translations: {
+        ...editing.translations,
+        [contentLangTab]: { ...editing.translations[contentLangTab], [field]: val },
+      },
+    })
+  }
+
+  const LANG_TABS: { key: LangTab; label: string }[] = [
+    { key: 'en', label: 'EN' },
+    { key: 'az', label: 'AZ' },
+    { key: 'ru', label: 'RU' },
+  ]
 
   const addChip = (field: 'tools' | 'tags', val: string, setter: (v: string) => void) => {
     const v = val.trim()
@@ -193,55 +234,138 @@ export default function CaseStudiesPage() {
           {/* TAB: Məzmun */}
           {activeTab === 'content' && (
             <div className="space-y-4">
-              <div>
-                <label className="block text-xs text-gray-500 mb-1">Problem</label>
-                <textarea
-                  value={editing.problem || ''}
-                  onChange={(e) => setEditing({ ...editing, problem: e.target.value })}
-                  rows={4}
-                  className="admin-input resize-none"
-                  placeholder="Legacy checkout had a 68% abandonment rate, 3 payment providers failing silently..."
-                />
+              {/* Language tabs for content */}
+              <div className="flex gap-1 bg-gray-800 rounded-lg p-1 w-fit">
+                {LANG_TABS.map((tab) => (
+                  <button
+                    key={tab.key}
+                    onClick={() => setContentLangTab(tab.key)}
+                    className={`px-3 py-1 rounded-md text-xs font-medium transition-colors ${
+                      contentLangTab === tab.key
+                        ? 'bg-gray-600 text-white'
+                        : 'text-gray-400 hover:text-white'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
-              <div>
-                <label className="block text-xs text-gray-500 mb-1">Mənim rolum</label>
-                <textarea
-                  value={editing.myRole || ''}
-                  onChange={(e) => setEditing({ ...editing, myRole: e.target.value })}
-                  rows={4}
-                  className="admin-input resize-none"
-                  placeholder="Owned discovery, roadmap, sprint planning and stakeholder communication..."
-                />
-              </div>
-              <div>
-                <label className="block text-xs text-gray-500 mb-1">Yanaşma</label>
-                <textarea
-                  value={editing.approach || ''}
-                  onChange={(e) => setEditing({ ...editing, approach: e.target.value })}
-                  rows={4}
-                  className="admin-input resize-none"
-                  placeholder="Phased migration: new payment gateway first, then UI overhaul..."
-                />
-              </div>
-              <div>
-                <label className="block text-xs text-gray-500 mb-1">Nəticə</label>
-                <textarea
-                  value={editing.outcome || ''}
-                  onChange={(e) => setEditing({ ...editing, outcome: e.target.value })}
-                  rows={4}
-                  className="admin-input resize-none"
-                  placeholder="Cart abandonment dropped 22%. Revenue up 18% MoM..."
-                />
-              </div>
-              <div>
-                <label className="block text-xs text-gray-500 mb-1">Reflection (optional)</label>
-                <textarea
-                  value={editing.reflection || ''}
-                  onChange={(e) => setEditing({ ...editing, reflection: e.target.value })}
-                  rows={3}
-                  className="admin-input resize-none"
-                />
-              </div>
+
+              {contentLangTab === 'en' ? (
+                <>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">Problem</label>
+                    <textarea
+                      value={editing.problem || ''}
+                      onChange={(e) => setEditing({ ...editing, problem: e.target.value })}
+                      rows={4}
+                      className="admin-input resize-none"
+                      placeholder="Legacy checkout had a 68% abandonment rate..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">My Role</label>
+                    <textarea
+                      value={editing.myRole || ''}
+                      onChange={(e) => setEditing({ ...editing, myRole: e.target.value })}
+                      rows={4}
+                      className="admin-input resize-none"
+                      placeholder="Owned discovery, roadmap, sprint planning..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">Approach</label>
+                    <textarea
+                      value={editing.approach || ''}
+                      onChange={(e) => setEditing({ ...editing, approach: e.target.value })}
+                      rows={4}
+                      className="admin-input resize-none"
+                      placeholder="Phased migration: new payment gateway first..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">Outcome</label>
+                    <textarea
+                      value={editing.outcome || ''}
+                      onChange={(e) => setEditing({ ...editing, outcome: e.target.value })}
+                      rows={4}
+                      className="admin-input resize-none"
+                      placeholder="Cart abandonment dropped 22%. Revenue up 18% MoM..."
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">Reflection (optional)</label>
+                    <textarea
+                      value={editing.reflection || ''}
+                      onChange={(e) => setEditing({ ...editing, reflection: e.target.value })}
+                      rows={3}
+                      className="admin-input resize-none"
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">
+                      Problem ({contentLangTab.toUpperCase()})
+                    </label>
+                    <textarea
+                      value={tCsField('problem')}
+                      onChange={(e) => setTCsField('problem', e.target.value)}
+                      rows={4}
+                      className="admin-input resize-none"
+                      placeholder={`Problem in ${contentLangTab.toUpperCase()}...`}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">
+                      My Role ({contentLangTab.toUpperCase()})
+                    </label>
+                    <textarea
+                      value={tCsField('myRole')}
+                      onChange={(e) => setTCsField('myRole', e.target.value)}
+                      rows={4}
+                      className="admin-input resize-none"
+                      placeholder={`My role in ${contentLangTab.toUpperCase()}...`}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">
+                      Approach ({contentLangTab.toUpperCase()})
+                    </label>
+                    <textarea
+                      value={tCsField('approach')}
+                      onChange={(e) => setTCsField('approach', e.target.value)}
+                      rows={4}
+                      className="admin-input resize-none"
+                      placeholder={`Approach in ${contentLangTab.toUpperCase()}...`}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">
+                      Outcome ({contentLangTab.toUpperCase()})
+                    </label>
+                    <textarea
+                      value={tCsField('outcome')}
+                      onChange={(e) => setTCsField('outcome', e.target.value)}
+                      rows={4}
+                      className="admin-input resize-none"
+                      placeholder={`Outcome in ${contentLangTab.toUpperCase()}...`}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-500 mb-1">
+                      Reflection ({contentLangTab.toUpperCase()}) (optional)
+                    </label>
+                    <textarea
+                      value={tCsField('reflection')}
+                      onChange={(e) => setTCsField('reflection', e.target.value)}
+                      rows={3}
+                      className="admin-input resize-none"
+                    />
+                  </div>
+                </>
+              )}
 
               {/* Tools */}
               <div>

@@ -5,6 +5,7 @@ import com.hafiz.portfolio.entity.CaseStudy;
 import com.hafiz.portfolio.entity.Company;
 import com.hafiz.portfolio.repository.CaseStudyRepository;
 import com.hafiz.portfolio.repository.CompanyRepository;
+import com.hafiz.portfolio.util.TranslationHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.regex.Pattern;
 
@@ -24,6 +26,32 @@ public class CaseStudyService {
 
     public List<CaseStudy> getAllPublished() {
         return caseStudyRepository.findByStatusOrderByOrderWeightAscPublishedAtDesc(CaseStudy.Status.PUBLISHED);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CaseStudy> getAllPublished(String lang) {
+        List<CaseStudy> list = getAllPublished();
+        if (lang == null || lang.equals("en")) return list;
+        list.forEach(cs -> applyTranslations(cs, lang));
+        return list;
+    }
+
+    @Transactional(readOnly = true)
+    public CaseStudy getBySlug(String slug, String lang) {
+        CaseStudy cs = getBySlug(slug);
+        if (lang != null && !lang.equals("en")) applyTranslations(cs, lang);
+        return cs;
+    }
+
+    private void applyTranslations(CaseStudy cs, String lang) {
+        Map<String, Map<String, Object>> t = TranslationHelper.parse(cs.getTranslations());
+        cs.setTitle(TranslationHelper.str(t, lang, "title", cs.getTitle()));
+        cs.setSummary(TranslationHelper.str(t, lang, "summary", cs.getSummary()));
+        cs.setProblem(TranslationHelper.str(t, lang, "problem", cs.getProblem()));
+        cs.setMyRole(TranslationHelper.str(t, lang, "myRole", cs.getMyRole()));
+        cs.setApproach(TranslationHelper.str(t, lang, "approach", cs.getApproach()));
+        cs.setOutcome(TranslationHelper.str(t, lang, "outcome", cs.getOutcome()));
+        cs.setReflection(TranslationHelper.str(t, lang, "reflection", cs.getReflection()));
     }
 
     public List<CaseStudy> getAll() {
@@ -74,6 +102,7 @@ public class CaseStudyService {
                 .orderWeight(req.getOrderWeight())
                 .status(req.getStatus() != null ? req.getStatus() : CaseStudy.Status.DRAFT)
                 .publishedAt(req.getStatus() == CaseStudy.Status.PUBLISHED ? LocalDateTime.now() : null)
+                .translations(TranslationHelper.serialize(req.getTranslations()))
                 .build();
         return caseStudyRepository.save(cs);
     }
@@ -109,6 +138,7 @@ public class CaseStudyService {
             }
             cs.setStatus(req.getStatus());
         }
+        cs.setTranslations(TranslationHelper.serialize(req.getTranslations()));
         return caseStudyRepository.save(cs);
     }
 

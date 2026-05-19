@@ -191,6 +191,7 @@
       "caseStudies": "Keys tədqiqatları",
       "skills": "Bacarıqlar",
       "experience": "Təcrübə",
+      "education": "Təhsil",
       "submissions": "Müraciətlər",
       "settings": "Parametrlər",
       "logout": "Çıxış"
@@ -281,6 +282,15 @@
         "copyrightText": "Müəllif hüquqları mətni",
         "colophonText": "Kolofon mətni"
       }
+    },
+    "education": {
+      "title": "Təhsil",
+      "new": "Təhsil əlavə et",
+      "newEntry": "Yeni təhsil",
+      "edit": "Redaktə et",
+      "deleteConfirm": "Bu təhsil qeydini silmək istəyirsiniz?",
+      "save": "Yadda saxla",
+      "cancel": "İmtina"
     },
     "projects": {
       "title": "Keys Tədqiqatları",

@@ -5,11 +5,13 @@ import com.hafiz.portfolio.entity.Company;
 import com.hafiz.portfolio.entity.Experience;
 import com.hafiz.portfolio.repository.CompanyRepository;
 import com.hafiz.portfolio.repository.ExperienceRepository;
+import com.hafiz.portfolio.util.TranslationHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Service
@@ -21,6 +23,21 @@ public class ExperienceService {
 
     public List<Experience> getAll() {
         return experienceRepository.findAllByOrderByOrderWeightAscStartDateDesc();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Experience> getAll(String lang) {
+        List<Experience> list = getAll();
+        if (lang == null || lang.equals("en")) return list;
+        list.forEach(e -> applyTranslations(e, lang));
+        return list;
+    }
+
+    private void applyTranslations(Experience e, String lang) {
+        Map<String, Map<String, Object>> t = TranslationHelper.parse(e.getTranslations());
+        e.setRole(TranslationHelper.str(t, lang, "role", e.getRole()));
+        e.setSummary(TranslationHelper.str(t, lang, "summary", e.getSummary()));
+        e.setBullets(TranslationHelper.list(t, lang, "bullets", e.getBullets()));
     }
 
     public Experience getById(Long id) {
@@ -42,6 +59,7 @@ public class ExperienceService {
                 .bullets(req.getBullets())
                 .companyUrl(req.getCompanyUrl())
                 .orderWeight(req.getOrderWeight())
+                .translations(TranslationHelper.serialize(req.getTranslations()))
                 .build();
         return experienceRepository.save(e);
     }
@@ -60,6 +78,7 @@ public class ExperienceService {
         e.setBullets(req.getBullets());
         e.setCompanyUrl(req.getCompanyUrl());
         e.setOrderWeight(req.getOrderWeight());
+        e.setTranslations(TranslationHelper.serialize(req.getTranslations()));
         return experienceRepository.save(e);
     }
 

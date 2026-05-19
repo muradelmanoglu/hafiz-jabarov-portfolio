@@ -8,6 +8,7 @@ import {
   FolderOpen,
   Wrench,
   Briefcase,
+  GraduationCap,
   Mail,
   Settings,
   LogOut,
@@ -34,6 +35,7 @@ export default function DashboardLayout({
     { label: t('caseStudies'), href: `${base}/projects`, icon: FolderOpen },
     { label: t('skills'), href: `${base}/skills`, icon: Wrench },
     { label: t('experience'), href: `${base}/experience`, icon: Briefcase },
+    { label: t('education'), href: `${base}/education`, icon: GraduationCap },
     { label: t('submissions'), href: `${base}/messages`, icon: Mail },
     { label: t('settings'), href: `${base}/settings`, icon: Settings },
   ]

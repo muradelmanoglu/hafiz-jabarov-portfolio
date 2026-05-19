@@ -191,6 +191,7 @@
       "caseStudies": "Case Studies",
       "skills": "Skills",
       "experience": "Experience",
+      "education": "Education",
       "submissions": "Submissions",
       "settings": "Settings",
       "logout": "Logout"
@@ -281,6 +282,15 @@
         "copyrightText": "Copyright text",
         "colophonText": "Colophon / built-with text"
       }
+    },
+    "education": {
+      "title": "Education",
+      "new": "Add Education",
+      "newEntry": "New Education Entry",
+      "edit": "Edit Education",
+      "deleteConfirm": "Delete this education entry?",
+      "save": "Save",
+      "cancel": "Cancel"
     },
     "projects": {
       "title": "Case Studies",

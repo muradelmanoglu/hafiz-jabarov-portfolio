@@ -169,6 +169,7 @@ export interface CaseStudy {
   orderWeight: number
   status: 'DRAFT' | 'PUBLISHED' | 'ARCHIVED'
   publishedAt?: string
+  translations?: Record<string, Record<string, unknown>>
 }
 
 export interface PortfolioService {
@@ -211,6 +212,7 @@ export interface Experience {
   bullets?: string[]
   companyUrl?: string
   orderWeight: number
+  translations?: Record<string, Record<string, unknown>>
 }
 
 export interface Education {
@@ -222,6 +224,7 @@ export interface Education {
   endDate?: string
   bullets?: string[]
   orderWeight: number
+  translations?: Record<string, Record<string, unknown>>
 }
 
 export interface Testimonial {
@@ -285,14 +288,14 @@ export const publicApi = {
   getSettings: () =>
     api.get<ApiResponse<SiteSettings>>('/public/settings'),
 
-  getCaseStudies: () =>
-    api.get<ApiResponse<CaseStudy[]>>('/public/case-studies'),
+  getCaseStudies: (lang?: string) =>
+    api.get<ApiResponse<CaseStudy[]>>(`/public/case-studies${lang ? `?lang=${lang}` : ''}`),
 
   getFeaturedCaseStudies: () =>
     api.get<ApiResponse<CaseStudy[]>>('/public/case-studies/featured'),
 
-  getCaseStudy: (slug: string) =>
-    api.get<ApiResponse<CaseStudy>>(`/public/case-studies/${slug}`),
+  getCaseStudy: (slug: string, lang?: string) =>
+    api.get<ApiResponse<CaseStudy>>(`/public/case-studies/${slug}${lang ? `?lang=${lang}` : ''}`),
 
   getServices: () =>
     api.get<ApiResponse<PortfolioService[]>>('/public/services'),
@@ -300,11 +303,11 @@ export const publicApi = {
   getSkills: () =>
     api.get<ApiResponse<Skill[]>>('/public/skills'),
 
-  getExperience: () =>
-    api.get<ApiResponse<Experience[]>>('/public/experience'),
+  getExperience: (lang?: string) =>
+    api.get<ApiResponse<Experience[]>>(`/public/experience${lang ? `?lang=${lang}` : ''}`),
 
-  getEducation: () =>
-    api.get<ApiResponse<Education[]>>('/public/education'),
+  getEducation: (lang?: string) =>
+    api.get<ApiResponse<Education[]>>(`/public/education${lang ? `?lang=${lang}` : ''}`),
 
   getTestimonials: () =>
     api.get<ApiResponse<Testimonial[]>>('/public/testimonials'),

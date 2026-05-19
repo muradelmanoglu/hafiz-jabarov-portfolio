@@ -7,19 +7,20 @@ import { publicApi, type CaseStudy } from '@/lib/api'
 import { Link } from '@/lib/navigation'
 import { ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 
 export default function WorkPage() {
   const t = useTranslations('work')
+  const locale = useLocale()
   const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    publicApi.getCaseStudies().then((res) => {
+    publicApi.getCaseStudies(locale).then((res) => {
       if (res.data.data) setCaseStudies(res.data.data)
       setLoading(false)
     })
-  }, [])
+  }, [locale])
 
   return (
     <>

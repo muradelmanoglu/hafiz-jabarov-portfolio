@@ -86,6 +86,9 @@ public class CaseStudy {
 
     private LocalDateTime publishedAt;
 
+    @Column(columnDefinition = "TEXT")
+    private String translations;
+
     @Column(nullable = false, updatable = false)
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();

@@ -35,4 +35,7 @@ public class Education {
 
     @Builder.Default
     private int orderWeight = 0;
+
+    @Column(columnDefinition = "TEXT")
+    private String translations;
 }

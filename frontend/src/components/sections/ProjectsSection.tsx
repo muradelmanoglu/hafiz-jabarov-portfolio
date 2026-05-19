@@ -9,6 +9,7 @@ import { Link } from '@/lib/navigation'
 
 export default function FeaturedWorkSection() {
   const t = useTranslations('work')
+  const locale = useLocale()
   const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([])
 
   useEffect(() => {

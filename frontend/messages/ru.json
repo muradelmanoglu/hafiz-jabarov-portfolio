@@ -191,6 +191,7 @@
       "caseStudies": "Кейсы",
       "skills": "Навыки",
       "experience": "Опыт",
+      "education": "Образование",
       "submissions": "Заявки",
       "settings": "Настройки",
       "logout": "Выйти"
@@ -281,6 +282,15 @@
         "copyrightText": "Текст авторских прав",
         "colophonText": "Текст колофона"
       }
+    },
+    "education": {
+      "title": "Образование",
+      "new": "Добавить образование",
+      "newEntry": "Новая запись",
+      "edit": "Редактировать",
+      "deleteConfirm": "Удалить эту запись?",
+      "save": "Сохранить",
+      "cancel": "Отмена"
     },
     "projects": {
       "title": "Кейсы",

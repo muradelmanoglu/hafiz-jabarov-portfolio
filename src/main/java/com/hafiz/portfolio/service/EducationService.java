@@ -3,11 +3,13 @@ package com.hafiz.portfolio.service;
 import com.hafiz.portfolio.dto.request.EducationRequest;
 import com.hafiz.portfolio.entity.Education;
 import com.hafiz.portfolio.repository.EducationRepository;
+import com.hafiz.portfolio.util.TranslationHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Service
@@ -18,6 +20,21 @@ public class EducationService {
 
     public List<Education> getAll() {
         return educationRepository.findAllByOrderByOrderWeightAsc();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Education> getAll(String lang) {
+        List<Education> list = getAll();
+        if (lang == null || lang.equals("en")) return list;
+        list.forEach(e -> applyTranslations(e, lang));
+        return list;
+    }
+
+    private void applyTranslations(Education e, String lang) {
+        Map<String, Map<String, Object>> t = TranslationHelper.parse(e.getTranslations());
+        e.setInstitution(TranslationHelper.str(t, lang, "institution", e.getInstitution()));
+        e.setProgram(TranslationHelper.str(t, lang, "program", e.getProgram()));
+        e.setBullets(TranslationHelper.list(t, lang, "bullets", e.getBullets()));
     }
 
     public Education getById(Long id) {
@@ -35,6 +52,7 @@ public class EducationService {
                 .endDate(req.getEndDate())
                 .bullets(req.getBullets())
                 .orderWeight(req.getOrderWeight())
+                .translations(TranslationHelper.serialize(req.getTranslations()))
                 .build();
         return educationRepository.save(e);
     }
@@ -49,6 +67,7 @@ public class EducationService {
         e.setEndDate(req.getEndDate());
         e.setBullets(req.getBullets());
         e.setOrderWeight(req.getOrderWeight());
+        e.setTranslations(TranslationHelper.serialize(req.getTranslations()));
         return educationRepository.save(e);
     }
 

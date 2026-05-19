@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class CaseStudyRequest {
@@ -55,4 +56,5 @@ public class CaseStudyRequest {
     private boolean featured;
     private int orderWeight;
     private CaseStudy.Status status;
+    private Map<String, Map<String, Object>> translations;
 }

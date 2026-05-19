@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Data
 public class EducationRequest {
@@ -24,4 +25,5 @@ public class EducationRequest {
     private LocalDate endDate;
     private List<String> bullets;
     private int orderWeight;
+    private Map<String, Map<String, Object>> translations;
 }
