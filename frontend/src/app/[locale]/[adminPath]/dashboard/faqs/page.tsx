@@ -11,7 +11,7 @@ const LANG_TABS: { key: LangTab; label: string }[] = [
   { key: 'ru', label: 'RU' },
 ]
 
-type FAQWithTranslations = Partial<FAQ> & {
+type FAQWithTranslations = Omit<Partial<FAQ>, 'translations'> & {
   translations: Record<string, Record<string, string>>
 }
 

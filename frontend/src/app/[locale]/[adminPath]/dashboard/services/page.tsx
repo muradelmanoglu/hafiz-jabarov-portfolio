@@ -11,7 +11,7 @@ const LANG_TABS: { key: LangTab; label: string }[] = [
   { key: 'ru', label: 'RU' },
 ]
 
-type ServiceWithTranslations = Partial<PortfolioService> & {
+type ServiceWithTranslations = Omit<Partial<PortfolioService>, 'translations'> & {
   translations: Record<string, Record<string, string>>
 }
 
