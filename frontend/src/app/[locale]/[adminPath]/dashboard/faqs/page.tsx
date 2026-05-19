@@ -47,9 +47,9 @@ export default function FAQsPage() {
     setSaving(true)
     setSaveError(null)
     try {
-      const payload = {
+      const payload: Partial<FAQ> = {
         ...editing,
-        translations: editing.translations as unknown as Record<string, Record<string, unknown>>,
+        translations: JSON.stringify(editing.translations),
       }
       if (editingId) {
         await adminApi.updateFAQ(editingId, payload)

@@ -59,10 +59,14 @@ export default function ServicesPage() {
     setSaving(true)
     setSaveError(null)
     try {
+      const payload: Partial<PortfolioService> = {
+        ...editing,
+        translations: JSON.stringify(editing.translations),
+      }
       if (editingId) {
-        await adminApi.updateService(editingId, editing)
+        await adminApi.updateService(editingId, payload)
       } else {
-        await adminApi.createService(editing)
+        await adminApi.createService(payload)
       }
       setEditing(null)
       setEditingId(null)
