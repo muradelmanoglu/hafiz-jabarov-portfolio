@@ -10,11 +10,17 @@ import { publicApi, type SiteSettings } from '@/lib/api'
 export default function AboutSection() {
   const t = useTranslations('about')
   const locale = useLocale()
-  const [settings, setSettings] = useState<Partial<SiteSettings>>({})
+  const [settings, setSettings] = useState<Partial<SiteSettings>>(() => {
+    if (typeof window === 'undefined') return {}
+    try { return JSON.parse(localStorage.getItem('site_settings_cache') || '{}') } catch { return {} }
+  })
 
   useEffect(() => {
     publicApi.getSettings().then((res) => {
-      if (res.data.data) setSettings(res.data.data)
+      if (res.data.data) {
+        setSettings(res.data.data)
+        try { localStorage.setItem('site_settings_cache', JSON.stringify(res.data.data)) } catch {}
+      }
     }).catch(() => {})
   }, [])
 

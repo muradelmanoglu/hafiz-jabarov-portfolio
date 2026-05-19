@@ -21,17 +21,17 @@ public class SiteSettingsService {
     @Transactional
     public SiteSettings update(SiteSettingsRequest req) {
         SiteSettings s = get();
-        s.setSiteTitle(req.getSiteTitle());
-        s.setTagline(req.getTagline());
-        s.setHeroHeadline(req.getHeroHeadline());
-        s.setHeroSubheadline(req.getHeroSubheadline());
-        s.setMetaDescription(req.getMetaDescription());
+        if (req.getSiteTitle() != null) s.setSiteTitle(req.getSiteTitle());
+        if (req.getTagline() != null) s.setTagline(req.getTagline());
+        if (req.getHeroHeadline() != null) s.setHeroHeadline(req.getHeroHeadline());
+        if (req.getHeroSubheadline() != null) s.setHeroSubheadline(req.getHeroSubheadline());
+        if (req.getMetaDescription() != null) s.setMetaDescription(req.getMetaDescription());
         if (req.getAvailability() != null) s.setAvailability(req.getAvailability());
         s.setAvailabilityMessage(req.getAvailabilityMessage());
-        s.setEmail(req.getEmail());
+        if (req.getEmail() != null) s.setEmail(req.getEmail());
         s.setPhone(req.getPhone());
         s.setPhoneVisible(req.isPhoneVisible());
-        s.setLinkedIn(req.getLinkedIn());
+        if (req.getLinkedIn() != null) s.setLinkedIn(req.getLinkedIn());
         s.setGithub(req.getGithub());
         s.setCalendly(req.getCalendly());
         s.setTwitter(req.getTwitter());
@@ -48,7 +48,7 @@ public class SiteSettingsService {
         s.setAboutP1(req.getAboutP1());
         s.setAboutP2(req.getAboutP2());
         s.setAboutP3(req.getAboutP3());
-        s.setHeadlineMetrics(req.getHeadlineMetrics());
+        if (req.getHeadlineMetrics() != null) s.setHeadlineMetrics(req.getHeadlineMetrics());
         return siteSettingsRepository.save(s);
     }
 

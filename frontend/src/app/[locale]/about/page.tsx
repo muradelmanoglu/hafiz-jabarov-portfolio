@@ -25,7 +25,10 @@ export default function AboutPage() {
   const [experience, setExperience] = useState<Experience[]>([])
   const [education, setEducation] = useState<Education[]>([])
   const [skills, setSkills] = useState<Skill[]>([])
-  const [settings, setSettings] = useState<Partial<SiteSettings>>({})
+  const [settings, setSettings] = useState<Partial<SiteSettings>>(() => {
+    if (typeof window === 'undefined') return {}
+    try { return JSON.parse(localStorage.getItem('site_settings_cache') || '{}') } catch { return {} }
+  })
 
   useEffect(() => {
     Promise.all([
@@ -37,7 +40,10 @@ export default function AboutPage() {
       if (expRes.data.data) setExperience(expRes.data.data)
       if (eduRes.data.data) setEducation(eduRes.data.data)
       if (skillRes.data.data) setSkills(skillRes.data.data)
-      if (settingsRes.data.data) setSettings(settingsRes.data.data)
+      if (settingsRes.data.data) {
+        setSettings(settingsRes.data.data)
+        try { localStorage.setItem('site_settings_cache', JSON.stringify(settingsRes.data.data)) } catch {}
+      }
     })
   }, [locale])
 
