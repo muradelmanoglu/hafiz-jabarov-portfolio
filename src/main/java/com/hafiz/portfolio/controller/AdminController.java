@@ -132,6 +132,11 @@ public class AdminController {
 
     // ─── Experience ───────────────────────────────────────────────────────────
 
+    @GetMapping("/experience")
+    public ResponseEntity<ApiResponse<List<Experience>>> getAllExperience() {
+        return ResponseEntity.ok(ApiResponse.success(experienceService.getAll()));
+    }
+
     @PostMapping("/experience")
     public ResponseEntity<ApiResponse<Experience>> createExperience(@Valid @RequestBody ExperienceRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)

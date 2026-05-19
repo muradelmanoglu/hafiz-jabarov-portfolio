@@ -33,16 +33,19 @@ export default function ResumePage() {
   const [experience, setExperience] = useState<Experience[]>([])
   const [education, setEducation] = useState<Education[]>([])
   const [skills, setSkills] = useState<Skill[]>([])
+  const [resumeUrl, setResumeUrl] = useState<string | null>(null)
 
   useEffect(() => {
     Promise.all([
       publicApi.getExperience(locale),
       publicApi.getEducation(locale),
       publicApi.getSkills(),
-    ]).then(([expRes, eduRes, skillRes]) => {
+      publicApi.getSettings(),
+    ]).then(([expRes, eduRes, skillRes, settingsRes]) => {
       if (expRes.data.data) setExperience(expRes.data.data)
       if (eduRes.data.data) setEducation(eduRes.data.data)
       if (skillRes.data.data) setSkills(skillRes.data.data)
+      if (settingsRes.data.data?.resumeUrl) setResumeUrl(settingsRes.data.data.resumeUrl)
     })
   }, [locale])
 
@@ -64,9 +67,11 @@ export default function ResumePage() {
               <p className="text-muted-2 mt-1">{t('subtitle')}</p>
             </div>
             <div className="flex gap-3 shrink-0">
-              <a href="/api/public/settings" className="btn-outline text-sm" download>
-                <Download size={14} /> {t('pdf')}
-              </a>
+              {resumeUrl && (
+                <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="btn-outline text-sm">
+                  <Download size={14} /> {t('pdf')}
+                </a>
+              )}
               <Link href="/contact" className="btn-accent text-sm">
                 {t('hire')} <ArrowRight size={14} />
               </Link>

@@ -39,19 +39,19 @@ public class CaseStudy {
     private String thumbnailUrl;
     private String heroImageUrl;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String summary;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String problem;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String myRole;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String approach;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(columnDefinition = "TEXT")
     private String outcome;
 
     @Column(columnDefinition = "TEXT")
@@ -71,7 +71,6 @@ public class CaseStudy {
     @Column(name = "tag")
     private List<String> tags;
 
-    @Column(nullable = false)
     private String domain;
 
     @Builder.Default

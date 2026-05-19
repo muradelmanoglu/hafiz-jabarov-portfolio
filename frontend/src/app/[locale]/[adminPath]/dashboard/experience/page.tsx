@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { adminApi, publicApi, type Experience } from '@/lib/api'
+import { adminApi, type Experience } from '@/lib/api'
 import { Plus, Pencil, Trash2, Check, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
@@ -39,7 +39,7 @@ export default function ExperiencePage() {
   useEffect(() => { fetchExperience() }, [])
 
   const fetchExperience = async () => {
-    const res = await publicApi.getExperience()
+    const res = await adminApi.getExperience()
     if (res.data.data) setExperiences(res.data.data)
   }
 

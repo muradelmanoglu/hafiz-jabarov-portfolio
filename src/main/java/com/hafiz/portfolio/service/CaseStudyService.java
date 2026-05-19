@@ -88,16 +88,16 @@ public class CaseStudyService {
                 .teamSize(req.getTeamSize())
                 .thumbnailUrl(req.getThumbnailUrl())
                 .heroImageUrl(req.getHeroImageUrl())
-                .summary(req.getSummary())
-                .problem(req.getProblem())
-                .myRole(req.getMyRole())
-                .approach(req.getApproach())
-                .outcome(req.getOutcome())
+                .summary(nvl(req.getSummary()))
+                .problem(nvl(req.getProblem()))
+                .myRole(nvl(req.getMyRole()))
+                .approach(nvl(req.getApproach()))
+                .outcome(nvl(req.getOutcome()))
                 .reflection(req.getReflection())
                 .outcomeMetrics(req.getOutcomeMetrics())
                 .tools(req.getTools())
                 .tags(req.getTags())
-                .domain(req.getDomain())
+                .domain(nvl(req.getDomain()))
                 .featured(req.isFeatured())
                 .orderWeight(req.getOrderWeight())
                 .status(req.getStatus() != null ? req.getStatus() : CaseStudy.Status.DRAFT)
@@ -120,16 +120,16 @@ public class CaseStudyService {
         cs.setTeamSize(req.getTeamSize());
         cs.setThumbnailUrl(req.getThumbnailUrl());
         cs.setHeroImageUrl(req.getHeroImageUrl());
-        cs.setSummary(req.getSummary());
-        cs.setProblem(req.getProblem());
-        cs.setMyRole(req.getMyRole());
-        cs.setApproach(req.getApproach());
-        cs.setOutcome(req.getOutcome());
+        cs.setSummary(nvl(req.getSummary()));
+        cs.setProblem(nvl(req.getProblem()));
+        cs.setMyRole(nvl(req.getMyRole()));
+        cs.setApproach(nvl(req.getApproach()));
+        cs.setOutcome(nvl(req.getOutcome()));
         cs.setReflection(req.getReflection());
         cs.setOutcomeMetrics(req.getOutcomeMetrics());
         cs.setTools(req.getTools());
         cs.setTags(req.getTags());
-        cs.setDomain(req.getDomain());
+        cs.setDomain(nvl(req.getDomain()));
         cs.setFeatured(req.isFeatured());
         cs.setOrderWeight(req.getOrderWeight());
         if (req.getStatus() != null) {
@@ -153,6 +153,10 @@ public class CaseStudyService {
         if (companyId == null) return null;
         return companyRepository.findById(companyId)
                 .orElseThrow(() -> new NoSuchElementException("Company not found: " + companyId));
+    }
+
+    private static String nvl(String s) {
+        return s != null ? s : "";
     }
 
     private String toSlug(String text) {

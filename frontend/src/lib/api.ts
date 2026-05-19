@@ -371,6 +371,8 @@ export const adminApi = {
     api.delete<ApiResponse<void>>(`/admin/skills/${id}`),
 
   // Experience
+  getExperience: () =>
+    api.get<ApiResponse<Experience[]>>('/admin/experience'),
   createExperience: (data: Partial<Experience>) =>
     api.post<ApiResponse<Experience>>('/admin/experience', data),
   updateExperience: (id: number, data: Partial<Experience>) =>
