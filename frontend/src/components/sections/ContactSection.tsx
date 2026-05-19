@@ -42,11 +42,11 @@ export default function ContactSection() {
   ]
 
   const BUDGET_RANGES = [
-    { value: 'UNDER_2K', label: t('budgetRanges.UNDER_2K') },
-    { value: 'TWO_TO_FIVE_K', label: t('budgetRanges.TWO_TO_FIVE_K') },
-    { value: 'FIVE_TO_TEN_K', label: t('budgetRanges.FIVE_TO_TEN_K') },
-    { value: 'OVER_TEN_K', label: t('budgetRanges.OVER_TEN_K') },
-    { value: 'PREFER_NOT_TO_SAY', label: t('budgetRanges.PREFER_NOT_TO_SAY') },
+    { value: 'UNDER_1K', label: t('budgetRanges.UNDER_1K') },
+    { value: 'FROM_1K_TO_5K', label: t('budgetRanges.FROM_1K_TO_5K') },
+    { value: 'FROM_5K_TO_10K', label: t('budgetRanges.FROM_5K_TO_10K') },
+    { value: 'FROM_10K_TO_25K', label: t('budgetRanges.FROM_10K_TO_25K') },
+    { value: 'ABOVE_25K', label: t('budgetRanges.ABOVE_25K') },
   ]
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormData>({

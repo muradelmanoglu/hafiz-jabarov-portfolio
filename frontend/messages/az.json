@@ -141,11 +141,11 @@
       "OTHER": "Digər"
     },
     "budgetRanges": {
-      "UNDER_2K": "$2,000-dən az",
-      "TWO_TO_FIVE_K": "$2,000 – $5,000",
-      "FIVE_TO_TEN_K": "$5,000 – $10,000",
-      "OVER_TEN_K": "$10,000+",
-      "PREFER_NOT_TO_SAY": "Deməyə üstünlük vermirəm"
+      "UNDER_1K": "1.000 dollardan az",
+      "FROM_1K_TO_5K": "1.000 – 5.000 dollar",
+      "FROM_5K_TO_10K": "5.000 – 10.000 dollar",
+      "FROM_10K_TO_25K": "10.000 – 25.000 dollar",
+      "ABOVE_25K": "25.000 dollar+"
     }
   },
   "aboutPage": {
