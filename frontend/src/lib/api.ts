@@ -113,12 +113,17 @@ export interface SiteSettings {
   github?: string
   calendly?: string
   twitter?: string
+  instagram?: string
   resumeUrl?: string
   logoUrl?: string
   faviconUrl?: string
   defaultOgImageUrl?: string
   copyrightText?: string
   colophonText?: string
+  aboutHeading?: string
+  aboutP1?: string
+  aboutP2?: string
+  aboutP3?: string
   headlineMetrics?: HeadlineMetric[]
 }
 

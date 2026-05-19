@@ -278,6 +278,7 @@
         "github": "GitHub URL",
         "calendly": "Calendly URL",
         "twitter": "Twitter / X URL",
+        "instagram": "Instagram URL",
         "resumeUrl": "URL резюме PDF",
         "logoUrl": "URL логотипа",
         "faviconUrl": "URL favicon",

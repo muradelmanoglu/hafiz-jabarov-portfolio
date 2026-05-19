@@ -52,6 +52,40 @@ export default function SettingsPage() {
     </div>
   )
 
+  const fileField = (key: keyof SiteSettings, label: string) => (
+    <div>
+      <label className="block text-xs text-gray-500 mb-1">{label}</label>
+      <div className="flex gap-2 items-center">
+        <input
+          value={(settings[key] as string) || ''}
+          onChange={(e) => setSettings({ ...settings, [key]: e.target.value })}
+          className="admin-input flex-1 text-xs"
+          placeholder="https://... or upload →"
+        />
+        <label className="btn-outline text-xs px-3 py-2 cursor-pointer shrink-0">
+          Upload
+          <input
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0]
+              if (!file) return
+              const reader = new FileReader()
+              reader.onload = () => {
+                setSettings({ ...settings, [key]: reader.result as string })
+              }
+              reader.readAsDataURL(file)
+            }}
+          />
+        </label>
+      </div>
+      {(settings[key] as string)?.startsWith('data:image') && (
+        <img src={settings[key] as string} alt={label} className="mt-2 h-10 w-auto rounded object-contain bg-gray-800 p-1" />
+      )}
+    </div>
+  )
+
   if (loading) return <div className="text-gray-500">Loading settings...</div>
 
   return (
@@ -78,6 +112,19 @@ export default function SettingsPage() {
             {field('heroHeadline', tf('heroHeadline'))}
             {field('metaDescription', tf('metaDescription'), true)}
             {field('heroSubheadline', tf('heroSubheadline'), true)}
+          </div>
+        </div>
+
+        <div className="card">
+          <h2 className="text-white font-semibold mb-4 text-sm uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
+            About Section
+          </h2>
+          <p className="text-gray-500 text-xs mb-4">Overrides the "About" section text on the homepage. Leave blank to use translation file defaults.</p>
+          <div className="space-y-4">
+            {field('aboutHeading', 'Heading')}
+            {field('aboutP1', 'Paragraph 1', true)}
+            {field('aboutP2', 'Paragraph 2', true)}
+            {field('aboutP3', 'Paragraph 3', true)}
           </div>
         </div>
 
@@ -113,6 +160,7 @@ export default function SettingsPage() {
             {field('github', tf('github'))}
             {field('calendly', tf('calendly'))}
             {field('twitter', tf('twitter'))}
+            {field('instagram', tf('instagram'))}
             {field('resumeUrl', tf('resumeUrl'))}
           </div>
         </div>
@@ -122,9 +170,9 @@ export default function SettingsPage() {
             {t('branding')}
           </h2>
           <div className="grid sm:grid-cols-2 gap-4">
-            {field('logoUrl', tf('logoUrl'))}
-            {field('faviconUrl', tf('faviconUrl'))}
-            {field('defaultOgImageUrl', tf('defaultOgImageUrl'))}
+            {fileField('logoUrl', tf('logoUrl'))}
+            {fileField('faviconUrl', tf('faviconUrl'))}
+            {fileField('defaultOgImageUrl', tf('defaultOgImageUrl'))}
             {field('copyrightText', tf('copyrightText'))}
             {field('colophonText', tf('colophonText'))}
           </div>

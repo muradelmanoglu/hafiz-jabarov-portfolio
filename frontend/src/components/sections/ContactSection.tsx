@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { publicApi, type ContactFormData } from '@/lib/api'
-import { Send, CheckCircle, CalendarDays } from 'lucide-react'
+import { publicApi, type ContactFormData, type SiteSettings } from '@/lib/api'
+import { Send, CheckCircle, CalendarDays, Linkedin, Github, Twitter, Instagram, Mail } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 
@@ -23,10 +23,14 @@ export default function ContactSection() {
   const [sent, setSent] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [calendlyUrl, setCalendlyUrl] = useState('https://calendly.com/hafizjabarov')
+  const [settings, setSettings] = useState<Partial<SiteSettings>>({})
 
   useEffect(() => {
     publicApi.getSettings().then((res) => {
-      if (res.data.data?.calendly) setCalendlyUrl(res.data.data.calendly)
+      if (res.data.data) {
+        if (res.data.data.calendly) setCalendlyUrl(res.data.data.calendly)
+        setSettings(res.data.data)
+      }
     }).catch(() => {})
   }, [])
 
@@ -94,6 +98,36 @@ export default function ContactSection() {
               <CalendarDays size={16} />
               {t('bookCall')}
             </a>
+            {/* Social links */}
+            {(settings.linkedIn || settings.github || settings.twitter || settings.instagram || settings.email) && (
+              <div className="flex items-center gap-4 mt-6">
+                {settings.linkedIn && (
+                  <a href={settings.linkedIn} target="_blank" rel="noopener noreferrer" className="text-muted hover:text-fg transition-colors" aria-label="LinkedIn">
+                    <Linkedin size={18} />
+                  </a>
+                )}
+                {settings.github && (
+                  <a href={settings.github} target="_blank" rel="noopener noreferrer" className="text-muted hover:text-fg transition-colors" aria-label="GitHub">
+                    <Github size={18} />
+                  </a>
+                )}
+                {settings.twitter && (
+                  <a href={settings.twitter} target="_blank" rel="noopener noreferrer" className="text-muted hover:text-fg transition-colors" aria-label="Twitter">
+                    <Twitter size={18} />
+                  </a>
+                )}
+                {settings.instagram && (
+                  <a href={settings.instagram} target="_blank" rel="noopener noreferrer" className="text-muted hover:text-fg transition-colors" aria-label="Instagram">
+                    <Instagram size={18} />
+                  </a>
+                )}
+                {settings.email && (
+                  <a href={`mailto:${settings.email}`} className="text-muted hover:text-fg transition-colors" aria-label="Email">
+                    <Mail size={18} />
+                  </a>
+                )}
+              </div>
+            )}
           </motion.div>
 
           {/* Right: form */}

@@ -1,10 +1,21 @@
-import { Linkedin, Github, Mail, CalendarDays } from 'lucide-react'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { Linkedin, Github, Mail, CalendarDays, Instagram, Twitter } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/lib/navigation'
+import { publicApi, type SiteSettings } from '@/lib/api'
 
 export default function Footer() {
   const t = useTranslations('footer')
   const tn = useTranslations('nav')
+  const [settings, setSettings] = useState<Partial<SiteSettings>>({})
+
+  useEffect(() => {
+    publicApi.getSettings().then((res) => {
+      if (res.data.data) setSettings(res.data.data)
+    }).catch(() => {})
+  }, [])
 
   const footerLinks = [
     { label: tn('work'), href: '/work' },
@@ -13,6 +24,15 @@ export default function Footer() {
     { label: tn('resume'), href: '/resume' },
     { label: tn('contact'), href: '/contact' },
   ]
+
+  const socialLinks = [
+    { url: settings.linkedIn, icon: Linkedin, label: 'LinkedIn' },
+    { url: settings.github, icon: Github, label: 'GitHub' },
+    { url: settings.twitter, icon: Twitter, label: 'Twitter' },
+    { url: settings.instagram, icon: Instagram, label: 'Instagram' },
+    { url: settings.email ? `mailto:${settings.email}` : null, icon: Mail, label: 'Email' },
+    { url: settings.calendly, icon: CalendarDays, label: 'Book a call' },
+  ].filter((s) => !!s.url)
 
   return (
     <footer className="border-t border-border mt-auto">
@@ -37,20 +57,22 @@ export default function Footer() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-4">
-            <a href="https://linkedin.com/in/hafizjabarov" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-fg transition-colors" aria-label="LinkedIn">
-              <Linkedin size={18} />
-            </a>
-            <a href="https://github.com/hafizjabarov" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-fg transition-colors" aria-label="GitHub">
-              <Github size={18} />
-            </a>
-            <a href="mailto:jabarovhafiz@gmail.com" className="text-muted hover:text-fg transition-colors" aria-label="Email">
-              <Mail size={18} />
-            </a>
-            <a href="https://calendly.com/hafizjabarov" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-fg transition-colors" aria-label="Book a call">
-              <CalendarDays size={18} />
-            </a>
-          </div>
+          {socialLinks.length > 0 && (
+            <div className="flex items-center gap-4">
+              {socialLinks.map(({ url, icon: Icon, label }) => (
+                <a
+                  key={label}
+                  href={url!}
+                  target={url!.startsWith('mailto:') ? undefined : '_blank'}
+                  rel={url!.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+                  className="text-muted hover:text-fg transition-colors"
+                  aria-label={label}
+                >
+                  <Icon size={18} />
+                </a>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="divider mt-8 mb-6" />

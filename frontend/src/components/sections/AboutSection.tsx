@@ -1,12 +1,21 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/lib/navigation'
+import { publicApi, type SiteSettings } from '@/lib/api'
 
 export default function AboutSection() {
   const t = useTranslations('about')
+  const [settings, setSettings] = useState<Partial<SiteSettings>>({})
+
+  useEffect(() => {
+    publicApi.getSettings().then((res) => {
+      if (res.data.data) setSettings(res.data.data)
+    }).catch(() => {})
+  }, [])
 
   const traits = [
     { label: t('traits.t1'), desc: t('traits.t1desc') },
@@ -26,11 +35,11 @@ export default function AboutSection() {
             transition={{ duration: 0.6 }}
           >
             <span className="section-label">{t('label')}</span>
-            <h2 className="display-md text-fg mb-6">{t('heading')}</h2>
+            <h2 className="display-md text-fg mb-6">{settings.aboutHeading || t('heading')}</h2>
             <div className="space-y-4 text-muted-2 leading-relaxed text-base">
-              <p>{t('p1')}</p>
-              <p>{t('p2')}</p>
-              <p>{t('p3')}</p>
+              <p>{settings.aboutP1 || t('p1')}</p>
+              <p>{settings.aboutP2 || t('p2')}</p>
+              <p>{settings.aboutP3 || t('p3')}</p>
             </div>
             <div className="mt-8">
               <Link href="/about" className="btn-outline text-sm">

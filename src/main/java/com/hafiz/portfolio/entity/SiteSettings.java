@@ -53,12 +53,25 @@ public class SiteSettings {
     private String github;
     private String calendly;
     private String twitter;
+    private String instagram;
     private String resumeUrl;
     private String logoUrl;
     private String faviconUrl;
     private String defaultOgImageUrl;
     private String copyrightText;
     private String colophonText;
+
+    @Column(columnDefinition = "TEXT")
+    private String aboutHeading;
+
+    @Column(columnDefinition = "TEXT")
+    private String aboutP1;
+
+    @Column(columnDefinition = "TEXT")
+    private String aboutP2;
+
+    @Column(columnDefinition = "TEXT")
+    private String aboutP3;
 
     @ElementCollection
     @CollectionTable(name = "site_headline_metrics", joinColumns = @JoinColumn(name = "site_settings_id"))
