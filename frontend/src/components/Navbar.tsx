@@ -55,7 +55,7 @@ export default function Navbar() {
     <nav
       className={cn(
         'fixed top-0 w-full z-50 transition-all duration-300',
-        scrolled ? 'bg-bg/70 backdrop-blur-xl border-b border-white/[0.04]' : 'bg-transparent'
+        scrolled ? 'bg-bg/30 backdrop-blur-xl' : 'bg-transparent'
       )}
     >
       <div className="container-main">
