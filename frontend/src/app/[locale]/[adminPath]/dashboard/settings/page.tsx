@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { adminApi, type SiteSettings, type HeadlineMetric } from '@/lib/api'
-import { Check, RefreshCw } from 'lucide-react'
+import { adminApi, type SiteSettings, type HeadlineMetric, type SocialLink } from '@/lib/api'
+import { Check, RefreshCw, Plus, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 export default function SettingsPage() {
@@ -13,6 +13,16 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [newMetric, setNewMetric] = useState<HeadlineMetric>({ value: '', label: '' })
+  const [newSocialLink, setNewSocialLink] = useState<SocialLink>({ label: '', url: '' })
+
+  // Derive parsed custom social links from JSON field
+  const parsedSocialLinks: SocialLink[] = (() => {
+    try { return JSON.parse(settings.customSocialLinksJson || '[]') } catch { return [] }
+  })()
+
+  const setSocialLinks = (links: SocialLink[]) => {
+    setSettings({ ...settings, customSocialLinksJson: JSON.stringify(links) })
+  }
 
   useEffect(() => {
     adminApi.getSettings().then((res) => {
@@ -162,6 +172,68 @@ export default function SettingsPage() {
             {field('twitter', tf('twitter'))}
             {field('instagram', tf('instagram'))}
             {field('resumeUrl', tf('resumeUrl'))}
+          </div>
+        </div>
+
+        {/* Custom Social Links */}
+        <div className="card">
+          <h2 className="text-white font-semibold mb-1 text-sm uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
+            Custom Social Links
+          </h2>
+          <p className="text-gray-500 text-xs mb-4">Add any extra social platform (e.g. YouTube, Dribbble, TikTok). These appear alongside the standard links in the footer and contact section.</p>
+
+          {/* Existing links */}
+          <div className="space-y-2 mb-4">
+            {parsedSocialLinks.map((link, i) => (
+              <div key={i} className="flex items-center gap-3 bg-gray-800 rounded-lg px-3 py-2">
+                <span className="text-white text-sm font-medium w-28 shrink-0">{link.label}</span>
+                <span className="text-gray-400 text-xs flex-1 truncate">{link.url}</span>
+                <button
+                  onClick={() => {
+                    const arr = [...parsedSocialLinks]
+                    arr.splice(i, 1)
+                    setSocialLinks(arr)
+                  }}
+                  className="text-gray-600 hover:text-red-400 shrink-0"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* Add new link */}
+          <div className="flex gap-2 items-center">
+            <input
+              value={newSocialLink.label}
+              onChange={(e) => setNewSocialLink({ ...newSocialLink, label: e.target.value })}
+              placeholder="Platform (e.g. YouTube)"
+              className="admin-input text-sm w-40 shrink-0"
+            />
+            <input
+              value={newSocialLink.url}
+              onChange={(e) => setNewSocialLink({ ...newSocialLink, url: e.target.value })}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault()
+                  if (!newSocialLink.label.trim() || !newSocialLink.url.trim()) return
+                  setSocialLinks([...parsedSocialLinks, { ...newSocialLink }])
+                  setNewSocialLink({ label: '', url: '' })
+                }
+              }}
+              placeholder="https://..."
+              className="admin-input text-sm flex-1"
+            />
+            <button
+              onClick={() => {
+                if (!newSocialLink.label.trim() || !newSocialLink.url.trim()) return
+                setSocialLinks([...parsedSocialLinks, { ...newSocialLink }])
+                setNewSocialLink({ label: '', url: '' })
+              }}
+              className="btn-outline px-3 text-sm shrink-0"
+            >
+              <Plus size={14} />
+            </button>
           </div>
         </div>
 

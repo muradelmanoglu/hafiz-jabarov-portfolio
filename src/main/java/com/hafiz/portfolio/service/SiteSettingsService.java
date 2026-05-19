@@ -35,12 +35,18 @@ public class SiteSettingsService {
         s.setGithub(req.getGithub());
         s.setCalendly(req.getCalendly());
         s.setTwitter(req.getTwitter());
+        s.setInstagram(req.getInstagram());
         s.setResumeUrl(req.getResumeUrl());
         s.setLogoUrl(req.getLogoUrl());
         s.setFaviconUrl(req.getFaviconUrl());
         s.setDefaultOgImageUrl(req.getDefaultOgImageUrl());
         s.setCopyrightText(req.getCopyrightText());
         s.setColophonText(req.getColophonText());
+        s.setCustomSocialLinksJson(req.getCustomSocialLinksJson());
+        s.setAboutHeading(req.getAboutHeading());
+        s.setAboutP1(req.getAboutP1());
+        s.setAboutP2(req.getAboutP2());
+        s.setAboutP3(req.getAboutP3());
         s.setHeadlineMetrics(req.getHeadlineMetrics());
         return siteSettingsRepository.save(s);
     }

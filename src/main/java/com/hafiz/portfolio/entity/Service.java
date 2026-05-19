@@ -20,8 +20,9 @@ public class Service {
     @Column(nullable = false, unique = true)
     private String slug;
 
-    @Column(nullable = false)
     private String icon;
+
+    private String category;
 
     @Column(nullable = false, length = 120)
     private String shortDescription;

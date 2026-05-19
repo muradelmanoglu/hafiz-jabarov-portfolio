@@ -120,6 +120,7 @@ export interface SiteSettings {
   defaultOgImageUrl?: string
   copyrightText?: string
   colophonText?: string
+  customSocialLinksJson?: string
   aboutHeading?: string
   aboutP1?: string
   aboutP2?: string
@@ -131,6 +132,11 @@ export interface HeadlineMetric {
   value: string
   label: string
   context?: string
+}
+
+export interface SocialLink {
+  label: string
+  url: string
 }
 
 export interface Company {
@@ -182,7 +188,8 @@ export interface PortfolioService {
   id: number
   title: string
   slug: string
-  icon: string
+  icon?: string
+  category?: string
   shortDescription: string
   longDescription: string
   deliverables?: string[]

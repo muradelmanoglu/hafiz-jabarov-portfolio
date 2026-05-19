@@ -41,11 +41,17 @@ public class SiteSettingsRequest {
     private String github;
     private String calendly;
     private String twitter;
+    private String instagram;
     private String resumeUrl;
     private String logoUrl;
     private String faviconUrl;
     private String defaultOgImageUrl;
     private String copyrightText;
     private String colophonText;
+    private String customSocialLinksJson;
+    private String aboutHeading;
+    private String aboutP1;
+    private String aboutP2;
+    private String aboutP3;
     private List<SiteSettings.HeadlineMetric> headlineMetrics;
 }

@@ -15,8 +15,9 @@ public class ServiceRequest {
 
     private String slug;
 
-    @NotBlank
     private String icon;
+
+    private String category;
 
     @NotBlank
     @Size(max = 120)

@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { publicApi, type ContactFormData, type SiteSettings } from '@/lib/api'
-import { Send, CheckCircle, CalendarDays, Linkedin, Github, Twitter, Instagram, Mail } from 'lucide-react'
+import { publicApi, type ContactFormData, type SiteSettings, type SocialLink } from '@/lib/api'
+import { Send, CheckCircle, CalendarDays, Linkedin, Github, Twitter, Instagram, Mail, ExternalLink } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 
@@ -18,21 +18,30 @@ type FormData = {
   message: string
 }
 
+function detectIcon(label: string, url: string) {
+  const l = label.toLowerCase()
+  const u = url.toLowerCase()
+  if (l.includes('linkedin') || u.includes('linkedin')) return Linkedin
+  if (l.includes('github') || u.includes('github')) return Github
+  if (l.includes('twitter') || l.includes(' x') || u.includes('twitter') || u.includes('x.com')) return Twitter
+  if (l.includes('instagram') || u.includes('instagram')) return Instagram
+  if (l.includes('calendly') || u.includes('calendly')) return CalendarDays
+  return ExternalLink
+}
+
 export default function ContactSection() {
   const t = useTranslations('contact')
   const [sent, setSent] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [calendlyUrl, setCalendlyUrl] = useState('https://calendly.com/hafizjabarov')
   const [settings, setSettings] = useState<Partial<SiteSettings>>({})
 
   useEffect(() => {
     publicApi.getSettings().then((res) => {
-      if (res.data.data) {
-        if (res.data.data.calendly) setCalendlyUrl(res.data.data.calendly)
-        setSettings(res.data.data)
-      }
+      if (res.data.data) setSettings(res.data.data)
     }).catch(() => {})
   }, [])
+
+  const calendlyUrl = settings.calendly || 'https://calendly.com/hafizjabarov'
 
   const schema = z.object({
     name: z.string().min(2, t('validation.nameMin')).max(100),
@@ -75,6 +84,28 @@ export default function ContactSection() {
     }
   }
 
+  // Build social links list (predefined + custom)
+  const predefinedLinks: { url: string; icon: typeof Linkedin; label: string }[] = [
+    { url: settings.linkedIn || '', icon: Linkedin, label: 'LinkedIn' },
+    { url: settings.github || '', icon: Github, label: 'GitHub' },
+    { url: settings.twitter || '', icon: Twitter, label: 'Twitter' },
+    { url: settings.instagram || '', icon: Instagram, label: 'Instagram' },
+    { url: settings.email ? `mailto:${settings.email}` : '', icon: Mail, label: 'Email' },
+  ].filter((s) => !!s.url)
+
+  const customLinks: SocialLink[] = (() => {
+    try { return JSON.parse(settings.customSocialLinksJson || '[]') } catch { return [] }
+  })()
+
+  const allSocialLinks = [
+    ...predefinedLinks,
+    ...customLinks.filter((c) => !!c.url).map((c) => ({
+      url: c.url,
+      icon: detectIcon(c.label, c.url),
+      label: c.label,
+    })),
+  ]
+
   return (
     <section className="section border-t border-border">
       <div className="container-main">
@@ -98,34 +129,23 @@ export default function ContactSection() {
               <CalendarDays size={16} />
               {t('bookCall')}
             </a>
+
             {/* Social links */}
-            {(settings.linkedIn || settings.github || settings.twitter || settings.instagram || settings.email) && (
+            {allSocialLinks.length > 0 && (
               <div className="flex items-center gap-4 mt-6">
-                {settings.linkedIn && (
-                  <a href={settings.linkedIn} target="_blank" rel="noopener noreferrer" className="text-muted hover:text-fg transition-colors" aria-label="LinkedIn">
-                    <Linkedin size={18} />
+                {allSocialLinks.map(({ url, icon: Icon, label }) => (
+                  <a
+                    key={label}
+                    href={url}
+                    target={url.startsWith('mailto:') ? undefined : '_blank'}
+                    rel={url.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+                    className="text-muted hover:text-fg transition-colors"
+                    aria-label={label}
+                    title={label}
+                  >
+                    <Icon size={18} />
                   </a>
-                )}
-                {settings.github && (
-                  <a href={settings.github} target="_blank" rel="noopener noreferrer" className="text-muted hover:text-fg transition-colors" aria-label="GitHub">
-                    <Github size={18} />
-                  </a>
-                )}
-                {settings.twitter && (
-                  <a href={settings.twitter} target="_blank" rel="noopener noreferrer" className="text-muted hover:text-fg transition-colors" aria-label="Twitter">
-                    <Twitter size={18} />
-                  </a>
-                )}
-                {settings.instagram && (
-                  <a href={settings.instagram} target="_blank" rel="noopener noreferrer" className="text-muted hover:text-fg transition-colors" aria-label="Instagram">
-                    <Instagram size={18} />
-                  </a>
-                )}
-                {settings.email && (
-                  <a href={`mailto:${settings.email}`} className="text-muted hover:text-fg transition-colors" aria-label="Email">
-                    <Mail size={18} />
-                  </a>
-                )}
+                ))}
               </div>
             )}
           </motion.div>

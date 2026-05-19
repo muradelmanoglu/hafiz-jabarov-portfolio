@@ -1,10 +1,22 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Linkedin, Github, Mail, CalendarDays, Instagram, Twitter } from 'lucide-react'
+import { Linkedin, Github, Mail, CalendarDays, Instagram, Twitter, ExternalLink } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/lib/navigation'
-import { publicApi, type SiteSettings } from '@/lib/api'
+import { publicApi, type SiteSettings, type SocialLink } from '@/lib/api'
+
+// Detect a standard icon from platform name / URL
+function detectIcon(label: string, url: string) {
+  const l = label.toLowerCase()
+  const u = url.toLowerCase()
+  if (l.includes('linkedin') || u.includes('linkedin')) return Linkedin
+  if (l.includes('github') || u.includes('github')) return Github
+  if (l.includes('twitter') || l.includes(' x') || u.includes('twitter') || u.includes('x.com')) return Twitter
+  if (l.includes('instagram') || u.includes('instagram')) return Instagram
+  if (l.includes('calendly') || u.includes('calendly')) return CalendarDays
+  return ExternalLink
+}
 
 export default function Footer() {
   const t = useTranslations('footer')
@@ -25,14 +37,29 @@ export default function Footer() {
     { label: tn('contact'), href: '/contact' },
   ]
 
-  const socialLinks = [
-    { url: settings.linkedIn, icon: Linkedin, label: 'LinkedIn' },
-    { url: settings.github, icon: Github, label: 'GitHub' },
-    { url: settings.twitter, icon: Twitter, label: 'Twitter' },
-    { url: settings.instagram, icon: Instagram, label: 'Instagram' },
-    { url: settings.email ? `mailto:${settings.email}` : null, icon: Mail, label: 'Email' },
-    { url: settings.calendly, icon: CalendarDays, label: 'Book a call' },
+  // Predefined social links
+  const predefinedLinks: { url: string; icon: typeof Linkedin; label: string }[] = [
+    { url: settings.linkedIn || '', icon: Linkedin, label: 'LinkedIn' },
+    { url: settings.github || '', icon: Github, label: 'GitHub' },
+    { url: settings.twitter || '', icon: Twitter, label: 'Twitter' },
+    { url: settings.instagram || '', icon: Instagram, label: 'Instagram' },
+    { url: settings.email ? `mailto:${settings.email}` : '', icon: Mail, label: 'Email' },
+    { url: settings.calendly || '', icon: CalendarDays, label: 'Book a call' },
   ].filter((s) => !!s.url)
+
+  // Custom social links added by admin
+  const customLinks: SocialLink[] = (() => {
+    try { return JSON.parse(settings.customSocialLinksJson || '[]') } catch { return [] }
+  })()
+
+  const allSocialLinks = [
+    ...predefinedLinks,
+    ...customLinks.filter((c) => !!c.url).map((c) => ({
+      url: c.url,
+      icon: detectIcon(c.label, c.url),
+      label: c.label,
+    })),
+  ]
 
   return (
     <footer className="border-t border-border mt-auto">
@@ -57,16 +84,17 @@ export default function Footer() {
             ))}
           </nav>
 
-          {socialLinks.length > 0 && (
+          {allSocialLinks.length > 0 && (
             <div className="flex items-center gap-4">
-              {socialLinks.map(({ url, icon: Icon, label }) => (
+              {allSocialLinks.map(({ url, icon: Icon, label }) => (
                 <a
                   key={label}
-                  href={url!}
-                  target={url!.startsWith('mailto:') ? undefined : '_blank'}
-                  rel={url!.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
+                  href={url}
+                  target={url.startsWith('mailto:') ? undefined : '_blank'}
+                  rel={url.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
                   className="text-muted hover:text-fg transition-colors"
                   aria-label={label}
+                  title={label}
                 >
                   <Icon size={18} />
                 </a>

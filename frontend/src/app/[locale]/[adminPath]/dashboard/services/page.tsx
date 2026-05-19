@@ -13,6 +13,7 @@ const STATUS_BADGE: Record<string, string> = {
 const emptyForm = (): Partial<PortfolioService> => ({
   title: '',
   slug: '',
+  category: '',
   shortDescription: '',
   longDescription: '',
   deliverables: [],
@@ -134,6 +135,15 @@ export default function ServicesPage() {
                 <option value="PUBLISHED">PUBLISHED</option>
                 <option value="ARCHIVED">ARCHIVED</option>
               </select>
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Category</label>
+              <input
+                value={editing.category || ''}
+                onChange={(e) => setEditing({ ...editing, category: e.target.value })}
+                className="admin-input"
+                placeholder="Strategy, Delivery, Coaching..."
+              />
             </div>
             <div>
               <label className="block text-xs text-gray-500 mb-1">Engagement Duration</label>
@@ -260,6 +270,7 @@ export default function ServicesPage() {
               <div className="flex items-center gap-2 mb-1 flex-wrap">
                 <span className="text-white font-medium text-sm">{svc.title}</span>
                 <span className={`text-xs px-2 py-0.5 rounded-full ${STATUS_BADGE[svc.status] || ''}`}>{svc.status}</span>
+                {svc.category && <span className="text-xs bg-blue-900/30 text-blue-400 px-2 py-0.5 rounded-full">{svc.category}</span>}
                 {svc.featured && <span className="text-xs bg-yellow-900/30 text-yellow-400 px-2 py-0.5 rounded-full">Featured</span>}
               </div>
               <p className="text-gray-500 text-xs truncate">{svc.shortDescription}</p>

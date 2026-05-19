@@ -34,6 +34,7 @@ public class PortfolioServiceService {
                 .title(req.getTitle())
                 .slug(req.getSlug() != null ? req.getSlug() : toSlug(req.getTitle()))
                 .icon(req.getIcon())
+                .category(req.getCategory())
                 .shortDescription(req.getShortDescription())
                 .longDescription(req.getLongDescription())
                 .deliverables(req.getDeliverables())
@@ -54,6 +55,7 @@ public class PortfolioServiceService {
         s.setTitle(req.getTitle());
         if (req.getSlug() != null && !req.getSlug().isBlank()) s.setSlug(req.getSlug());
         s.setIcon(req.getIcon());
+        s.setCategory(req.getCategory());
         s.setShortDescription(req.getShortDescription());
         s.setLongDescription(req.getLongDescription());
         s.setDeliverables(req.getDeliverables());

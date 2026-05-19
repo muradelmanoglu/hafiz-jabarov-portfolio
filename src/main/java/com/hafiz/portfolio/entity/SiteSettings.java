@@ -55,11 +55,21 @@ public class SiteSettings {
     private String twitter;
     private String instagram;
     private String resumeUrl;
+
+    @Column(columnDefinition = "TEXT")
     private String logoUrl;
+
+    @Column(columnDefinition = "TEXT")
     private String faviconUrl;
+
+    @Column(columnDefinition = "TEXT")
     private String defaultOgImageUrl;
+
     private String copyrightText;
     private String colophonText;
+
+    @Column(columnDefinition = "TEXT")
+    private String customSocialLinksJson;
 
     @Column(columnDefinition = "TEXT")
     private String aboutHeading;
