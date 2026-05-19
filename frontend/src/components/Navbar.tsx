@@ -24,9 +24,11 @@ export default function Navbar() {
     { label: t('services'), href: '/services' },
     { label: t('about'), href: '/about' },
     { label: t('resume'), href: '/resume' },
+    { label: t('contact'), href: '/contact' },
   ]
 
   useEffect(() => {
+    setScrolled(window.scrollY > 20)
     const onScroll = () => setScrolled(window.scrollY > 20)
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -53,7 +55,7 @@ export default function Navbar() {
     <nav
       className={cn(
         'fixed top-0 w-full z-50 transition-all duration-300',
-        scrolled ? 'bg-bg/90 backdrop-blur-xl border-b border-border' : 'bg-transparent'
+        scrolled ? 'bg-bg/70 backdrop-blur-xl border-b border-white/[0.04]' : 'bg-transparent'
       )}
     >
       <div className="container-main">
@@ -78,6 +80,9 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
+            <Link href="/contact" className="btn-accent text-xs py-2 px-5">
+              {t('letsTalk')}
+            </Link>
             <div className="relative">
               <button
                 onClick={() => setLangOpen(!langOpen)}
@@ -103,9 +108,6 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-            <Link href="/contact" className="btn-accent text-xs py-2 px-5">
-              {t('letsTalk')}
-            </Link>
           </div>
 
           <button
