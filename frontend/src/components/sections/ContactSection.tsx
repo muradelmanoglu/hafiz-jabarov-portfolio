@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -22,6 +22,13 @@ export default function ContactSection() {
   const t = useTranslations('contact')
   const [sent, setSent] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [calendlyUrl, setCalendlyUrl] = useState('https://calendly.com/hafizjabarov')
+
+  useEffect(() => {
+    publicApi.getSettings().then((res) => {
+      if (res.data.data?.calendly) setCalendlyUrl(res.data.data.calendly)
+    }).catch(() => {})
+  }, [])
 
   const schema = z.object({
     name: z.string().min(2, t('validation.nameMin')).max(100),
@@ -79,7 +86,7 @@ export default function ContactSection() {
             <h2 className="display-md text-fg mb-6">{t('heading')}</h2>
             <p className="text-muted-2 leading-relaxed mb-8">{t('desc')}</p>
             <a
-              href="https://calendly.com/hafizjabarov"
+              href={calendlyUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-outline inline-flex"

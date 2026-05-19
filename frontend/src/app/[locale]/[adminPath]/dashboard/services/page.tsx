@@ -13,7 +13,6 @@ const STATUS_BADGE: Record<string, string> = {
 const emptyForm = (): Partial<PortfolioService> => ({
   title: '',
   slug: '',
-  icon: '',
   shortDescription: '',
   longDescription: '',
   deliverables: [],
@@ -122,15 +121,6 @@ export default function ServicesPage() {
                 onChange={(e) => setEditing({ ...editing, slug: e.target.value })}
                 className="admin-input"
                 placeholder="fractional-pm"
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-gray-500 mb-1">Icon (emoji or name)</label>
-              <input
-                value={editing.icon || ''}
-                onChange={(e) => setEditing({ ...editing, icon: e.target.value })}
-                className="admin-input"
-                placeholder="🧭"
               />
             </div>
             <div>
@@ -268,7 +258,6 @@ export default function ServicesPage() {
           <div key={svc.id} className="card flex items-start justify-between gap-4">
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2 mb-1 flex-wrap">
-                {svc.icon && <span className="text-base">{svc.icon}</span>}
                 <span className="text-white font-medium text-sm">{svc.title}</span>
                 <span className={`text-xs px-2 py-0.5 rounded-full ${STATUS_BADGE[svc.status] || ''}`}>{svc.status}</span>
                 {svc.featured && <span className="text-xs bg-yellow-900/30 text-yellow-400 px-2 py-0.5 rounded-full">Featured</span>}

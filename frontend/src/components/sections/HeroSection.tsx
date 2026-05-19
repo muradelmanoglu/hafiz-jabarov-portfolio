@@ -1,19 +1,34 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { ArrowRight, CalendarDays } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/lib/navigation'
+import { publicApi, type SiteSettings } from '@/lib/api'
+
+const DEFAULT_STATS = [
+  { value: '7+', labelKey: 'stats.yearsExp' },
+  { value: '30+', labelKey: 'stats.products' },
+  { value: '$50M+', labelKey: 'stats.revenue' },
+  { value: '15+', labelKey: 'stats.teams' },
+]
 
 export default function HeroSection() {
   const t = useTranslations('hero')
+  const [settings, setSettings] = useState<Partial<SiteSettings>>({})
 
-  const stats = [
-    { value: '7+', label: t('stats.yearsExp') },
-    { value: '30+', label: t('stats.products') },
-    { value: '$50M+', label: t('stats.revenue') },
-    { value: '15+', label: t('stats.teams') },
-  ]
+  useEffect(() => {
+    publicApi.getSettings().then((res) => {
+      if (res.data.data) setSettings(res.data.data)
+    }).catch(() => {})
+  }, [])
+
+  const stats = settings.headlineMetrics && settings.headlineMetrics.length > 0
+    ? settings.headlineMetrics.map((m) => ({ value: m.value, label: m.label }))
+    : DEFAULT_STATS.map((s) => ({ value: s.value, label: t(s.labelKey) }))
+
+  const calendlyUrl = settings.calendly || 'https://calendly.com/hafizjabarov'
 
   return (
     <section className="section min-h-screen flex flex-col justify-center pt-20 md:pt-28">
@@ -60,7 +75,7 @@ export default function HeroSection() {
             {t('viewWork')} <ArrowRight size={16} />
           </Link>
           <a
-            href="https://calendly.com/hafizjabarov"
+            href={calendlyUrl}
             target="_blank"
             rel="noopener noreferrer"
             className="btn-outline"

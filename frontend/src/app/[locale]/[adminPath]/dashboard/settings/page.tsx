@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { adminApi, type SiteSettings } from '@/lib/api'
+import { adminApi, type SiteSettings, type HeadlineMetric } from '@/lib/api'
 import { Check, RefreshCw } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
@@ -12,6 +12,7 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [newMetric, setNewMetric] = useState<HeadlineMetric>({ value: '', label: '' })
 
   useEffect(() => {
     adminApi.getSettings().then((res) => {
@@ -126,6 +127,63 @@ export default function SettingsPage() {
             {field('defaultOgImageUrl', tf('defaultOgImageUrl'))}
             {field('copyrightText', tf('copyrightText'))}
             {field('colophonText', tf('colophonText'))}
+          </div>
+        </div>
+
+        <div className="card">
+          <h2 className="text-white font-semibold mb-4 text-sm uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
+            Hero Stats
+          </h2>
+          <p className="text-gray-500 text-xs mb-4">The 4 numbers shown in the hero section (e.g. 7+ Years, 30+ Products)</p>
+          <div className="space-y-2 mb-4">
+            {(settings.headlineMetrics || []).map((m, i) => (
+              <div key={i} className="flex items-center gap-3 bg-gray-800 rounded-lg px-3 py-2">
+                <span className="text-white font-bold text-sm w-16 shrink-0">{m.value}</span>
+                <span className="text-gray-300 text-xs flex-1">{m.label}</span>
+                <button
+                  onClick={() => {
+                    const arr = [...(settings.headlineMetrics || [])]
+                    arr.splice(i, 1)
+                    setSettings({ ...settings, headlineMetrics: arr })
+                  }}
+                  className="text-gray-600 hover:text-red-400 ml-auto"
+                >
+                  ✕
+                </button>
+              </div>
+            ))}
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              value={newMetric.value}
+              onChange={(e) => setNewMetric({ ...newMetric, value: e.target.value })}
+              placeholder="Value (e.g. 7+)"
+              className="admin-input text-sm"
+            />
+            <div className="flex gap-2">
+              <input
+                value={newMetric.label}
+                onChange={(e) => setNewMetric({ ...newMetric, label: e.target.value })}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    e.preventDefault()
+                    if (!newMetric.value.trim() || !newMetric.label.trim()) return
+                    setSettings({ ...settings, headlineMetrics: [...(settings.headlineMetrics || []), { ...newMetric }] })
+                    setNewMetric({ value: '', label: '' })
+                  }
+                }}
+                placeholder="Label (e.g. Years PM experience)"
+                className="admin-input text-sm flex-1"
+              />
+              <button
+                onClick={() => {
+                  if (!newMetric.value.trim() || !newMetric.label.trim()) return
+                  setSettings({ ...settings, headlineMetrics: [...(settings.headlineMetrics || []), { ...newMetric }] })
+                  setNewMetric({ value: '', label: '' })
+                }}
+                className="btn-outline px-3 text-sm"
+              >+</button>
+            </div>
           </div>
         </div>
       </div>
