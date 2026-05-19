@@ -39,6 +39,8 @@ public class SiteSettingsRequest {
     private String copyrightText;
     private String colophonText;
     private String customSocialLinksJson;
+    private String contactProjectTypesJson;
+    private String contactBudgetRangesJson;
     private String aboutTranslationsJson;
     private String aboutHeading;
     private String aboutP1;

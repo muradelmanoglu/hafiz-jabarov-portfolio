@@ -17,5 +17,6 @@ public class SkillRequest {
     private Skill.Proficiency proficiency;
     private Integer yearsUsed;
     private String iconUrl;
+    private String customCategory;
     private int orderWeight;
 }

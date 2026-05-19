@@ -26,6 +26,14 @@ export default function SkillsSection({ skills = [] }: { skills?: Skill[] }) {
   const t = useTranslations('skills')
   const [activeCategory, setActiveCategory] = useState<string>('ALL')
 
+  const getCategoryLabel = (cat: string) => {
+    if (cat === 'OTHER') {
+      const otherSkill = skills.find((s) => s.category === 'OTHER' && s.customCategory)
+      return otherSkill?.customCategory || categoryLabels['OTHER']
+    }
+    return categoryLabels[cat] || cat
+  }
+
   const categories = ['ALL', ...Array.from(new Set(skills.map((s) => s.category)))]
   const filtered = activeCategory === 'ALL' ? skills : skills.filter((s) => s.category === activeCategory)
 
@@ -51,7 +59,7 @@ export default function SkillsSection({ skills = [] }: { skills?: Skill[] }) {
                 )}
                 style={activeCategory === cat ? { backgroundColor: 'var(--accent)' } : {}}
               >
-                {cat === 'ALL' ? t('all') : categoryLabels[cat] || cat}
+                {cat === 'ALL' ? t('all') : getCategoryLabel(cat)}
               </button>
             ))}
           </div>

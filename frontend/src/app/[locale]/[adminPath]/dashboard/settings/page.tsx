@@ -13,6 +13,20 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false)
   const [newMetric, setNewMetric] = useState<HeadlineMetric>({ value: '', label: '' })
   const [newSocialLink, setNewSocialLink] = useState<SocialLink>({ label: '', url: '' })
+  const [newProjectType, setNewProjectType] = useState<{ value: string; label: string }>({ value: '', label: '' })
+  const [newBudgetRange, setNewBudgetRange] = useState<{ value: string; label: string }>({ value: '', label: '' })
+
+  const parsedProjectTypes: { value: string; label: string }[] = (() => {
+    try { return JSON.parse(settings.contactProjectTypesJson || '[]') } catch { return [] }
+  })()
+  const parsedBudgetRanges: { value: string; label: string }[] = (() => {
+    try { return JSON.parse(settings.contactBudgetRangesJson || '[]') } catch { return [] }
+  })()
+
+  const setProjectTypes = (items: { value: string; label: string }[]) =>
+    setSettings({ ...settings, contactProjectTypesJson: JSON.stringify(items) })
+  const setBudgetRanges = (items: { value: string; label: string }[]) =>
+    setSettings({ ...settings, contactBudgetRangesJson: JSON.stringify(items) })
   // Derive parsed custom social links from JSON field
   const parsedSocialLinks: SocialLink[] = (() => {
     try { return JSON.parse(settings.customSocialLinksJson || '[]') } catch { return [] }
@@ -56,6 +70,45 @@ export default function SettingsPage() {
           className="admin-input"
         />
       )}
+    </div>
+  )
+
+  const pdfField = (key: keyof SiteSettings, label: string) => (
+    <div>
+      <label className="block text-xs text-gray-500 mb-1">{label}</label>
+      <div className="flex gap-2 items-center">
+        <label className="btn-outline text-xs px-3 py-2 cursor-pointer shrink-0">
+          Upload PDF
+          <input
+            type="file"
+            accept="application/pdf"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files?.[0]
+              if (!file) return
+              const reader = new FileReader()
+              reader.onload = () => {
+                setSettings({ ...settings, [key]: reader.result as string })
+              }
+              reader.readAsDataURL(file)
+            }}
+          />
+        </label>
+        {(settings[key] as string)?.startsWith('data:application/pdf') ? (
+          <span className="text-xs text-green-400 flex-1">PDF uploaded ✓</span>
+        ) : (settings[key] as string)?.startsWith('http') ? (
+          <a href={settings[key] as string} target="_blank" rel="noopener noreferrer" className="text-xs text-accent flex-1 truncate hover:underline">
+            {settings[key] as string}
+          </a>
+        ) : (
+          <span className="text-xs text-gray-600 flex-1">No file uploaded</span>
+        )}
+        {settings[key] && (
+          <button onClick={() => setSettings({ ...settings, [key]: '' })} className="text-gray-600 hover:text-red-400 shrink-0">
+            <X size={14} />
+          </button>
+        )}
+      </div>
     </div>
   )
 
@@ -155,7 +208,7 @@ export default function SettingsPage() {
             {field('calendly', tf('calendly'))}
             {field('twitter', tf('twitter'))}
             {field('instagram', tf('instagram'))}
-            {field('resumeUrl', tf('resumeUrl'))}
+            {pdfField('resumeUrl', tf('resumeUrl'))}
           </div>
         </div>
 
@@ -218,6 +271,50 @@ export default function SettingsPage() {
             >
               <Plus size={14} />
             </button>
+          </div>
+        </div>
+
+        {/* Project Types */}
+        <div className="card">
+          <h2 className="text-white font-semibold mb-1 text-sm uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
+            Contact Form — Project Types
+          </h2>
+          <p className="text-gray-500 text-xs mb-4">Shown in the project type dropdown of the contact form. Leave empty to use the defaults.</p>
+          <div className="space-y-2 mb-4">
+            {parsedProjectTypes.map((item, i) => (
+              <div key={i} className="flex items-center gap-3 bg-gray-800 rounded-lg px-3 py-2">
+                <span className="text-white text-sm font-medium w-36 shrink-0">{item.label}</span>
+                <span className="text-gray-400 text-xs flex-1 truncate">{item.value}</span>
+                <button onClick={() => { const arr = [...parsedProjectTypes]; arr.splice(i, 1); setProjectTypes(arr) }} className="text-gray-600 hover:text-red-400 shrink-0"><X size={14} /></button>
+              </div>
+            ))}
+          </div>
+          <div className="flex gap-2 items-center">
+            <input value={newProjectType.label} onChange={(e) => setNewProjectType({ ...newProjectType, label: e.target.value })} placeholder="Label (e.g. SaaS Product)" className="admin-input text-sm flex-1" />
+            <input value={newProjectType.value} onChange={(e) => setNewProjectType({ ...newProjectType, value: e.target.value })} placeholder="Value (e.g. SAAS_PRODUCT)" className="admin-input text-sm w-40 shrink-0" />
+            <button onClick={() => { if (!newProjectType.label.trim() || !newProjectType.value.trim()) return; setProjectTypes([...parsedProjectTypes, { ...newProjectType }]); setNewProjectType({ value: '', label: '' }) }} className="btn-outline px-3 text-sm shrink-0"><Plus size={14} /></button>
+          </div>
+        </div>
+
+        {/* Budget Ranges */}
+        <div className="card">
+          <h2 className="text-white font-semibold mb-1 text-sm uppercase tracking-widest" style={{ color: 'var(--accent)' }}>
+            Contact Form — Budget Ranges
+          </h2>
+          <p className="text-gray-500 text-xs mb-4">Shown in the budget range dropdown of the contact form. Leave empty to use the defaults.</p>
+          <div className="space-y-2 mb-4">
+            {parsedBudgetRanges.map((item, i) => (
+              <div key={i} className="flex items-center gap-3 bg-gray-800 rounded-lg px-3 py-2">
+                <span className="text-white text-sm font-medium w-36 shrink-0">{item.label}</span>
+                <span className="text-gray-400 text-xs flex-1 truncate">{item.value}</span>
+                <button onClick={() => { const arr = [...parsedBudgetRanges]; arr.splice(i, 1); setBudgetRanges(arr) }} className="text-gray-600 hover:text-red-400 shrink-0"><X size={14} /></button>
+              </div>
+            ))}
+          </div>
+          <div className="flex gap-2 items-center">
+            <input value={newBudgetRange.label} onChange={(e) => setNewBudgetRange({ ...newBudgetRange, label: e.target.value })} placeholder="Label (e.g. $5k–$10k)" className="admin-input text-sm flex-1" />
+            <input value={newBudgetRange.value} onChange={(e) => setNewBudgetRange({ ...newBudgetRange, value: e.target.value })} placeholder="Value (e.g. 5K_TO_10K)" className="admin-input text-sm w-40 shrink-0" />
+            <button onClick={() => { if (!newBudgetRange.label.trim() || !newBudgetRange.value.trim()) return; setBudgetRanges([...parsedBudgetRanges, { ...newBudgetRange }]); setNewBudgetRange({ value: '', label: '' }) }} className="btn-outline px-3 text-sm shrink-0"><Plus size={14} /></button>
           </div>
         </div>
 

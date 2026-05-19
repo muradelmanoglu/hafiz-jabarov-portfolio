@@ -501,6 +501,7 @@ export default function CaseStudiesPage() {
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2 mb-1 flex-wrap">
                 <span className="text-white font-medium text-sm">{cs.title}</span>
+                <span className="text-xs text-gray-700">#{cs.orderWeight}</span>
                 <span className={`text-xs px-2 py-0.5 rounded-full ${STATUS_BADGE[cs.status] || ''}`}>{cs.status}</span>
                 {cs.featured && <span className="text-xs bg-yellow-900/30 text-yellow-400 px-2 py-0.5 rounded-full">Featured</span>}
               </div>

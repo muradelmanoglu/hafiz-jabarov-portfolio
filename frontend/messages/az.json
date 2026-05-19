@@ -93,7 +93,27 @@
   },
   "testimonials": {
     "label": "Rəylər",
-    "heading": "Müştərilər nə deyir"
+    "heading": "Müştərilər nə deyir",
+    "form": {
+      "toggle": "Rəy yaz",
+      "quote": "Rəyiniz",
+      "quotePlaceholder": "Mənimlə işləmə təcrübənizi paylaşın...",
+      "quoteMin": "Rəy ən azı 20 simvol olmalıdır",
+      "name": "Adınız",
+      "namePlaceholder": "Könül Əliyeva",
+      "nameRequired": "Ad tələb olunur",
+      "title": "Vəzifəniz",
+      "titlePlaceholder": "CEO, Şirkət adı",
+      "titleRequired": "Vəzifə tələb olunur",
+      "company": "Şirkət",
+      "companyPlaceholder": "İstəyə bağlı",
+      "linkedIn": "LinkedIn URL",
+      "submit": "Rəy göndər",
+      "sending": "Göndərilir...",
+      "successTitle": "Təşəkkür edirik!",
+      "successDesc": "Rəyiniz qəbul edildi və təsdiqləndikdən sonra görünəcək.",
+      "error": "Xəta baş verdi. Yenidən cəhd edin."
+    }
   },
   "faq": {
     "label": "SSS",
@@ -230,6 +250,8 @@
       "orderWeight": "Sıralama çəkisi",
       "save": "Yadda saxla",
       "cancel": "Ləğv et",
+      "customCategory": "Xüsusi kateqoriya adı",
+      "customCategoryPlaceholder": "məs. Çevik Metodologiyalar",
       "deleteConfirm": "Bu bacarığı silinsin?"
     },
     "experience": {

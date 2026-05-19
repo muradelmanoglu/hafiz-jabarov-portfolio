@@ -251,6 +251,7 @@ export default function FAQsPage() {
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2 mb-1 flex-wrap">
                 <span className="text-white font-medium text-sm">{f.question}</span>
+                <span className="text-xs text-gray-700">#{f.orderWeight}</span>
                 <span className="text-xs bg-gray-800 text-gray-400 px-2 py-0.5 rounded-full">{f.category}</span>
               </div>
               <p className="text-gray-500 text-xs line-clamp-2">{f.answer}</p>

@@ -179,6 +179,7 @@ export default function TestimonialsPage() {
               <div className="flex items-center gap-2 mb-1 flex-wrap">
                 <span className="text-white font-medium text-sm">{t.authorName}</span>
                 <span className="text-gray-500 text-xs">{t.authorTitle}</span>
+                <span className="text-xs text-gray-700">#{t.orderWeight}</span>
                 {t.featured && <span className="text-xs bg-yellow-900/30 text-yellow-400 px-2 py-0.5 rounded-full flex items-center gap-1"><Star size={10} /> Featured</span>}
                 {t.approved
                   ? <span className="text-xs bg-green-900/40 text-green-400 px-2 py-0.5 rounded-full">Approved</span>

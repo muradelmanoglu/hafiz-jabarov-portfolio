@@ -1,5 +1,6 @@
 package com.hafiz.portfolio.service;
 
+import com.hafiz.portfolio.dto.request.PublicTestimonialRequest;
 import com.hafiz.portfolio.dto.request.TestimonialRequest;
 import com.hafiz.portfolio.entity.Testimonial;
 import com.hafiz.portfolio.repository.TestimonialRepository;
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -32,6 +34,21 @@ public class TestimonialService {
     public Testimonial getById(Long id) {
         return testimonialRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Testimonial not found: " + id));
+    }
+
+    @Transactional
+    public Testimonial submitPublic(PublicTestimonialRequest req) {
+        Testimonial t = Testimonial.builder()
+                .quote(req.getQuote())
+                .authorName(req.getAuthorName())
+                .authorTitle(req.getAuthorTitle())
+                .authorCompany(req.getAuthorCompany())
+                .linkedIn(req.getLinkedIn())
+                .dateReceived(LocalDate.now())
+                .approved(false)
+                .featured(false)
+                .build();
+        return testimonialRepository.save(t);
     }
 
     @Transactional

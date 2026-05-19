@@ -93,7 +93,27 @@
   },
   "testimonials": {
     "label": "Отзывы",
-    "heading": "Что говорят клиенты"
+    "heading": "Что говорят клиенты",
+    "form": {
+      "toggle": "Оставить отзыв",
+      "quote": "Ваш отзыв",
+      "quotePlaceholder": "Поделитесь опытом работы со мной...",
+      "quoteMin": "Отзыв должен содержать не менее 20 символов",
+      "name": "Ваше имя",
+      "namePlaceholder": "Иван Иванов",
+      "nameRequired": "Имя обязательно",
+      "title": "Должность",
+      "titlePlaceholder": "CEO, Компания",
+      "titleRequired": "Должность обязательна",
+      "company": "Компания",
+      "companyPlaceholder": "Необязательно",
+      "linkedIn": "LinkedIn URL",
+      "submit": "Отправить отзыв",
+      "sending": "Отправка...",
+      "successTitle": "Спасибо!",
+      "successDesc": "Ваш отзыв получен и появится после проверки.",
+      "error": "Что-то пошло не так. Попробуйте ещё раз."
+    }
   },
   "faq": {
     "label": "Частые вопросы",
@@ -230,6 +250,8 @@
       "orderWeight": "Вес сортировки",
       "save": "Сохранить",
       "cancel": "Отмена",
+      "customCategory": "Название категории",
+      "customCategoryPlaceholder": "напр. Agile-методологии",
       "deleteConfirm": "Удалить этот навык?"
     },
     "experience": {

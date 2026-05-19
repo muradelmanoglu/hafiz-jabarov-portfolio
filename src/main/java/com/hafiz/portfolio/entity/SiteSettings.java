@@ -54,7 +54,14 @@ public class SiteSettings {
     private String calendly;
     private String twitter;
     private String instagram;
+    @Column(columnDefinition = "TEXT")
     private String resumeUrl;
+
+    @Column(columnDefinition = "TEXT")
+    private String contactProjectTypesJson;
+
+    @Column(columnDefinition = "TEXT")
+    private String contactBudgetRangesJson;
 
     @Column(columnDefinition = "TEXT")
     private String logoUrl;

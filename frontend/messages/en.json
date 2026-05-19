@@ -93,7 +93,27 @@
   },
   "testimonials": {
     "label": "Testimonials",
-    "heading": "What clients say"
+    "heading": "What clients say",
+    "form": {
+      "toggle": "Leave a review",
+      "quote": "Your review",
+      "quotePlaceholder": "Share your experience working with me...",
+      "quoteMin": "Review must be at least 20 characters",
+      "name": "Your name",
+      "namePlaceholder": "Jane Smith",
+      "nameRequired": "Name is required",
+      "title": "Your title / role",
+      "titlePlaceholder": "CEO, Acme Inc.",
+      "titleRequired": "Title is required",
+      "company": "Company",
+      "companyPlaceholder": "Optional",
+      "linkedIn": "LinkedIn URL",
+      "submit": "Submit review",
+      "sending": "Submitting...",
+      "successTitle": "Thank you!",
+      "successDesc": "Your review has been submitted and will appear after approval.",
+      "error": "Something went wrong. Please try again."
+    }
   },
   "faq": {
     "label": "FAQ",
@@ -230,6 +250,8 @@
       "orderWeight": "Order weight",
       "save": "Save",
       "cancel": "Cancel",
+      "customCategory": "Custom category name",
+      "customCategoryPlaceholder": "e.g. Agile Methodologies",
       "deleteConfirm": "Delete this skill?"
     },
     "experience": {

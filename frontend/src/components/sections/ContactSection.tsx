@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { publicApi, type ContactFormData, type SiteSettings, type SocialLink } from '@/lib/api'
-import { Send, CheckCircle, CalendarDays, Linkedin, Github, Twitter, Instagram, Mail, ExternalLink } from 'lucide-react'
+import { Send, CheckCircle, CalendarDays, Linkedin, Github, Twitter, Instagram, Mail, ExternalLink, Phone } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 
@@ -45,7 +45,7 @@ export default function ContactSection({ settings = {} }: { settings?: Partial<S
     message: z.string().min(20, t('validation.messageMin')).max(1000),
   })
 
-  const PROJECT_TYPES = [
+  const defaultProjectTypes = [
     { value: 'FRACTIONAL_PM', label: t('projectTypes.FRACTIONAL_PM') },
     { value: 'ECOMMERCE_DELIVERY', label: t('projectTypes.ECOMMERCE_DELIVERY') },
     { value: 'DELIVERY_AUDIT', label: t('projectTypes.DELIVERY_AUDIT') },
@@ -54,13 +54,27 @@ export default function ContactSection({ settings = {} }: { settings?: Partial<S
     { value: 'OTHER', label: t('projectTypes.OTHER') },
   ]
 
-  const BUDGET_RANGES = [
+  const defaultBudgetRanges = [
     { value: 'UNDER_1K', label: t('budgetRanges.UNDER_1K') },
     { value: 'FROM_1K_TO_5K', label: t('budgetRanges.FROM_1K_TO_5K') },
     { value: 'FROM_5K_TO_10K', label: t('budgetRanges.FROM_5K_TO_10K') },
     { value: 'FROM_10K_TO_25K', label: t('budgetRanges.FROM_10K_TO_25K') },
     { value: 'ABOVE_25K', label: t('budgetRanges.ABOVE_25K') },
   ]
+
+  const PROJECT_TYPES: { value: string; label: string }[] = (() => {
+    try {
+      const parsed = JSON.parse(settings.contactProjectTypesJson || '')
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultProjectTypes
+    } catch { return defaultProjectTypes }
+  })()
+
+  const BUDGET_RANGES: { value: string; label: string }[] = (() => {
+    try {
+      const parsed = JSON.parse(settings.contactBudgetRangesJson || '')
+      return Array.isArray(parsed) && parsed.length > 0 ? parsed : defaultBudgetRanges
+    } catch { return defaultBudgetRanges }
+  })()
 
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -122,6 +136,17 @@ export default function ContactSection({ settings = {} }: { settings?: Partial<S
               <CalendarDays size={16} />
               {t('bookCall')}
             </a>
+
+            {/* Phone */}
+            {settings.phone && settings.phoneVisible && (
+              <a
+                href={`tel:${settings.phone}`}
+                className="inline-flex items-center gap-2 text-muted hover:text-fg transition-colors text-sm mt-4"
+              >
+                <Phone size={15} />
+                {settings.phone}
+              </a>
+            )}
 
             {/* Social links */}
             {allSocialLinks.length > 0 && (

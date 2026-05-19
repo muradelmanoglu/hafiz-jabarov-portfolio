@@ -25,6 +25,8 @@ public class Skill {
     private Integer yearsUsed;
     private String iconUrl;
 
+    private String customCategory;
+
     @Builder.Default
     private int orderWeight = 0;
 

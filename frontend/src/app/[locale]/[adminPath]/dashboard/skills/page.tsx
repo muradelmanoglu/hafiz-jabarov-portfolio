@@ -15,6 +15,7 @@ const emptyForm = (): Partial<Skill> => ({
   category: 'TOOLS',
   proficiency: 'PROFICIENT',
   yearsUsed: undefined,
+  customCategory: undefined,
   orderWeight: 0,
 })
 
@@ -49,6 +50,11 @@ export default function SkillsPage() {
     fetchSkills()
   }
 
+  const displayCategory = (skill: Skill) =>
+    skill.category === 'OTHER' && skill.customCategory
+      ? skill.customCategory
+      : skill.category.replace(/_/g, ' ')
+
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
@@ -80,12 +86,23 @@ export default function SkillsPage() {
               <label className="block text-xs text-gray-500 mb-1">{t('category')}</label>
               <select
                 value={editing.category || 'TOOLS'}
-                onChange={(e) => setEditing({ ...editing, category: e.target.value as Skill['category'] })}
+                onChange={(e) => setEditing({ ...editing, category: e.target.value as Skill['category'], customCategory: undefined })}
                 className="admin-input"
               >
-                {CATEGORIES.map((c) => <option key={c} value={c}>{c.replace('_', ' ')}</option>)}
+                {CATEGORIES.map((c) => <option key={c} value={c}>{c.replace(/_/g, ' ')}</option>)}
               </select>
             </div>
+            {editing.category === 'OTHER' && (
+              <div className="sm:col-span-2">
+                <label className="block text-xs text-gray-500 mb-1">{t('customCategory')}</label>
+                <input
+                  value={editing.customCategory || ''}
+                  onChange={(e) => setEditing({ ...editing, customCategory: e.target.value })}
+                  className="admin-input"
+                  placeholder={t('customCategoryPlaceholder')}
+                />
+              </div>
+            )}
             <div>
               <label className="block text-xs text-gray-500 mb-1">{t('proficiency')}</label>
               <select
@@ -129,10 +146,13 @@ export default function SkillsPage() {
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {skills.map((skill) => (
           <div key={skill.id} className="card flex items-center justify-between gap-3">
-            <div>
-              <span className="text-white font-medium text-sm">{skill.name}</span>
+            <div className="min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="text-white font-medium text-sm">{skill.name}</span>
+                <span className="text-xs text-gray-600 shrink-0">#{skill.orderWeight}</span>
+              </div>
               <div className="flex gap-2 mt-1">
-                <span className="text-xs text-gray-600">{skill.category.replace('_', ' ')}</span>
+                <span className="text-xs text-gray-600">{displayCategory(skill)}</span>
                 <span className="text-xs text-gray-600">·</span>
                 <span className="text-xs text-gray-600">{skill.proficiency}</span>
                 {skill.yearsUsed && <span className="text-xs text-gray-600">· {skill.yearsUsed}y</span>}

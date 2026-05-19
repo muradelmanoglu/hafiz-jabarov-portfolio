@@ -121,6 +121,8 @@ export interface SiteSettings {
   copyrightText?: string
   colophonText?: string
   customSocialLinksJson?: string
+  contactProjectTypesJson?: string
+  contactBudgetRangesJson?: string
   aboutTranslationsJson?: string
   aboutHeading?: string
   aboutP1?: string
@@ -211,6 +213,7 @@ export interface Skill {
   proficiency: 'FAMILIAR' | 'PROFICIENT' | 'EXPERT'
   yearsUsed?: number
   iconUrl?: string
+  customCategory?: string
   orderWeight: number
 }
 
@@ -339,6 +342,9 @@ export const publicApi = {
 
   submitContact: (data: ContactFormData) =>
     api.post<ApiResponse<void>>('/public/contact', data),
+
+  submitTestimonial: (data: { quote: string; authorName: string; authorTitle: string; authorCompany?: string; linkedIn?: string }) =>
+    api.post<ApiResponse<void>>('/public/testimonials', data),
 }
 
 // ─── Admin API ────────────────────────────────────────────────────────────────

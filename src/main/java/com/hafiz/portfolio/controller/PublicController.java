@@ -1,6 +1,7 @@
 package com.hafiz.portfolio.controller;
 
 import com.hafiz.portfolio.dto.request.ContactSubmissionRequest;
+import com.hafiz.portfolio.dto.request.PublicTestimonialRequest;
 import com.hafiz.portfolio.dto.response.ApiResponse;
 import com.hafiz.portfolio.entity.*;
 import com.hafiz.portfolio.service.*;
@@ -119,6 +120,14 @@ public class PublicController {
     }
 
     // ─── Contact ─────────────────────────────────────────────────────────────
+
+    @PostMapping("/testimonials")
+    public ResponseEntity<ApiResponse<Void>> submitTestimonial(
+            @Valid @RequestBody PublicTestimonialRequest request) {
+        testimonialService.submitPublic(request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success("Your review has been submitted for approval."));
+    }
 
     @PostMapping("/contact")
     public ResponseEntity<ApiResponse<Void>> submitContact(

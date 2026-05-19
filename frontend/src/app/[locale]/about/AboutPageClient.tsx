@@ -60,7 +60,13 @@ export default function AboutPageClient({
               <Mail size={15} /> Email
             </a>
             {resumeUrl && (
-              <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="btn-outline text-sm">
+              <a
+                href={resumeUrl}
+                download={resumeUrl.startsWith('data:') ? 'CV.pdf' : undefined}
+                target={resumeUrl.startsWith('data:') ? undefined : '_blank'}
+                rel={resumeUrl.startsWith('data:') ? undefined : 'noopener noreferrer'}
+                className="btn-outline text-sm"
+              >
                 <Download size={15} /> {t('downloadCv')}
               </a>
             )}

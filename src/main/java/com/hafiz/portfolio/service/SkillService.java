@@ -33,6 +33,7 @@ public class SkillService {
                 .proficiency(req.getProficiency())
                 .yearsUsed(req.getYearsUsed())
                 .iconUrl(req.getIconUrl())
+                .customCategory(req.getCustomCategory())
                 .orderWeight(req.getOrderWeight())
                 .build();
         return skillRepository.save(skill);
@@ -46,6 +47,7 @@ public class SkillService {
         skill.setProficiency(req.getProficiency());
         skill.setYearsUsed(req.getYearsUsed());
         skill.setIconUrl(req.getIconUrl());
+        skill.setCustomCategory(req.getCustomCategory());
         skill.setOrderWeight(req.getOrderWeight());
         return skillRepository.save(skill);
     }

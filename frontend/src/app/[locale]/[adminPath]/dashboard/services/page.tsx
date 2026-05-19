@@ -353,6 +353,7 @@ export default function ServicesPage() {
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2 mb-1 flex-wrap">
                 <span className="text-white font-medium text-sm">{svc.title}</span>
+                <span className="text-xs text-gray-700">#{svc.orderWeight}</span>
                 <span className={`text-xs px-2 py-0.5 rounded-full ${STATUS_BADGE[svc.status] || ''}`}>{svc.status}</span>
                 {svc.category && <span className="text-xs bg-blue-900/30 text-blue-400 px-2 py-0.5 rounded-full">{svc.category}</span>}
                 {svc.featured && <span className="text-xs bg-yellow-900/30 text-yellow-400 px-2 py-0.5 rounded-full">Featured</span>}

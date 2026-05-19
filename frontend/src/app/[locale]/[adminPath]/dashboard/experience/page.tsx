@@ -348,6 +348,7 @@ export default function ExperiencePage() {
                 <span className="text-sm" style={{ color: 'var(--accent)' }}>
                   {exp.companyName}
                 </span>
+                <span className="text-xs text-gray-700">#{exp.orderWeight}</span>
                 {exp.current && (
                   <span className="text-xs bg-green-900/50 text-green-400 px-2 py-0.5 rounded-full">
                     {t('present')}
