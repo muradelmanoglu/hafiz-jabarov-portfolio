@@ -14,14 +14,12 @@ const LANG_TABS: { key: LangTab; label: string }[] = [
 export default function AboutAdminPage() {
   const [settings, setSettings] = useState<Partial<SiteSettings>>({})
   const [langTab, setLangTab] = useState<LangTab>('en')
-  const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
 
   useEffect(() => {
     adminApi.getSettings().then((res) => {
       if (res.data.data) setSettings(res.data.data)
-      setLoading(false)
     })
   }, [])
 
@@ -50,8 +48,6 @@ export default function AboutAdminPage() {
     const updated = { ...t, [langTab]: { ...(t[langTab] || {}), [field]: val } }
     setSettings({ ...settings, aboutTranslationsJson: JSON.stringify(updated) })
   }
-
-  if (loading) return <div className="text-gray-500">Loading...</div>
 
   return (
     <div>

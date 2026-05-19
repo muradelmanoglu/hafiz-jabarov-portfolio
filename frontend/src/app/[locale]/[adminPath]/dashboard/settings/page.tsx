@@ -9,7 +9,6 @@ export default function SettingsPage() {
   const t = useTranslations('admin.settings')
   const tf = useTranslations('admin.settings.fields')
   const [settings, setSettings] = useState<Partial<SiteSettings>>({})
-  const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [newMetric, setNewMetric] = useState<HeadlineMetric>({ value: '', label: '' })
@@ -26,7 +25,6 @@ export default function SettingsPage() {
   useEffect(() => {
     adminApi.getSettings().then((res) => {
       if (res.data.data) setSettings(res.data.data)
-      setLoading(false)
     })
   }, [])
 
@@ -94,8 +92,6 @@ export default function SettingsPage() {
       )}
     </div>
   )
-
-  if (loading) return <div className="text-gray-500">Loading settings...</div>
 
   return (
     <div>
