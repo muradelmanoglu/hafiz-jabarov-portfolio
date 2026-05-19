@@ -9,6 +9,7 @@ import { Link } from '@/lib/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { CalendarDays } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import { cn } from '@/lib/utils'
 
 export default function ServicesPage() {
   const t = useTranslations('services')
@@ -44,31 +45,34 @@ export default function ServicesPage() {
       <Navbar />
       <main className="pt-24 md:pt-32">
         <div className="container-main">
-          <div className="mb-20">
-            <span className="section-label">{t('label')}</span>
-            <h1 className="display-lg text-fg mb-4">{t('heading')}</h1>
-            <p className="text-muted-2 max-w-lg">{t('pageDesc')}</p>
-          </div>
-
-          {/* Filter tabs — only show if multiple categories */}
-          {categories.length > 2 && (
-            <div className="flex flex-wrap gap-2 mb-10">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveFilter(cat)}
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${
-                    activeFilter === cat
-                      ? 'border-transparent text-bg'
-                      : 'border-border text-muted-2 hover:border-accent hover:text-fg'
-                  }`}
-                  style={activeFilter === cat ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : {}}
-                >
-                  {cat}
-                </button>
-              ))}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+              <span className="section-label">{t('label')}</span>
+              <h1 className="display-lg text-fg mb-2">{t('heading')}</h1>
+              <p className="text-muted-2 max-w-lg text-sm">{t('pageDesc')}</p>
             </div>
-          )}
+
+            {/* Filter tabs — only show if multiple categories */}
+            {categories.length > 2 && (
+              <div className="flex flex-wrap gap-2">
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveFilter(cat)}
+                    className={cn(
+                      'px-3 py-1.5 rounded-full text-xs font-medium transition-all',
+                      activeFilter === cat
+                        ? 'text-black'
+                        : 'text-muted-2 hover:text-fg border border-border hover:border-border-2'
+                    )}
+                    style={activeFilter === cat ? { backgroundColor: 'var(--accent)' } : {}}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           <div className="space-y-6 mb-32">
             <AnimatePresence mode="popLayout">

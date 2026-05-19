@@ -8,6 +8,7 @@ import { Link } from '@/lib/navigation'
 import { ArrowRight } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslations, useLocale } from 'next-intl'
+import { cn } from '@/lib/utils'
 
 export default function WorkPage() {
   const t = useTranslations('work')
@@ -40,31 +41,34 @@ export default function WorkPage() {
       <Navbar />
       <main className="pt-24 md:pt-32">
         <div className="container-main">
-          <div className="mb-16">
-            <span className="section-label">{t('pageLabel')}</span>
-            <h1 className="display-lg text-fg mb-4">{t('pageHeading')}</h1>
-            <p className="text-muted-2 max-w-lg">{t('pageDesc')}</p>
-          </div>
-
-          {/* Filter tabs — only show if there are multiple domains */}
-          {!loading && domains.length > 2 && (
-            <div className="flex flex-wrap gap-2 mb-10">
-              {domains.map((d) => (
-                <button
-                  key={d}
-                  onClick={() => setActiveFilter(d)}
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${
-                    activeFilter === d
-                      ? 'border-transparent text-bg'
-                      : 'border-border text-muted-2 hover:border-accent hover:text-fg'
-                  }`}
-                  style={activeFilter === d ? { backgroundColor: 'var(--accent)', borderColor: 'var(--accent)' } : {}}
-                >
-                  {d}
-                </button>
-              ))}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+            <div>
+              <span className="section-label">{t('pageLabel')}</span>
+              <h1 className="display-lg text-fg mb-2">{t('pageHeading')}</h1>
+              <p className="text-muted-2 max-w-lg text-sm">{t('pageDesc')}</p>
             </div>
-          )}
+
+            {/* Filter tabs — only show if there are multiple domains */}
+            {!loading && domains.length > 2 && (
+              <div className="flex flex-wrap gap-2">
+                {domains.map((d) => (
+                  <button
+                    key={d}
+                    onClick={() => setActiveFilter(d)}
+                    className={cn(
+                      'px-3 py-1.5 rounded-full text-xs font-medium transition-all',
+                      activeFilter === d
+                        ? 'text-black'
+                        : 'text-muted-2 hover:text-fg border border-border hover:border-border-2'
+                    )}
+                    style={activeFilter === d ? { backgroundColor: 'var(--accent)' } : {}}
+                  >
+                    {d === 'All' ? t('pageLabel') === t('pageLabel') ? 'All' : d : d}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           {loading ? (
             <div className="text-center text-muted py-20">{t('loading')}</div>
