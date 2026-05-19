@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import { publicApi, type Experience, type Education, type Skill } from '@/lib/api'
+import { publicApi, type Experience, type Education, type Skill, type SiteSettings } from '@/lib/api'
 import { Link } from '@/lib/navigation'
-import { ArrowRight, Linkedin, Mail } from 'lucide-react'
+import { ArrowRight, Linkedin, Mail, Download } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations, useLocale } from 'next-intl'
 
@@ -25,18 +25,35 @@ export default function AboutPage() {
   const [experience, setExperience] = useState<Experience[]>([])
   const [education, setEducation] = useState<Education[]>([])
   const [skills, setSkills] = useState<Skill[]>([])
+  const [settings, setSettings] = useState<Partial<SiteSettings>>({})
 
   useEffect(() => {
     Promise.all([
       publicApi.getExperience(locale),
       publicApi.getEducation(locale),
       publicApi.getSkills(),
-    ]).then(([expRes, eduRes, skillRes]) => {
+      publicApi.getSettings(),
+    ]).then(([expRes, eduRes, skillRes, settingsRes]) => {
       if (expRes.data.data) setExperience(expRes.data.data)
       if (eduRes.data.data) setEducation(eduRes.data.data)
       if (skillRes.data.data) setSkills(skillRes.data.data)
+      if (settingsRes.data.data) setSettings(settingsRes.data.data)
     })
   }, [locale])
+
+  // Resolve multilingual about text — same priority as AboutSection
+  const aboutTrans = (() => {
+    try { return JSON.parse(settings.aboutTranslationsJson || '{}') } catch { return {} }
+  })()
+  const locTrans = (locale !== 'en' && aboutTrans[locale]) ? aboutTrans[locale] : {}
+
+  const heading = locTrans.heading || settings.aboutHeading || t('heading')
+  const p1 = locTrans.p1 || settings.aboutP1 || t('p1')
+  const p2 = locTrans.p2 || settings.aboutP2 || t('p2')
+  const p3 = locTrans.p3 || settings.aboutP3 || t('p3')
+
+  const linkedInUrl = settings.linkedIn || 'https://linkedin.com/in/hafizjabarov'
+  const emailAddr = settings.email || 'jabarovhafiz@gmail.com'
 
   return (
     <>
@@ -50,17 +67,22 @@ export default function AboutPage() {
             className="mb-20"
           >
             <span className="section-label">{t('label')}</span>
-            <h1 className="display-lg text-fg mb-6">{t('heading')}</h1>
-            <p className="text-lg text-muted-2 leading-relaxed mb-4">{t('p1')}</p>
-            <p className="text-muted-2 leading-relaxed mb-4">{t('p2')}</p>
-            <p className="text-muted-2 leading-relaxed mb-8">{t('p3')}</p>
-            <div className="flex gap-4">
-              <a href="https://linkedin.com/in/hafizjabarov" target="_blank" rel="noopener noreferrer" className="btn-outline text-sm">
+            <h1 className="display-lg text-fg mb-6">{heading}</h1>
+            <p className="text-lg text-muted-2 leading-relaxed mb-4">{p1}</p>
+            <p className="text-muted-2 leading-relaxed mb-4">{p2}</p>
+            <p className="text-muted-2 leading-relaxed mb-8">{p3}</p>
+            <div className="flex flex-wrap gap-3">
+              <a href={linkedInUrl} target="_blank" rel="noopener noreferrer" className="btn-outline text-sm">
                 <Linkedin size={15} /> LinkedIn
               </a>
-              <a href="mailto:jabarovhafiz@gmail.com" className="btn-outline text-sm">
+              <a href={`mailto:${emailAddr}`} className="btn-outline text-sm">
                 <Mail size={15} /> Email
               </a>
+              {settings.resumeUrl && (
+                <a href={settings.resumeUrl} target="_blank" rel="noopener noreferrer" className="btn-outline text-sm">
+                  <Download size={15} /> {t('downloadCv')}
+                </a>
+              )}
               <Link href="/contact" className="btn-accent text-sm">
                 {t('letsWork')} <ArrowRight size={14} />
               </Link>

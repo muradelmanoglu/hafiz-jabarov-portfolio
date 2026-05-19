@@ -23,7 +23,6 @@ export default function Navbar() {
     { label: t('work'), href: '/work' },
     { label: t('services'), href: '/services' },
     { label: t('about'), href: '/about' },
-    { label: t('resume'), href: '/resume' },
     { label: t('contact'), href: '/contact' },
   ]
 

@@ -143,7 +143,7 @@ export default function SettingsPage() {
               ))}
             </div>
           </div>
-          <p className="text-gray-500 text-xs mb-4">Overrides the "About" section text on the homepage. Leave blank to use translation file defaults.</p>
+          <p className="text-gray-500 text-xs mb-4">Overrides the bio text on the About page and homepage About section. Leave blank to use translation file defaults.</p>
 
           {aboutLang === 'en' ? (
             <div className="space-y-4">

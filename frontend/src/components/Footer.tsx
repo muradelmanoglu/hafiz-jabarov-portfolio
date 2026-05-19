@@ -33,7 +33,6 @@ export default function Footer() {
     { label: tn('work'), href: '/work' },
     { label: tn('services'), href: '/services' },
     { label: tn('about'), href: '/about' },
-    { label: tn('resume'), href: '/resume' },
     { label: tn('contact'), href: '/contact' },
   ]
 
