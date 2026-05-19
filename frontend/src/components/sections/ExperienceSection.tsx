@@ -1,20 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { publicApi, type Experience } from '@/lib/api'
 import { motion } from 'framer-motion'
 import { useTranslations, useLocale } from 'next-intl'
+import type { Experience } from '@/lib/api'
 
-export default function ExperienceSection() {
+export default function ExperienceSection({ experiences = [] }: { experiences?: Experience[] }) {
   const t = useTranslations('experience')
   const locale = useLocale()
-  const [experiences, setExperiences] = useState<Experience[]>([])
-
-  useEffect(() => {
-    publicApi.getExperience(locale).then((res) => {
-      if (res.data.data) setExperiences(res.data.data)
-    })
-  }, [locale])
 
   const localeMap: Record<string, string> = { en: 'en-US', az: 'az-Latn-AZ', ru: 'ru-RU' }
 

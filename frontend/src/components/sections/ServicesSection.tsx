@@ -1,21 +1,15 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { publicApi, type PortfolioService } from '@/lib/api'
 import { ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/lib/navigation'
+import type { PortfolioService } from '@/lib/api'
 
-export default function ServicesSection() {
+export default function ServicesSection({ services = [] }: { services?: PortfolioService[] }) {
   const t = useTranslations('services')
-  const [services, setServices] = useState<PortfolioService[]>([])
 
-  useEffect(() => {
-    publicApi.getServices().then((res) => {
-      if (res.data.data) setServices(res.data.data)
-    })
-  }, [])
+  const featured = services.filter((s) => s.featured).slice(0, 3)
 
   return (
     <section className="section border-t border-border">
@@ -31,7 +25,7 @@ export default function ServicesSection() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {services.filter((s) => s.featured).slice(0, 3).map((service, i) => (
+          {featured.map((service, i) => (
             <motion.div
               key={service.id}
               initial={{ opacity: 0, y: 16 }}
@@ -63,10 +57,6 @@ export default function ServicesSection() {
               </div>
             </motion.div>
           ))}
-
-          {services.length === 0 && (
-            <div className="col-span-3 text-center text-muted py-12">{t('loading')}</div>
-          )}
         </div>
       </div>
     </section>

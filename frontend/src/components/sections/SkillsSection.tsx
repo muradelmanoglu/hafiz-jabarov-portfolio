@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { publicApi, type Skill } from '@/lib/api'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
+import type { Skill } from '@/lib/api'
 
 const categoryLabels: Record<string, string> = {
   PROJECT_MANAGEMENT: 'Project Mgmt',
@@ -22,16 +22,9 @@ const proficiencyDots: Record<string, number> = {
   EXPERT: 3,
 }
 
-export default function SkillsSection() {
+export default function SkillsSection({ skills = [] }: { skills?: Skill[] }) {
   const t = useTranslations('skills')
-  const [skills, setSkills] = useState<Skill[]>([])
   const [activeCategory, setActiveCategory] = useState<string>('ALL')
-
-  useEffect(() => {
-    publicApi.getSkills().then((res) => {
-      if (res.data.data) setSkills(res.data.data)
-    })
-  }, [])
 
   const categories = ['ALL', ...Array.from(new Set(skills.map((s) => s.category)))]
   const filtered = activeCategory === 'ALL' ? skills : skills.filter((s) => s.category === activeCategory)

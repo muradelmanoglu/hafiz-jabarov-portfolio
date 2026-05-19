@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -29,17 +29,10 @@ function detectIcon(label: string, url: string) {
   return ExternalLink
 }
 
-export default function ContactSection() {
+export default function ContactSection({ settings = {} }: { settings?: Partial<SiteSettings> }) {
   const t = useTranslations('contact')
   const [sent, setSent] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [settings, setSettings] = useState<Partial<SiteSettings>>({})
-
-  useEffect(() => {
-    publicApi.getSettings().then((res) => {
-      if (res.data.data) setSettings(res.data.data)
-    }).catch(() => {})
-  }, [])
 
   const calendlyUrl = settings.calendly || 'https://calendly.com/hafizjabarov'
 

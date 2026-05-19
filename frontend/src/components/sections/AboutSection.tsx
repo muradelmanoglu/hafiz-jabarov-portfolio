@@ -1,34 +1,18 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations, useLocale } from 'next-intl'
 import { Link } from '@/lib/navigation'
-import { publicApi, type SiteSettings } from '@/lib/api'
+import type { SiteSettings } from '@/lib/api'
 
-export default function AboutSection() {
+export default function AboutSection({ settings = {} }: { settings?: Partial<SiteSettings> }) {
   const t = useTranslations('about')
   const locale = useLocale()
-  const [settings, setSettings] = useState<Partial<SiteSettings>>(() => {
-    if (typeof window === 'undefined') return {}
-    try { return JSON.parse(localStorage.getItem('site_settings_cache') || '{}') } catch { return {} }
-  })
 
-  useEffect(() => {
-    publicApi.getSettings().then((res) => {
-      if (res.data.data) {
-        setSettings(res.data.data)
-        try { localStorage.setItem('site_settings_cache', JSON.stringify(res.data.data)) } catch {}
-      }
-    }).catch(() => {})
-  }, [])
-
-  // Resolve about text: check locale-specific translations, fall back to EN fields, then i18n file
   const aboutTrans = (() => {
     try { return JSON.parse(settings.aboutTranslationsJson || '{}') } catch { return {} }
   })()
-
   const locTrans = (locale !== 'en' && aboutTrans[locale]) ? aboutTrans[locale] : {}
 
   const heading = locTrans.heading || settings.aboutHeading || t('heading')

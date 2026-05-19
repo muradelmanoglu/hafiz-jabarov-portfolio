@@ -1,4 +1,4 @@
-import { setRequestLocale } from 'next-intl/server'
+import { setRequestLocale, getTranslations } from 'next-intl/server'
 import Navbar from '@/components/Navbar'
 import HeroSection from '@/components/sections/HeroSection'
 import AboutSection from '@/components/sections/AboutSection'
@@ -10,24 +10,42 @@ import TestimonialsSection from '@/components/sections/TestimonialsSection'
 import FAQSection from '@/components/sections/FAQSection'
 import ContactSection from '@/components/sections/ContactSection'
 import Footer from '@/components/Footer'
+import { fetchPublic } from '@/lib/server-api'
+import type {
+  SiteSettings, CaseStudy, PortfolioService, Experience,
+  Skill, Testimonial, FAQ,
+} from '@/lib/api'
 
-export default function HomePage({ params: { locale } }: { params: { locale: string } }) {
+export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
   setRequestLocale(locale)
+
+  const [settings, caseStudies, services, experiences, skills, testimonials, faqs] = await Promise.all([
+    fetchPublic<Partial<SiteSettings>>('/settings'),
+    fetchPublic<CaseStudy[]>('/case-studies/featured'),
+    fetchPublic<PortfolioService[]>(`/services?lang=${locale}`),
+    fetchPublic<Experience[]>(`/experience?lang=${locale}`),
+    fetchPublic<Skill[]>('/skills'),
+    fetchPublic<Testimonial[]>('/testimonials/featured'),
+    fetchPublic<FAQ[]>(`/faqs?page=HOME&lang=${locale}`),
+  ])
+
+  const s = settings ?? {}
+
   return (
     <>
       <Navbar />
       <main>
-        <HeroSection />
-        <AboutSection />
-        <FeaturedWorkSection />
-        <ServicesSection />
-        <ExperienceSection />
-        <SkillsSection />
-        <TestimonialsSection />
-        <FAQSection page="HOME" />
-        <ContactSection />
+        <HeroSection settings={s} />
+        <AboutSection settings={s} />
+        <FeaturedWorkSection caseStudies={caseStudies ?? []} />
+        <ServicesSection services={services ?? []} />
+        <ExperienceSection experiences={experiences ?? []} />
+        <SkillsSection skills={skills ?? []} />
+        <TestimonialsSection testimonials={testimonials ?? []} />
+        <FAQSection faqs={faqs ?? []} />
+        <ContactSection settings={s} />
       </main>
-      <Footer />
+      <Footer settings={s} />
     </>
   )
 }

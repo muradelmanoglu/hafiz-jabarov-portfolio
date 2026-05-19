@@ -1,22 +1,13 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { publicApi, type CaseStudy } from '@/lib/api'
 import { ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
-import { useTranslations, useLocale } from 'next-intl'
+import { useTranslations } from 'next-intl'
 import { Link } from '@/lib/navigation'
+import type { CaseStudy } from '@/lib/api'
 
-export default function FeaturedWorkSection() {
+export default function FeaturedWorkSection({ caseStudies = [] }: { caseStudies?: CaseStudy[] }) {
   const t = useTranslations('work')
-  const locale = useLocale()
-  const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([])
-
-  useEffect(() => {
-    publicApi.getFeaturedCaseStudies().then((res) => {
-      if (res.data.data) setCaseStudies(res.data.data)
-    })
-  }, [])
 
   return (
     <section className="section border-t border-border">
@@ -56,9 +47,7 @@ export default function FeaturedWorkSection() {
                         <span key={tag} className="tag">{tag}</span>
                       ))}
                     </div>
-                    <h3 className="text-lg font-semibold text-fg mb-1 group-hover:text-fg transition-colors">
-                      {cs.title}
-                    </h3>
+                    <h3 className="text-lg font-semibold text-fg mb-1">{cs.title}</h3>
                     <p className="text-muted text-sm line-clamp-2">{cs.summary}</p>
                   </div>
 
@@ -80,10 +69,6 @@ export default function FeaturedWorkSection() {
               </Link>
             </motion.div>
           ))}
-
-          {caseStudies.length === 0 && (
-            <div className="text-center text-muted py-16">{t('loadingCaseStudies')}</div>
-          )}
         </div>
       </div>
     </section>

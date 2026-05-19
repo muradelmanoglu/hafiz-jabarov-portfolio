@@ -1,20 +1,12 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { publicApi, type Testimonial } from '@/lib/api'
 import { motion } from 'framer-motion'
 import { Quote } from 'lucide-react'
 import { useTranslations } from 'next-intl'
+import type { Testimonial } from '@/lib/api'
 
-export default function TestimonialsSection() {
+export default function TestimonialsSection({ testimonials = [] }: { testimonials?: Testimonial[] }) {
   const t = useTranslations('testimonials')
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([])
-
-  useEffect(() => {
-    publicApi.getTestimonials().then((res) => {
-      if (res.data.data) setTestimonials(res.data.data)
-    })
-  }, [])
 
   if (testimonials.length === 0) return null
 

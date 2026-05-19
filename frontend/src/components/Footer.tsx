@@ -1,12 +1,9 @@
-'use client'
-
-import { useEffect, useState } from 'react'
 import { Linkedin, Github, Mail, CalendarDays, Instagram, Twitter, ExternalLink } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { getTranslations } from 'next-intl/server'
 import { Link } from '@/lib/navigation'
-import { publicApi, type SiteSettings, type SocialLink } from '@/lib/api'
+import { fetchPublic } from '@/lib/server-api'
+import type { SiteSettings, SocialLink } from '@/lib/api'
 
-// Detect a standard icon from platform name / URL
 function detectIcon(label: string, url: string) {
   const l = label.toLowerCase()
   const u = url.toLowerCase()
@@ -18,16 +15,11 @@ function detectIcon(label: string, url: string) {
   return ExternalLink
 }
 
-export default function Footer() {
-  const t = useTranslations('footer')
-  const tn = useTranslations('nav')
-  const [settings, setSettings] = useState<Partial<SiteSettings>>({})
+export default async function Footer({ settings: propSettings }: { settings?: Partial<SiteSettings> }) {
+  const t = await getTranslations('footer')
+  const tn = await getTranslations('nav')
 
-  useEffect(() => {
-    publicApi.getSettings().then((res) => {
-      if (res.data.data) setSettings(res.data.data)
-    }).catch(() => {})
-  }, [])
+  const settings = propSettings ?? (await fetchPublic<Partial<SiteSettings>>('/settings')) ?? {}
 
   const footerLinks = [
     { label: tn('work'), href: '/work' },
@@ -36,17 +28,15 @@ export default function Footer() {
     { label: tn('contact'), href: '/contact' },
   ]
 
-  // Predefined social links
-  const predefinedLinks: { url: string; icon: typeof Linkedin; label: string }[] = [
-    { url: settings.linkedIn || '', icon: Linkedin, label: 'LinkedIn' },
-    { url: settings.github || '', icon: Github, label: 'GitHub' },
-    { url: settings.twitter || '', icon: Twitter, label: 'Twitter' },
-    { url: settings.instagram || '', icon: Instagram, label: 'Instagram' },
-    { url: settings.email ? `mailto:${settings.email}` : '', icon: Mail, label: 'Email' },
-    { url: settings.calendly || '', icon: CalendarDays, label: 'Book a call' },
+  const predefinedLinks: { url: string; Icon: typeof Linkedin; label: string }[] = [
+    { url: settings.linkedIn || '', Icon: Linkedin, label: 'LinkedIn' },
+    { url: settings.github || '', Icon: Github, label: 'GitHub' },
+    { url: settings.twitter || '', Icon: Twitter, label: 'Twitter' },
+    { url: settings.instagram || '', Icon: Instagram, label: 'Instagram' },
+    { url: settings.email ? `mailto:${settings.email}` : '', Icon: Mail, label: 'Email' },
+    { url: settings.calendly || '', Icon: CalendarDays, label: 'Book a call' },
   ].filter((s) => !!s.url)
 
-  // Custom social links added by admin
   const customLinks: SocialLink[] = (() => {
     try { return JSON.parse(settings.customSocialLinksJson || '[]') } catch { return [] }
   })()
@@ -55,7 +45,7 @@ export default function Footer() {
     ...predefinedLinks,
     ...customLinks.filter((c) => !!c.url).map((c) => ({
       url: c.url,
-      icon: detectIcon(c.label, c.url),
+      Icon: detectIcon(c.label, c.url),
       label: c.label,
     })),
   ]
@@ -85,7 +75,7 @@ export default function Footer() {
 
           {allSocialLinks.length > 0 && (
             <div className="flex items-center gap-4">
-              {allSocialLinks.map(({ url, icon: Icon, label }) => (
+              {allSocialLinks.map(({ url, Icon, label }) => (
                 <a
                   key={label}
                   href={url}

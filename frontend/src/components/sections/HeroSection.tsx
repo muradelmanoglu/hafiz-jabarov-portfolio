@@ -1,11 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { ArrowRight, CalendarDays } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/lib/navigation'
-import { publicApi, type SiteSettings } from '@/lib/api'
+import type { SiteSettings } from '@/lib/api'
 
 const DEFAULT_STATS = [
   { value: '7+', labelKey: 'stats.yearsExp' },
@@ -14,15 +13,8 @@ const DEFAULT_STATS = [
   { value: '15+', labelKey: 'stats.teams' },
 ]
 
-export default function HeroSection() {
+export default function HeroSection({ settings = {} }: { settings?: Partial<SiteSettings> }) {
   const t = useTranslations('hero')
-  const [settings, setSettings] = useState<Partial<SiteSettings>>({})
-
-  useEffect(() => {
-    publicApi.getSettings().then((res) => {
-      if (res.data.data) setSettings(res.data.data)
-    }).catch(() => {})
-  }, [])
 
   const stats = settings.headlineMetrics && settings.headlineMetrics.length > 0
     ? settings.headlineMetrics.map((m) => ({ value: m.value, label: m.label }))
@@ -74,12 +66,7 @@ export default function HeroSection() {
           <Link href="/work" className="btn-accent">
             {t('viewWork')} <ArrowRight size={16} />
           </Link>
-          <a
-            href={calendlyUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-outline"
-          >
+          <a href={calendlyUrl} target="_blank" rel="noopener noreferrer" className="btn-outline">
             <CalendarDays size={16} />
             {t('bookCall')}
           </a>
