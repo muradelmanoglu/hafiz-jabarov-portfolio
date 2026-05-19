@@ -9,6 +9,7 @@ import {
   Wrench,
   Briefcase,
   GraduationCap,
+  Package,
   Mail,
   Settings,
   LogOut,
@@ -33,6 +34,7 @@ export default function DashboardLayout({
   const navItems = [
     { label: t('dashboard'), href: base, icon: LayoutDashboard },
     { label: t('caseStudies'), href: `${base}/projects`, icon: FolderOpen },
+    { label: t('services'), href: `${base}/services`, icon: Package },
     { label: t('skills'), href: `${base}/skills`, icon: Wrench },
     { label: t('experience'), href: `${base}/experience`, icon: Briefcase },
     { label: t('education'), href: `${base}/education`, icon: GraduationCap },

@@ -139,8 +139,9 @@ export interface Company {
 }
 
 export interface Metric {
-  label: string
   value: string
+  label: string
+  context?: string
 }
 
 export interface CaseStudy {

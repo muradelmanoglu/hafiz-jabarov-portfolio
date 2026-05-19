@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { adminApi, type CaseStudy } from '@/lib/api'
+import { adminApi, type CaseStudy, type Metric } from '@/lib/api'
 import { Plus, Pencil, Trash2, Check, ExternalLink, X } from 'lucide-react'
 import Link from 'next/link'
 import { useTranslations, useLocale } from 'next-intl'
@@ -27,6 +27,7 @@ const emptyForm = (): CaseStudyWithTranslations => ({
   outcome: '',
   tools: [],
   tags: [],
+  outcomeMetrics: [],
   translations: { az: {}, ru: {} },
 })
 
@@ -49,6 +50,7 @@ export default function CaseStudiesPage() {
   const [contentLangTab, setContentLangTab] = useState<LangTab>('en')
   const [newTool, setNewTool] = useState('')
   const [newTag, setNewTag] = useState('')
+  const [newMetric, setNewMetric] = useState<Metric>({ value: '', label: '', context: '' })
   const [saveError, setSaveError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
 
@@ -105,6 +107,7 @@ export default function CaseStudiesPage() {
     setSaveError(null)
     setNewTool('')
     setNewTag('')
+    setNewMetric({ value: '', label: '', context: '' })
   }
 
   const tCsField = (field: string): string => {
@@ -128,6 +131,19 @@ export default function CaseStudiesPage() {
     { key: 'az', label: 'AZ' },
     { key: 'ru', label: 'RU' },
   ]
+
+  const addMetric = () => {
+    if (!editing || !newMetric.value.trim() || !newMetric.label.trim()) return
+    setEditing({ ...editing, outcomeMetrics: [...(editing.outcomeMetrics || []), { ...newMetric }] })
+    setNewMetric({ value: '', label: '', context: '' })
+  }
+
+  const removeMetric = (i: number) => {
+    if (!editing) return
+    const arr = [...(editing.outcomeMetrics || [])]
+    arr.splice(i, 1)
+    setEditing({ ...editing, outcomeMetrics: arr })
+  }
 
   const addChip = (field: 'tools' | 'tags', val: string, setter: (v: string) => void) => {
     const v = val.trim()
@@ -366,6 +382,45 @@ export default function CaseStudiesPage() {
                   </div>
                 </>
               )}
+
+              {/* Outcome Metrics */}
+              <div>
+                <label className="block text-xs text-gray-500 mb-2">Outcome Metrics <span className="text-gray-600">(e.g. -22% · Cart abandonment)</span></label>
+                <div className="space-y-2 mb-3">
+                  {(editing.outcomeMetrics || []).map((m, i) => (
+                    <div key={i} className="flex items-center gap-3 bg-gray-800 rounded-lg px-3 py-2">
+                      <span className="text-accent font-bold text-sm w-16 shrink-0">{m.value}</span>
+                      <span className="text-gray-300 text-xs flex-1">{m.label}</span>
+                      {m.context && <span className="text-gray-500 text-xs">{m.context}</span>}
+                      <button onClick={() => removeMetric(i)} className="text-gray-600 hover:text-red-400 ml-auto"><X size={12} /></button>
+                    </div>
+                  ))}
+                </div>
+                <div className="grid grid-cols-3 gap-2">
+                  <input
+                    value={newMetric.value}
+                    onChange={(e) => setNewMetric({ ...newMetric, value: e.target.value })}
+                    placeholder="Value (+18%)"
+                    className="admin-input text-sm"
+                  />
+                  <input
+                    value={newMetric.label}
+                    onChange={(e) => setNewMetric({ ...newMetric, label: e.target.value })}
+                    placeholder="Label (Revenue MoM)"
+                    className="admin-input text-sm"
+                  />
+                  <div className="flex gap-1">
+                    <input
+                      value={newMetric.context || ''}
+                      onChange={(e) => setNewMetric({ ...newMetric, context: e.target.value })}
+                      onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addMetric())}
+                      placeholder="Context (opt)"
+                      className="admin-input text-sm flex-1"
+                    />
+                    <button onClick={addMetric} className="btn-outline px-2"><Plus size={14} /></button>
+                  </div>
+                </div>
+              </div>
 
               {/* Tools */}
               <div>
