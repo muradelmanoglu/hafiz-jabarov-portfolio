@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { adminApi, api, type SiteSettings, type HeadlineMetric, type SocialLink } from '@/lib/api'
-import { Check, RefreshCw, Plus, X, Upload } from 'lucide-react'
+import { Check, RefreshCw, Plus, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 export default function SettingsPage() {
@@ -86,9 +86,17 @@ export default function SettingsPage() {
       e.target.value = ''
       setUploading((u) => ({ ...u, [key]: true }))
       try {
-        const formData = new FormData()
-        formData.append('file', file)
-        const res = await api.post<{ success: boolean; data: string }>('/admin/upload', formData)
+        const base64 = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader()
+          reader.onload = () => resolve(reader.result as string)
+          reader.onerror = reject
+          reader.readAsDataURL(file)
+        })
+        const res = await api.post<{ success: boolean; data: string }>('/admin/upload', {
+          data: base64,
+          contentType: file.type,
+          name: file.name,
+        })
         if (res.data.success && res.data.data) {
           setSettings((prev) => ({ ...prev, [key]: res.data.data }))
         }
