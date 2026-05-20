@@ -71,21 +71,20 @@ public class FileUploadController {
 
     @GetMapping("/uploads/{id}")
     public ResponseEntity<byte[]> serve(@PathVariable Long id) {
-        return uploadedFileRepository.findById(id)
-                .map(file -> {
-                    try {
-                        String data = file.getBase64Data();
-                        String base64 = data.contains(",") ? data.substring(data.indexOf(',') + 1) : data;
-                        byte[] bytes = Base64.getDecoder().decode(base64);
-                        String safeName = file.getOriginalName().replaceAll("[^a-zA-Z0-9._\\-]", "_");
-                        return ResponseEntity.ok()
-                                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + safeName + "\"")
-                                .contentType(MediaType.parseMediaType(file.getContentType()))
-                                .body(bytes);
-                    } catch (Exception e) {
-                        return ResponseEntity.<byte[]>status(500).build();
-                    }
-                })
-                .orElse(ResponseEntity.notFound().build());
+        var found = uploadedFileRepository.findById(id);
+        if (found.isEmpty()) return ResponseEntity.<byte[]>notFound().build();
+        var file = found.get();
+        try {
+            String data = file.getBase64Data();
+            String base64 = data.contains(",") ? data.substring(data.indexOf(',') + 1) : data;
+            byte[] bytes = Base64.getDecoder().decode(base64);
+            String safeName = file.getOriginalName().replaceAll("[^a-zA-Z0-9._\\-]", "_");
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + safeName + "\"")
+                    .contentType(MediaType.parseMediaType(file.getContentType()))
+                    .body(bytes);
+        } catch (Exception e) {
+            return ResponseEntity.<byte[]>status(500).build();
+        }
     }
 }
