@@ -122,7 +122,12 @@ export default function ExperiencePage() {
       exp
         ? {
             ...exp,
-            translations: (exp.translations as Record<string, Record<string, unknown>>) || { az: {}, ru: {} },
+            translations: (() => {
+              const t = exp.translations
+              if (!t) return { az: {}, ru: {} }
+              if (typeof t === 'string') { try { return JSON.parse(t) } catch { return { az: {}, ru: {} } } }
+              return t as Record<string, Record<string, unknown>>
+            })(),
           }
         : emptyForm()
     )

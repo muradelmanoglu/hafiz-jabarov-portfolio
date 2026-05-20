@@ -94,10 +94,14 @@ export default function CaseStudiesPage() {
       cs
         ? {
             ...cs,
-            translations: (cs.translations as Record<string, Record<string, unknown>>) || {
-              az: {},
-              ru: {},
-            },
+            translations: (() => {
+              const t = cs.translations
+              if (!t) return { az: {}, ru: {} }
+              if (typeof t === 'string') {
+                try { return JSON.parse(t) } catch { return { az: {}, ru: {} } }
+              }
+              return t as Record<string, Record<string, unknown>>
+            })(),
           }
         : emptyForm()
     )

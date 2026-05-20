@@ -111,8 +111,12 @@ export default function EducationPage() {
       item
         ? {
             ...item,
-            translations:
-              (item.translations as Record<string, Record<string, unknown>>) || { az: {}, ru: {} },
+            translations: (() => {
+              const t = item.translations
+              if (!t) return { az: {}, ru: {} }
+              if (typeof t === 'string') { try { return JSON.parse(t) } catch { return { az: {}, ru: {} } } }
+              return t as Record<string, Record<string, unknown>>
+            })(),
           }
         : emptyForm()
     )
