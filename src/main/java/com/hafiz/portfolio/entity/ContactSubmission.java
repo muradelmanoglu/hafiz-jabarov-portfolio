@@ -22,12 +22,10 @@ public class ContactSubmission {
 
     private String company;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private ProjectType projectType;
+    private String projectType;
 
-    @Enumerated(EnumType.STRING)
-    private BudgetRange budgetRange;
+    private String budgetRange;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String message;
@@ -46,14 +44,6 @@ public class ContactSubmission {
     private String ipAddress;
     private String userAgent;
     private String referrer;
-
-    public enum ProjectType {
-        FRACTIONAL_PM, ECOMMERCE_DELIVERY, DELIVERY_AUDIT, DESIGN_COACHING, TEAM_SETUP, OTHER
-    }
-
-    public enum BudgetRange {
-        UNDER_1K, FROM_1K_TO_5K, FROM_5K_TO_10K, FROM_10K_TO_25K, ABOVE_25K
-    }
 
     public enum Status {
         NEW, READ, REPLIED, SPAM, ARCHIVED
