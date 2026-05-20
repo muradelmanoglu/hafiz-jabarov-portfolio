@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { adminApi, publicApi, type Skill } from '@/lib/api'
+import { adminApi, type Skill } from '@/lib/api'
 import { Plus, Pencil, Trash2, Check } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
@@ -28,7 +28,7 @@ export default function SkillsPage() {
   useEffect(() => { fetchSkills() }, [])
 
   const fetchSkills = async () => {
-    const res = await publicApi.getSkills()
+    const res = await adminApi.getSkills()
     if (res.data.data) setSkills(res.data.data)
   }
 

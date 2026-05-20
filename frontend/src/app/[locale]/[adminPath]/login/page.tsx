@@ -97,7 +97,7 @@ export default function AdminLoginPage({ params }: { params: { locale: string; a
             </div>
           )}
 
-          <button type="submit" disabled={isSubmitting} className="btn-primary w-full">
+          <button type="submit" disabled={isSubmitting} className="btn-accent w-full justify-center">
             {isSubmitting ? t('loading') : t('submit')}
           </button>
         </form>

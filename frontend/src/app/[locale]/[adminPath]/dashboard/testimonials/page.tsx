@@ -11,6 +11,7 @@ const emptyForm = (): Partial<Testimonial> => ({
   authorCompany: '',
   authorPhotoUrl: '',
   linkedIn: '',
+  dateReceived: new Date().toISOString().split('T')[0],
   featured: false,
   orderWeight: 0,
 })
@@ -136,6 +137,15 @@ export default function TestimonialsPage() {
                 onChange={(e) => setEditing({ ...editing, linkedIn: e.target.value })}
                 className="admin-input"
                 placeholder="https://linkedin.com/in/..."
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-gray-500 mb-1">Date Received *</label>
+              <input
+                type="date"
+                value={editing.dateReceived ? String(editing.dateReceived).split('T')[0] : ''}
+                onChange={(e) => setEditing({ ...editing, dateReceived: e.target.value as unknown as Testimonial['dateReceived'] })}
+                className="admin-input"
               />
             </div>
             <div>

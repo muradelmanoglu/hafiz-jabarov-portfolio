@@ -385,6 +385,8 @@ export const adminApi = {
     api.delete<ApiResponse<void>>(`/admin/services/${id}`),
 
   // Skills
+  getSkills: () =>
+    api.get<ApiResponse<Skill[]>>('/admin/skills'),
   createSkill: (data: Partial<Skill>) =>
     api.post<ApiResponse<Skill>>('/admin/skills', data),
   updateSkill: (id: number, data: Partial<Skill>) =>

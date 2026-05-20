@@ -112,6 +112,11 @@ public class AdminController {
 
     // ─── Skills ───────────────────────────────────────────────────────────────
 
+    @GetMapping("/skills")
+    public ResponseEntity<ApiResponse<List<Skill>>> getAllSkills() {
+        return ResponseEntity.ok(ApiResponse.success(skillService.getAll()));
+    }
+
     @PostMapping("/skills")
     public ResponseEntity<ApiResponse<Skill>> createSkill(@Valid @RequestBody SkillRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
