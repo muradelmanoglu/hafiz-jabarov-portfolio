@@ -79,7 +79,10 @@ public class ContactSubmissionService {
 
     private String getClientIp(HttpServletRequest request) {
         String xff = request.getHeader("X-Forwarded-For");
-        if (xff != null && !xff.isBlank()) return xff.split(",")[0].trim();
+        if (xff != null && !xff.isBlank()) {
+            String[] parts = xff.split(",");
+            if (parts.length > 0) return parts[0].trim();
+        }
         return request.getRemoteAddr();
     }
 }

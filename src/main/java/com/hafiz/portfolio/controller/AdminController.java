@@ -314,8 +314,9 @@ public class AdminController {
     public ResponseEntity<ApiResponse<ContactSubmission>> addSubmissionNote(
             @PathVariable Long id,
             @RequestBody Map<String, String> body) {
+        String note = body.getOrDefault("note", "");
         return ResponseEntity.ok(ApiResponse.success("Note added",
-                contactSubmissionService.addNote(id, body.get("note"))));
+                contactSubmissionService.addNote(id, note)));
     }
 
     @DeleteMapping("/submissions/{id}")

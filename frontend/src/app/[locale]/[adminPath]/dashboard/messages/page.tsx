@@ -86,7 +86,7 @@ export default function MessagesPage() {
                       {sub.status}
                     </span>
                   </div>
-                  <p className="text-gray-600 text-xs truncate">{sub.projectType.replace('_', ' ')}</p>
+                  <p className="text-gray-600 text-xs truncate">{sub.projectType.replaceAll('_', ' ')}</p>
                 </div>
                 <button
                   onClick={(e) => { e.stopPropagation(); handleDelete(sub.id) }}
@@ -116,8 +116,8 @@ export default function MessagesPage() {
               <p className="text-gray-500 text-sm">{selected.email}</p>
               {selected.company && <p className="text-gray-600 text-xs mt-0.5">{selected.company}</p>}
               <div className="flex gap-4 mt-2 text-xs text-gray-600">
-                <span>{selected.projectType.replace('_', ' ')}</span>
-                {selected.budgetRange && <span>{selected.budgetRange.replace('_', ' ')}</span>}
+                <span>{selected.projectType.replaceAll('_', ' ')}</span>
+                {selected.budgetRange && <span>{selected.budgetRange.replaceAll('_', ' ')}</span>}
               </div>
               <p className="text-gray-700 text-xs mt-1">
                 {new Date(selected.submittedAt).toLocaleString('en-US')}

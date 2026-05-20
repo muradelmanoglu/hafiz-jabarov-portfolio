@@ -33,10 +33,17 @@ public class RateLimitFilter extends OncePerRequestFilter {
     @Value("${app.rate-limit.contact.window-minutes:60}")
     private int contactWindowMinutes;
 
+    @Value("${app.rate-limit.testimonial.max-attempts:3}")
+    private int testimonialMaxAttempts;
+
+    @Value("${app.rate-limit.testimonial.window-minutes:60}")
+    private int testimonialWindowMinutes;
+
     private record AttemptRecord(int count, LocalDateTime windowStart) {}
 
     private final Map<String, AttemptRecord> loginAttempts = new ConcurrentHashMap<>();
     private final Map<String, AttemptRecord> contactAttempts = new ConcurrentHashMap<>();
+    private final Map<String, AttemptRecord> testimonialAttempts = new ConcurrentHashMap<>();
     private final AtomicInteger requestCounter = new AtomicInteger(0);
     private static final int PRUNE_EVERY = 1000;
 
@@ -62,6 +69,14 @@ public class RateLimitFilter extends OncePerRequestFilter {
             pruneIfNeeded(contactAttempts, contactWindowMinutes);
             if (isRateLimited(ip, contactAttempts, contactMaxAttempts, contactWindowMinutes)) {
                 log.warn("Contact rate limit exceeded for IP: {}", ip);
+                writeRateLimitResponse(response);
+                return;
+            }
+        } else if ("POST".equals(method) && uri.endsWith("/api/public/testimonials")) {
+            String ip = getClientIp(request);
+            pruneIfNeeded(testimonialAttempts, testimonialWindowMinutes);
+            if (isRateLimited(ip, testimonialAttempts, testimonialMaxAttempts, testimonialWindowMinutes)) {
+                log.warn("Testimonial rate limit exceeded for IP: {}", ip);
                 writeRateLimitResponse(response);
                 return;
             }
@@ -103,7 +118,8 @@ public class RateLimitFilter extends OncePerRequestFilter {
     private String getClientIp(HttpServletRequest request) {
         String xForwardedFor = request.getHeader("X-Forwarded-For");
         if (xForwardedFor != null && !xForwardedFor.isBlank()) {
-            return xForwardedFor.split(",")[0].trim();
+            String[] parts = xForwardedFor.split(",");
+            if (parts.length > 0) return parts[0].trim();
         }
         return request.getRemoteAddr();
     }
