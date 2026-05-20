@@ -205,7 +205,8 @@
   }
 
   select.input-field option:checked,
-  select.input-field option:focus {
+  select.input-field option:focus,
+  select.input-field option:hover {
     background-color: #00F921;
     color: #000;
   }

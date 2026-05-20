@@ -40,8 +40,8 @@ export default function CursorTrail() {
           ctx.beginPath()
           ctx.moveTo(points[i - 1].x, points[i - 1].y)
           ctx.lineTo(points[i].x, points[i].y)
-          ctx.strokeStyle = `rgba(0, 180, 255, ${t * 0.75})`
-          ctx.lineWidth = t * 1.8
+          ctx.strokeStyle = `rgba(0, 249, 33, ${t * 0.85})`
+          ctx.lineWidth = t * 4
           ctx.lineCap = 'round'
           ctx.lineJoin = 'round'
           ctx.stroke()
