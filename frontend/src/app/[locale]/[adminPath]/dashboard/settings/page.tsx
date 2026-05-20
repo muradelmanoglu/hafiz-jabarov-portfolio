@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { adminApi, type SiteSettings, type HeadlineMetric, type SocialLink } from '@/lib/api'
-import { Check, RefreshCw, Plus, X } from 'lucide-react'
+import { adminApi, api, type SiteSettings, type HeadlineMetric, type SocialLink } from '@/lib/api'
+import { Check, RefreshCw, Plus, X, Upload } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
 export default function SettingsPage() {
@@ -73,78 +73,65 @@ export default function SettingsPage() {
     </div>
   )
 
-  const pdfField = (key: keyof SiteSettings, label: string) => (
-    <div>
-      <label className="block text-xs text-gray-500 mb-1">{label}</label>
-      <div className="flex gap-2 items-center">
-        <label className="btn-outline text-xs px-3 py-2 cursor-pointer shrink-0">
-          Upload PDF
-          <input
-            type="file"
-            accept="application/pdf"
-            className="hidden"
-            onChange={(e) => {
-              const file = e.target.files?.[0]
-              if (!file) return
-              const reader = new FileReader()
-              reader.onload = () => {
-                setSettings({ ...settings, [key]: reader.result as string })
-              }
-              reader.readAsDataURL(file)
-            }}
-          />
-        </label>
-        {(settings[key] as string)?.startsWith('data:application/pdf') ? (
-          <span className="text-xs text-green-400 flex-1">PDF uploaded ✓</span>
-        ) : (settings[key] as string)?.startsWith('http') ? (
-          <a href={settings[key] as string} target="_blank" rel="noopener noreferrer" className="text-xs text-accent flex-1 truncate hover:underline">
-            {settings[key] as string}
-          </a>
-        ) : (
-          <span className="text-xs text-gray-600 flex-1">No file uploaded</span>
-        )}
-        {settings[key] && (
-          <button onClick={() => setSettings({ ...settings, [key]: '' })} className="text-gray-600 hover:text-red-400 shrink-0">
-            <X size={14} />
-          </button>
-        )}
-      </div>
-    </div>
-  )
+  const [uploading, setUploading] = useState<Record<string, boolean>>({})
 
-  const fileField = (key: keyof SiteSettings, label: string) => (
-    <div>
-      <label className="block text-xs text-gray-500 mb-1">{label}</label>
-      <div className="flex gap-2 items-center">
-        <input
-          value={(settings[key] as string) || ''}
-          onChange={(e) => setSettings({ ...settings, [key]: e.target.value })}
-          className="admin-input flex-1 text-xs"
-          placeholder="https://... or upload →"
-        />
-        <label className="btn-outline text-xs px-3 py-2 cursor-pointer shrink-0">
-          Upload
-          <input
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e) => {
-              const file = e.target.files?.[0]
-              if (!file) return
-              const reader = new FileReader()
-              reader.onload = () => {
-                setSettings({ ...settings, [key]: reader.result as string })
-              }
-              reader.readAsDataURL(file)
-            }}
-          />
-        </label>
+  const uploadField = (key: keyof SiteSettings, label: string, accept: string = 'image/*') => {
+    const val = (settings[key] as string) || ''
+    const isPdf = accept.includes('pdf')
+    const isUploading = uploading[key as string]
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0]
+      if (!file) return
+      e.target.value = ''
+      setUploading((u) => ({ ...u, [key]: true }))
+      try {
+        const formData = new FormData()
+        formData.append('file', file)
+        const res = await api.post<{ success: boolean; data: string }>('/admin/upload', formData, {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        })
+        if (res.data.success && res.data.data) {
+          setSettings((prev) => ({ ...prev, [key]: res.data.data }))
+        }
+      } catch {
+        alert('Upload failed. Please try again.')
+      } finally {
+        setUploading((u) => ({ ...u, [key]: false }))
+      }
+    }
+
+    return (
+      <div>
+        <label className="block text-xs text-gray-500 mb-1">{label}</label>
+        <div className="flex gap-2 items-center">
+          <label className={`btn-outline text-xs px-3 py-2 cursor-pointer shrink-0 flex items-center gap-1.5 ${isUploading ? 'opacity-50' : ''}`}>
+            <Upload size={12} />
+            {isUploading ? 'Uploading...' : isPdf ? 'Upload PDF' : 'Upload'}
+            <input type="file" accept={accept} className="hidden" onChange={handleFileChange} disabled={isUploading} />
+          </label>
+          {val ? (
+            isPdf ? (
+              <a href={val} target="_blank" rel="noopener noreferrer" className="text-xs text-green-400 flex-1 truncate hover:underline">
+                PDF uploaded ✓
+              </a>
+            ) : (
+              <img src={val} alt={label} className="h-8 w-auto rounded object-contain bg-gray-800 p-0.5 shrink-0" />
+            )
+          ) : (
+            <span className="text-xs text-gray-600 flex-1">No file uploaded</span>
+          )}
+          {val && (
+            <button onClick={() => setSettings((prev) => ({ ...prev, [key]: '' }))} className="text-gray-600 hover:text-red-400 shrink-0">
+              <X size={14} />
+            </button>
+          )}
+        </div>
       </div>
-      {(settings[key] as string)?.startsWith('data:image') && (
-        <img src={settings[key] as string} alt={label} className="mt-2 h-10 w-auto rounded object-contain bg-gray-800 p-1" />
-      )}
-    </div>
-  )
+    )
+  }
+
+  const fileField = uploadField
 
   return (
     <div>
@@ -208,7 +195,7 @@ export default function SettingsPage() {
             {field('calendly', tf('calendly'))}
             {field('twitter', tf('twitter'))}
             {field('instagram', tf('instagram'))}
-            {pdfField('resumeUrl', tf('resumeUrl'))}
+            {uploadField('resumeUrl', tf('resumeUrl'), 'application/pdf')}
           </div>
         </div>
 
