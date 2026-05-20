@@ -86,8 +86,10 @@ export default function ContactSection({ settings = {} }: { settings?: Partial<S
       await publicApi.submitContact(data as ContactFormData)
       setSent(true)
       reset()
-    } catch {
-      setError(t('form.errorGeneric'))
+    } catch (err: unknown) {
+      const axiosErr = err as { response?: { data?: { message?: string }; status?: number } }
+      const serverMsg = axiosErr?.response?.data?.message
+      setError(serverMsg || t('form.errorGeneric'))
     }
   }
 

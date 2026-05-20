@@ -125,10 +125,14 @@ export default function SettingsPage() {
         })
         if (res.data.success && res.data.data) {
           setSettings((prev) => ({ ...prev, [key]: res.data.data }))
+        } else {
+          alert(`Upload failed: server returned success=false or empty URL`)
         }
-      } catch (err) {
+      } catch (err: unknown) {
+        const axiosErr = err as { response?: { data?: { message?: string }; status?: number } }
+        const msg = axiosErr?.response?.data?.message || 'Upload failed'
         console.error('Upload error:', err)
-        alert('Upload failed. Please try again.')
+        alert(`Upload failed (${axiosErr?.response?.status ?? 'network error'}): ${msg}`)
       } finally {
         setUploading((u) => ({ ...u, [key]: false }))
       }
