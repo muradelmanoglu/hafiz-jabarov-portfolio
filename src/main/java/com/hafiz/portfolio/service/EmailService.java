@@ -16,10 +16,10 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
 
-    @Value("${app.email.notification-to:jabarovhafiz@gmail.com}")
+    @Value("${app.email.notification-to}")
     private String notificationTo;
 
-    @Value("${app.email.from:noreply@hafizjabarov.com}")
+    @Value("${app.email.from}")
     private String fromAddress;
 
     @Async

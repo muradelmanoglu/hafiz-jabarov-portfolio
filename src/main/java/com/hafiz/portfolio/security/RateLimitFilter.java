@@ -15,20 +15,30 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 @Slf4j
 public class RateLimitFilter extends OncePerRequestFilter {
 
     @Value("${app.rate-limit.login.max-attempts:5}")
-    private int maxAttempts;
+    private int loginMaxAttempts;
 
     @Value("${app.rate-limit.login.window-minutes:15}")
-    private int windowMinutes;
+    private int loginWindowMinutes;
+
+    @Value("${app.rate-limit.contact.max-attempts:5}")
+    private int contactMaxAttempts;
+
+    @Value("${app.rate-limit.contact.window-minutes:60}")
+    private int contactWindowMinutes;
 
     private record AttemptRecord(int count, LocalDateTime windowStart) {}
 
-    private final Map<String, AttemptRecord> attempts = new ConcurrentHashMap<>();
+    private final Map<String, AttemptRecord> loginAttempts = new ConcurrentHashMap<>();
+    private final Map<String, AttemptRecord> contactAttempts = new ConcurrentHashMap<>();
+    private final AtomicInteger requestCounter = new AtomicInteger(0);
+    private static final int PRUNE_EVERY = 1000;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -36,13 +46,23 @@ public class RateLimitFilter extends OncePerRequestFilter {
                                     @NonNull FilterChain filterChain)
             throws ServletException, IOException {
 
-        if ("POST".equals(request.getMethod()) && request.getRequestURI().endsWith("/api/auth/login")) {
+        String method = request.getMethod();
+        String uri = request.getRequestURI();
+
+        if ("POST".equals(method) && uri.endsWith("/api/auth/login")) {
             String ip = getClientIp(request);
-            if (isRateLimited(ip)) {
-                log.warn("Rate limit exceeded for IP: {}", ip);
-                response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
-                response.setContentType("application/json");
-                response.getWriter().write("{\"error\":\"Too many login attempts. Please try again later.\"}");
+            pruneIfNeeded(loginAttempts, loginWindowMinutes);
+            if (isRateLimited(ip, loginAttempts, loginMaxAttempts, loginWindowMinutes)) {
+                log.warn("Login rate limit exceeded for IP: {}", ip);
+                writeRateLimitResponse(response);
+                return;
+            }
+        } else if ("POST".equals(method) && uri.endsWith("/api/public/contact")) {
+            String ip = getClientIp(request);
+            pruneIfNeeded(contactAttempts, contactWindowMinutes);
+            if (isRateLimited(ip, contactAttempts, contactMaxAttempts, contactWindowMinutes)) {
+                log.warn("Contact rate limit exceeded for IP: {}", ip);
+                writeRateLimitResponse(response);
                 return;
             }
         }
@@ -50,7 +70,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private boolean isRateLimited(String ip) {
+    private boolean isRateLimited(String ip, Map<String, AttemptRecord> attempts, int max, int windowMinutes) {
         LocalDateTime now = LocalDateTime.now();
         AttemptRecord record = attempts.get(ip);
 
@@ -59,12 +79,25 @@ public class RateLimitFilter extends OncePerRequestFilter {
             return false;
         }
 
-        if (record.count() >= maxAttempts) {
+        if (record.count() >= max) {
             return true;
         }
 
         attempts.put(ip, new AttemptRecord(record.count() + 1, record.windowStart()));
         return false;
+    }
+
+    private void pruneIfNeeded(Map<String, AttemptRecord> map, int windowMinutes) {
+        if (requestCounter.incrementAndGet() % PRUNE_EVERY == 0) {
+            LocalDateTime cutoff = LocalDateTime.now().minusMinutes(windowMinutes);
+            map.entrySet().removeIf(e -> e.getValue().windowStart().isBefore(cutoff));
+        }
+    }
+
+    private void writeRateLimitResponse(HttpServletResponse response) throws IOException {
+        response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
+        response.setContentType("application/json");
+        response.getWriter().write("{\"success\":false,\"message\":\"Too many requests. Please try again later.\"}");
     }
 
     private String getClientIp(HttpServletRequest request) {
