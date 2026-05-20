@@ -6,6 +6,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
+import CursorTrail from '@/components/CursorTrail'
 import '../globals.css'
 
 const fraunces = Fraunces({
@@ -64,6 +65,7 @@ export default async function LocaleLayout({
     >
       <body className={GeistSans.className}>
         <NextIntlClientProvider messages={messages}>
+          <CursorTrail />
           {children}
         </NextIntlClientProvider>
       </body>

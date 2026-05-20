@@ -5,6 +5,23 @@ import { adminApi, api, type SiteSettings, type HeadlineMetric, type SocialLink 
 import { Check, RefreshCw, Plus, X, Upload } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 
+const DEFAULT_PROJECT_TYPES = [
+  { value: 'FRACTIONAL_PM', label: 'Fractional PM' },
+  { value: 'ECOMMERCE_DELIVERY', label: 'E-Commerce Delivery' },
+  { value: 'DELIVERY_AUDIT', label: 'Delivery Audit' },
+  { value: 'DESIGN_COACHING', label: 'Design Coaching' },
+  { value: 'TEAM_SETUP', label: 'Team Setup' },
+  { value: 'OTHER', label: 'Other' },
+]
+
+const DEFAULT_BUDGET_RANGES = [
+  { value: 'UNDER_1K', label: 'Under $1,000' },
+  { value: 'FROM_1K_TO_5K', label: '$1,000 – $5,000' },
+  { value: 'FROM_5K_TO_10K', label: '$5,000 – $10,000' },
+  { value: 'FROM_10K_TO_25K', label: '$10,000 – $25,000' },
+  { value: 'ABOVE_25K', label: '$25,000+' },
+]
+
 export default function SettingsPage() {
   const t = useTranslations('admin.settings')
   const tf = useTranslations('admin.settings.fields')
@@ -38,7 +55,16 @@ export default function SettingsPage() {
 
   useEffect(() => {
     adminApi.getSettings().then((res) => {
-      if (res.data.data) setSettings(res.data.data)
+      if (res.data.data) {
+        const s = res.data.data
+        let projectTypes: { value: string; label: string }[] = []
+        let budgetRanges: { value: string; label: string }[] = []
+        try { projectTypes = JSON.parse(s.contactProjectTypesJson || '[]') } catch { /* empty */ }
+        try { budgetRanges = JSON.parse(s.contactBudgetRangesJson || '[]') } catch { /* empty */ }
+        if (!projectTypes.length) s.contactProjectTypesJson = JSON.stringify(DEFAULT_PROJECT_TYPES)
+        if (!budgetRanges.length) s.contactBudgetRangesJson = JSON.stringify(DEFAULT_BUDGET_RANGES)
+        setSettings(s)
+      }
     })
   }, [])
 
