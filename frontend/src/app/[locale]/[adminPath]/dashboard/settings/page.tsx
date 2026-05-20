@@ -88,9 +88,7 @@ export default function SettingsPage() {
       try {
         const formData = new FormData()
         formData.append('file', file)
-        const res = await api.post<{ success: boolean; data: string }>('/admin/upload', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        })
+        const res = await api.post<{ success: boolean; data: string }>('/admin/upload', formData)
         if (res.data.success && res.data.data) {
           setSettings((prev) => ({ ...prev, [key]: res.data.data }))
         }
