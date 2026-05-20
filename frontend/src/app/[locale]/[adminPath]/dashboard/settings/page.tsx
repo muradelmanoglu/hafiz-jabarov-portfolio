@@ -100,7 +100,8 @@ export default function SettingsPage() {
         if (res.data.success && res.data.data) {
           setSettings((prev) => ({ ...prev, [key]: res.data.data }))
         }
-      } catch {
+      } catch (err) {
+        console.error('Upload error:', err)
         alert('Upload failed. Please try again.')
       } finally {
         setUploading((u) => ({ ...u, [key]: false }))
