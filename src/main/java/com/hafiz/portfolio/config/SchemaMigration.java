@@ -22,7 +22,7 @@ public class SchemaMigration {
 
     private void dropConstraintIfExists(String table, String constraint) {
         try {
-            int count = jdbcTemplate.queryForObject(
+            Integer count = jdbcTemplate.queryForObject(
                 "SELECT COUNT(*) FROM information_schema.table_constraints " +
                 "WHERE table_name = ? AND constraint_name = ?",
                 Integer.class, table, constraint
