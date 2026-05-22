@@ -10,17 +10,17 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        accent: '#00F921',
-        'accent-dim': '#00C41A',
-        bg: '#0A0A0A',
-        surface: '#111111',
-        'surface-2': '#1A1A1A',
-        border: '#2A2A2A',
-        'border-2': '#333333',
-        muted: '#666666',
-        'muted-2': '#888888',
-        fg: '#FAFAFA',
-        'fg-2': '#D4D4D4',
+        accent: 'var(--accent)',
+        'accent-dim': 'var(--accent-dim)',
+        bg: 'var(--bg)',
+        surface: 'var(--surface)',
+        'surface-2': 'var(--surface-2)',
+        border: 'var(--border)',
+        'border-2': 'var(--border-2)',
+        muted: 'var(--muted)',
+        'muted-2': 'var(--muted-2)',
+        fg: 'var(--fg)',
+        'fg-2': 'var(--fg-2)',
       },
       fontFamily: {
         serif: ['var(--font-fraunces)', 'Georgia', 'serif'],

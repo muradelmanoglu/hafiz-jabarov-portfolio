@@ -56,7 +56,11 @@ export default function Navbar() {
     <nav
       className={cn(
         'fixed top-0 w-full z-50 transition-all duration-300',
-        scrolled ? 'bg-bg/50 backdrop-blur-xl' : 'bg-transparent'
+        scrolled
+          ? theme === 'light'
+            ? 'bg-white/70 backdrop-blur-xl border-b border-border'
+            : 'bg-bg/50 backdrop-blur-xl'
+          : 'bg-transparent'
       )}
     >
       <div className="container-main">
@@ -129,7 +133,7 @@ export default function Navbar() {
       </div>
 
       {isOpen && (
-        <div className="md:hidden border-t border-border bg-bg/95 backdrop-blur-xl">
+        <div className={cn('md:hidden border-t border-border backdrop-blur-xl', theme === 'light' ? 'bg-white/95' : 'bg-bg/95')}>
           <div className="container-main py-6 space-y-4">
             {navLinks.map((link) => (
               <Link
