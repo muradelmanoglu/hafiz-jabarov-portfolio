@@ -121,6 +121,7 @@ export interface SiteSettings {
   copyrightText?: string
   colophonText?: string
   customSocialLinksJson?: string
+  settingsTranslationsJson?: string
   contactProjectTypesJson?: string
   contactBudgetRangesJson?: string
   aboutTranslationsJson?: string

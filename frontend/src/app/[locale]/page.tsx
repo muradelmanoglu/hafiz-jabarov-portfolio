@@ -31,7 +31,22 @@ export default async function HomePage({ params: { locale } }: { params: { local
     fetchPublic<Company[]>('/companies'),
   ])
 
-  const s = settings ?? {}
+  const baseSettings = settings ?? {}
+  // Apply locale-specific translations over the base EN settings
+  const s: Partial<SiteSettings> = (() => {
+    if (locale === 'en' || !baseSettings.settingsTranslationsJson) return baseSettings
+    try {
+      const allTranslations = JSON.parse(baseSettings.settingsTranslationsJson)
+      const localeTranslations: Record<string, string> = allTranslations[locale] || {}
+      const merged = { ...baseSettings }
+      for (const [key, val] of Object.entries(localeTranslations)) {
+        if (val) (merged as Record<string, unknown>)[key] = val
+      }
+      return merged
+    } catch {
+      return baseSettings
+    }
+  })()
 
   return (
     <>
