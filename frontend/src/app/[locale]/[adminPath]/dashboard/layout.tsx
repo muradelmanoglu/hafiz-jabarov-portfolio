@@ -17,6 +17,7 @@ import {
   MessageSquare,
   HelpCircle,
   User,
+  Building2,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTranslations } from 'next-intl'
@@ -42,6 +43,7 @@ export default function DashboardLayout({
     { label: t('experience'), href: `${base}/experience`, icon: Briefcase },
     { label: t('education'), href: `${base}/education`, icon: GraduationCap },
     { label: t('about'), href: `${base}/about`, icon: User },
+    { label: t('companies'), href: `${base}/companies`, icon: Building2 },
     { label: t('testimonials'), href: `${base}/testimonials`, icon: MessageSquare },
     { label: t('faqs'), href: `${base}/faqs`, icon: HelpCircle },
     { label: t('submissions'), href: `${base}/messages`, icon: Mail },
