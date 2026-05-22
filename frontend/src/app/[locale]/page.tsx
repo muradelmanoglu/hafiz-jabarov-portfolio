@@ -40,7 +40,16 @@ export default async function HomePage({ params: { locale } }: { params: { local
       const localeTranslations: Record<string, string> = allTranslations[locale] || {}
       const merged = { ...baseSettings }
       for (const [key, val] of Object.entries(localeTranslations)) {
-        if (val) (merged as Record<string, unknown>)[key] = val
+        if (val && !key.startsWith('headlineMetricLabel_')) {
+          (merged as Record<string, unknown>)[key] = val
+        }
+      }
+      // Apply translated metric labels
+      if (merged.headlineMetrics && merged.headlineMetrics.length > 0) {
+        merged.headlineMetrics = merged.headlineMetrics.map((m, i) => {
+          const label = localeTranslations[`headlineMetricLabel_${i}`]
+          return label ? { ...m, label } : m
+        })
       }
       return merged
     } catch {

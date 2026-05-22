@@ -399,28 +399,64 @@ export default function SettingsPage() {
             Hero Stats
           </h2>
           <p className="text-gray-500 text-xs mb-4">The 4 numbers shown in the hero section (e.g. 7+ Years, 30+ Products)</p>
-          <div className="space-y-2 mb-4">
-            {(settings.headlineMetrics || []).map((m, i) => (
-              <div key={i} className="flex items-center gap-3 bg-gray-800 rounded-lg px-3 py-2">
-                <span className="text-white font-bold text-sm w-16 shrink-0">{m.value}</span>
-                <span className="text-gray-300 text-xs flex-1">{m.label}</span>
-                <button onClick={() => { const arr = [...(settings.headlineMetrics || [])]; arr.splice(i, 1); setSettings({ ...settings, headlineMetrics: arr }) }} className="text-gray-600 hover:text-red-400 ml-auto">✕</button>
+
+          {/* EN tab: add/remove metrics */}
+          <LangTabs />
+
+          {langTab === 'en' ? (
+            <>
+              <div className="space-y-2 mb-4">
+                {(settings.headlineMetrics || []).map((m, i) => (
+                  <div key={i} className="flex items-center gap-3 bg-gray-800 rounded-lg px-3 py-2">
+                    <span className="text-white font-bold text-sm w-16 shrink-0">{m.value}</span>
+                    <span className="text-gray-300 text-xs flex-1">{m.label}</span>
+                    <button onClick={() => { const arr = [...(settings.headlineMetrics || [])]; arr.splice(i, 1); setSettings({ ...settings, headlineMetrics: arr }) }} className="text-gray-600 hover:text-red-400 ml-auto">✕</button>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            <input value={newMetric.value} onChange={(e) => setNewMetric({ ...newMetric, value: e.target.value })} placeholder="Value (e.g. 7+)" className="admin-input text-sm" />
-            <div className="flex gap-2">
-              <input
-                value={newMetric.label}
-                onChange={(e) => setNewMetric({ ...newMetric, label: e.target.value })}
-                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (!newMetric.value.trim() || !newMetric.label.trim()) return; setSettings({ ...settings, headlineMetrics: [...(settings.headlineMetrics || []), { ...newMetric }] }); setNewMetric({ value: '', label: '' }) } }}
-                placeholder="Label (e.g. Years PM experience)"
-                className="admin-input text-sm flex-1"
-              />
-              <button onClick={() => { if (!newMetric.value.trim() || !newMetric.label.trim()) return; setSettings({ ...settings, headlineMetrics: [...(settings.headlineMetrics || []), { ...newMetric }] }); setNewMetric({ value: '', label: '' }) }} className="btn-outline px-3 text-sm">+</button>
+              <div className="grid grid-cols-2 gap-2">
+                <input value={newMetric.value} onChange={(e) => setNewMetric({ ...newMetric, value: e.target.value })} placeholder="Value (e.g. 7+)" className="admin-input text-sm" />
+                <div className="flex gap-2">
+                  <input
+                    value={newMetric.label}
+                    onChange={(e) => setNewMetric({ ...newMetric, label: e.target.value })}
+                    onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); if (!newMetric.value.trim() || !newMetric.label.trim()) return; setSettings({ ...settings, headlineMetrics: [...(settings.headlineMetrics || []), { ...newMetric }] }); setNewMetric({ value: '', label: '' }) } }}
+                    placeholder="Label (e.g. Years PM experience)"
+                    className="admin-input text-sm flex-1"
+                  />
+                  <button onClick={() => { if (!newMetric.value.trim() || !newMetric.label.trim()) return; setSettings({ ...settings, headlineMetrics: [...(settings.headlineMetrics || []), { ...newMetric }] }); setNewMetric({ value: '', label: '' }) }} className="btn-outline px-3 text-sm">+</button>
+                </div>
+              </div>
+            </>
+          ) : (
+            // AZ / RU: only translate the labels, values stay the same
+            <div className="space-y-3">
+              {(settings.headlineMetrics || []).length === 0 && (
+                <p className="text-gray-600 text-xs">First add metrics in the EN tab.</p>
+              )}
+              {(settings.headlineMetrics || []).map((m, i) => {
+                const trKey = `headlineMetricLabel_${i}`
+                const trVal = translations[langTab][trKey] || ''
+                return (
+                  <div key={i} className="flex items-center gap-3">
+                    <span className="text-white font-bold text-sm w-16 shrink-0 bg-gray-800 rounded px-2 py-2 text-center">{m.value}</span>
+                    <div className="flex-1">
+                      <p className="text-gray-600 text-xs mb-1">EN: {m.label}</p>
+                      <input
+                        value={trVal}
+                        onChange={(e) => setTranslations({
+                          ...translations,
+                          [langTab]: { ...translations[langTab], [trKey]: e.target.value },
+                        })}
+                        placeholder={`${langTab.toUpperCase()} label...`}
+                        className="admin-input text-sm"
+                      />
+                    </div>
+                  </div>
+                )
+              })}
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
