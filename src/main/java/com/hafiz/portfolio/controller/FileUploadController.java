@@ -66,7 +66,8 @@ public class FileUploadController {
                 .build();
 
         UploadedFile saved = uploadedFileRepository.save(file);
-        return ResponseEntity.ok(ApiResponse.success("/api/uploads/" + saved.getId()));
+        String url = "/api/uploads/" + saved.getId();
+        return ResponseEntity.ok(ApiResponse.<String>builder().success(true).data(url).build());
     }
 
     @GetMapping("/uploads/{id}")

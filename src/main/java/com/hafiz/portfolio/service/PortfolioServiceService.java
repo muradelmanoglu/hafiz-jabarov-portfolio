@@ -49,7 +49,7 @@ public class PortfolioServiceService {
         Service s = Service.builder()
                 .title(req.getTitle())
                 .slug(req.getSlug() != null ? req.getSlug() : toSlug(req.getTitle()))
-                .icon(req.getIcon())
+                .icon(req.getIcon() != null ? req.getIcon() : "")
                 .category(req.getCategory())
                 .shortDescription(req.getShortDescription())
                 .longDescription(req.getLongDescription())
@@ -71,7 +71,7 @@ public class PortfolioServiceService {
         Service s = getById(id);
         s.setTitle(req.getTitle());
         if (req.getSlug() != null && !req.getSlug().isBlank()) s.setSlug(req.getSlug());
-        s.setIcon(req.getIcon());
+        s.setIcon(req.getIcon() != null ? req.getIcon() : "");
         s.setCategory(req.getCategory());
         s.setShortDescription(req.getShortDescription());
         s.setLongDescription(req.getLongDescription());
