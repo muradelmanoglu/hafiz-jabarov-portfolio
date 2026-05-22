@@ -1,10 +1,42 @@
 'use client'
 
 import { ArrowRight, CalendarDays } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import { useTranslations } from 'next-intl'
+import { useRef, useEffect, useState } from 'react'
 import { Link } from '@/lib/navigation'
 import type { SiteSettings } from '@/lib/api'
+
+function parseStatValue(value: string): { prefix: string; num: number; suffix: string } | null {
+  const m = value.match(/^([^0-9]*)(\d+(?:\.\d+)?)(.*)$/)
+  if (!m) return null
+  return { prefix: m[1], num: parseFloat(m[2]), suffix: m[3] }
+}
+
+function CountUp({ value }: { value: string }) {
+  const parsed = parseStatValue(value)
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-60px' })
+  const [count, setCount] = useState(0)
+
+  useEffect(() => {
+    if (!inView || !parsed) return
+    const target = parsed.num
+    const duration = 1400
+    const startTime = Date.now()
+    const tick = () => {
+      const elapsed = Date.now() - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      const eased = 1 - Math.pow(1 - progress, 3)
+      setCount(Math.round(eased * target))
+      if (progress < 1) requestAnimationFrame(tick)
+    }
+    requestAnimationFrame(tick)
+  }, [inView]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  if (!parsed) return <>{value}</>
+  return <span ref={ref}>{parsed.prefix}{count}{parsed.suffix}</span>
+}
 
 const DEFAULT_STATS = [
   { value: '7+', labelKey: 'stats.yearsExp' },
@@ -80,7 +112,9 @@ export default function HeroSection({ settings = {} }: { settings?: Partial<Site
         >
           {stats.map((stat) => (
             <div key={stat.label}>
-              <p className="heading-serif text-3xl md:text-4xl text-fg mb-1">{stat.value}</p>
+              <p className="heading-serif text-3xl md:text-4xl text-fg mb-1">
+                <CountUp value={stat.value} />
+              </p>
               <p className="text-sm text-muted">{stat.label}</p>
             </div>
           ))}

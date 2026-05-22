@@ -1,6 +1,7 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server'
 import Navbar from '@/components/Navbar'
 import HeroSection from '@/components/sections/HeroSection'
+import BrandsSection from '@/components/sections/BrandsSection'
 import AboutSection from '@/components/sections/AboutSection'
 import FeaturedWorkSection from '@/components/sections/ProjectsSection'
 import ServicesSection from '@/components/sections/ServicesSection'
@@ -13,13 +14,13 @@ import Footer from '@/components/Footer'
 import { fetchPublic } from '@/lib/server-api'
 import type {
   SiteSettings, CaseStudy, PortfolioService, Experience,
-  Skill, Testimonial, FAQ,
+  Skill, Testimonial, FAQ, Company,
 } from '@/lib/api'
 
 export default async function HomePage({ params: { locale } }: { params: { locale: string } }) {
   setRequestLocale(locale)
 
-  const [settings, caseStudies, services, experiences, skills, testimonials, faqs] = await Promise.all([
+  const [settings, caseStudies, services, experiences, skills, testimonials, faqs, companies] = await Promise.all([
     fetchPublic<Partial<SiteSettings>>('/settings'),
     fetchPublic<CaseStudy[]>('/case-studies/featured'),
     fetchPublic<PortfolioService[]>(`/services?lang=${locale}`),
@@ -27,6 +28,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
     fetchPublic<Skill[]>('/skills'),
     fetchPublic<Testimonial[]>('/testimonials'),
     fetchPublic<FAQ[]>(`/faqs?page=HOME&lang=${locale}`),
+    fetchPublic<Company[]>('/companies'),
   ])
 
   const s = settings ?? {}
@@ -36,6 +38,7 @@ export default async function HomePage({ params: { locale } }: { params: { local
       <Navbar />
       <main>
         <HeroSection settings={s} />
+        <BrandsSection companies={companies ?? []} />
         <AboutSection settings={s} />
         <FeaturedWorkSection caseStudies={caseStudies ?? []} />
         <ServicesSection services={services ?? []} />

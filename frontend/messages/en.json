@@ -27,6 +27,9 @@
       "teams": "Teams led"
     }
   },
+  "brands": {
+    "label": "Brands & partners I've worked with"
+  },
   "about": {
     "label": "About",
     "heading": "PM who's actually been in the room",

@@ -27,6 +27,9 @@
       "teams": "İdarə olunan komanda"
     }
   },
+  "brands": {
+    "label": "Əməkdaşlıq etdiyim brendlər"
+  },
   "about": {
     "label": "Haqqında",
     "heading": "Gerçəkdən içindən keçmiş PM",
