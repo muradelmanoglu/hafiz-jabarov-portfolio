@@ -133,6 +133,8 @@
       "emailPlaceholder": "siz@sirket.com",
       "company": "Şirkət",
       "companyPlaceholder": "İstəyə bağlı",
+      "phone": "Telefon",
+      "phonePlaceholder": "+994 50 123 45 67",
       "projectType": "Layihə növü",
       "projectTypePlaceholder": "Seçin...",
       "budgetRange": "Büdcə aralığı",

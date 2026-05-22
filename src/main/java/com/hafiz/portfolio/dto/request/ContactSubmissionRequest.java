@@ -22,6 +22,9 @@ public class ContactSubmissionRequest {
 
     private String budgetRange;
 
+    @Size(max = 30)
+    private String phone;
+
     @NotBlank
     @Size(min = 20, max = 1000)
     private String message;

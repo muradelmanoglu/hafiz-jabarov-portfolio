@@ -13,6 +13,7 @@ type FormData = {
   name: string
   email: string
   company?: string
+  phone?: string
   projectType: string
   budgetRange?: string
   message: string
@@ -40,6 +41,7 @@ export default function ContactSection({ settings = {} }: { settings?: Partial<S
     name: z.string().min(2, t('validation.nameMin')).max(100),
     email: z.string().email(t('validation.emailInvalid')),
     company: z.string().max(100).optional(),
+    phone: z.string().max(30).optional(),
     projectType: z.string().min(1, t('validation.projectTypeRequired')),
     budgetRange: z.string().optional(),
     message: z.string().min(20, t('validation.messageMin')).max(1000),
@@ -201,9 +203,15 @@ export default function ContactSection({ settings = {} }: { settings?: Partial<S
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm text-muted-2 mb-1.5">{t('form.company')}</label>
-                  <input {...register('company')} className="input-field" placeholder={t('form.companyPlaceholder')} />
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm text-muted-2 mb-1.5">{t('form.company')}</label>
+                    <input {...register('company')} className="input-field" placeholder={t('form.companyPlaceholder')} />
+                  </div>
+                  <div>
+                    <label className="block text-sm text-muted-2 mb-1.5">{t('form.phone')}</label>
+                    <input {...register('phone')} type="tel" className="input-field" placeholder={t('form.phonePlaceholder')} />
+                  </div>
                 </div>
 
                 <div>

@@ -21,6 +21,7 @@ public class ContactSubmission {
     private String email;
 
     private String company;
+    private String phone;
 
     @Column(nullable = false)
     private String projectType;

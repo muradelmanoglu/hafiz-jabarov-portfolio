@@ -133,6 +133,8 @@
       "emailPlaceholder": "you@company.com",
       "company": "Компания",
       "companyPlaceholder": "Необязательно",
+      "phone": "Телефон",
+      "phonePlaceholder": "+7 900 123 45 67",
       "projectType": "Тип проекта",
       "projectTypePlaceholder": "Выберите...",
       "budgetRange": "Бюджет",

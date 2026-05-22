@@ -133,6 +133,8 @@
       "emailPlaceholder": "you@company.com",
       "company": "Company",
       "companyPlaceholder": "Optional",
+      "phone": "Phone",
+      "phonePlaceholder": "+1 234 567 8900",
       "projectType": "Project type",
       "projectTypePlaceholder": "Select...",
       "budgetRange": "Budget range",

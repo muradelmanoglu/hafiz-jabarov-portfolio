@@ -25,6 +25,7 @@ public class ContactSubmissionService {
                 .name(req.getName())
                 .email(req.getEmail())
                 .company(req.getCompany())
+                .phone(req.getPhone())
                 .projectType(req.getProjectType())
                 .budgetRange(req.getBudgetRange())
                 .message(req.getMessage())
