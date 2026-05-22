@@ -62,10 +62,8 @@ export default function AboutPageClient({
             {resumeUrl && (
               <a
                 href={resumeUrl}
-                download={resumeUrl.startsWith('data:') ? 'CV.pdf' : undefined}
-                target={resumeUrl.startsWith('data:') ? undefined : '_blank'}
-                rel={resumeUrl.startsWith('data:') ? undefined : 'noopener noreferrer'}
-                className="btn-outline text-sm"
+                download="CV.pdf"
+                className="btn-accent text-sm"
               >
                 <Download size={15} /> {t('downloadCv')}
               </a>

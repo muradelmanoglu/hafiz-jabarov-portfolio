@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, FileDown } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useTranslations, useLocale } from 'next-intl'
 import { Link } from '@/lib/navigation'
@@ -44,10 +44,20 @@ export default function AboutSection({ settings = {} }: { settings?: Partial<Sit
               <p>{p2}</p>
               <p>{p3}</p>
             </div>
-            <div className="mt-8">
+            <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/about" className="btn-outline text-sm">
                 {t('cta')} <ArrowRight size={14} />
               </Link>
+              {settings.resumeUrl && (
+                <a
+                  href={settings.resumeUrl}
+                  download
+                  className="btn-accent text-sm inline-flex items-center gap-2"
+                >
+                  <FileDown size={15} />
+                  {t('downloadCV')}
+                </a>
+              )}
             </div>
           </motion.div>
 
