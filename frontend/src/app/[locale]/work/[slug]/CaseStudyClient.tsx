@@ -6,9 +6,13 @@ import { Link } from '@/lib/navigation'
 import { ArrowLeft, ExternalLink, Users, Calendar } from 'lucide-react'
 import type { CaseStudy } from '@/lib/api'
 
+const AZ_MONTHS = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'İyun', 'İyul', 'Avq', 'Sen', 'Okt', 'Noy', 'Dek']
+
 function formatDate(d: string, locale: string) {
-  const localeMap: Record<string, string> = { en: 'en-US', az: 'az-Latn-AZ', ru: 'ru-RU' }
-  return new Date(d).toLocaleDateString(localeMap[locale] || 'en-US', { month: 'short', year: 'numeric' })
+  const date = new Date(d)
+  if (locale === 'az') return `${AZ_MONTHS[date.getMonth()]} ${date.getFullYear()}`
+  const jsLocale = locale === 'ru' ? 'ru-RU' : 'en-US'
+  return date.toLocaleDateString(jsLocale, { month: 'short', year: 'numeric' })
 }
 
 export default function CaseStudyClient({ cs, locale }: { cs: CaseStudy; locale: string }) {

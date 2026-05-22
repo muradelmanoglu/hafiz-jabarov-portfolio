@@ -6,11 +6,21 @@ import { useTranslations } from 'next-intl'
 import { Link } from '@/lib/navigation'
 import type { Experience, Education, Skill } from '@/lib/api'
 
+const AZ_MONTHS = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'İyun', 'İyul', 'Avq', 'Sen', 'Okt', 'Noy', 'Dek']
+
+function fmtDate(d: string, locale?: string): string {
+  const date = new Date(d)
+  const year = date.getFullYear()
+  const month = date.getMonth()
+  if (locale === 'az') return `${AZ_MONTHS[month]} ${year}`
+  const jsLocale = locale === 'ru' ? 'ru-RU' : 'en-US'
+  return date.toLocaleDateString(jsLocale, { month: 'short', year: 'numeric' })
+}
+
 function fmtPeriod(start: string, end?: string, current?: boolean, locale?: string, presentText?: string) {
-  const localeMap: Record<string, string> = { en: 'en-US', az: 'az-Latn-AZ', ru: 'ru-RU' }
-  const fmt = (d: string) =>
-    new Date(d).toLocaleDateString(localeMap[locale || 'en'] || 'en-US', { month: 'short', year: 'numeric' })
-  return `${fmt(start)} — ${current ? (presentText || 'Present') : end ? fmt(end) : ''}`
+  const s = fmtDate(start, locale)
+  const e = current ? (presentText || 'Present') : end ? fmtDate(end, locale) : ''
+  return `${s} — ${e}`
 }
 
 interface Props {

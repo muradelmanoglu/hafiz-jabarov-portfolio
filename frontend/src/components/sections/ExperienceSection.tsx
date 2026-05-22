@@ -8,17 +8,18 @@ export default function ExperienceSection({ experiences = [] }: { experiences?: 
   const t = useTranslations('experience')
   const locale = useLocale()
 
-  const localeMap: Record<string, string> = { en: 'en-US', az: 'az-Latn-AZ', ru: 'ru-RU' }
+  const AZ_MONTHS = ['Yan', 'Fev', 'Mar', 'Apr', 'May', 'İyun', 'İyul', 'Avq', 'Sen', 'Okt', 'Noy', 'Dek']
+
+  function fmtDate(d: string): string {
+    const [year, month] = d.split('-')
+    const date = new Date(Number(year), Number(month) - 1)
+    if (locale === 'az') return `${AZ_MONTHS[date.getMonth()]} ${date.getFullYear()}`
+    const jsLocale = locale === 'ru' ? 'ru-RU' : 'en-US'
+    return date.toLocaleDateString(jsLocale, { month: 'short', year: 'numeric' })
+  }
 
   function formatPeriod(startDate: string, endDate?: string, current?: boolean): string {
-    const fmt = (d: string) => {
-      const [year, month] = d.split('-')
-      return new Date(Number(year), Number(month) - 1).toLocaleDateString(
-        localeMap[locale] || 'en-US',
-        { month: 'short', year: 'numeric' }
-      )
-    }
-    return `${fmt(startDate)} — ${current ? t('present') : endDate ? fmt(endDate) : ''}`
+    return `${fmtDate(startDate)} — ${current ? t('present') : endDate ? fmtDate(endDate) : ''}`
   }
 
   return (
