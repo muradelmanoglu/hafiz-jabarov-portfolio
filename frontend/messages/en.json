@@ -152,6 +152,7 @@
       "nameMin": "Name must be at least 2 characters",
       "emailInvalid": "Please enter a valid email",
       "projectTypeRequired": "Please select a project type",
+      "phoneRequired": "Phone number is required",
       "messageMin": "Message must be at least 20 characters"
     },
     "projectTypes": {

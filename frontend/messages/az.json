@@ -152,6 +152,7 @@
       "nameMin": "Ad ən azı 2 simvol olmalıdır",
       "emailInvalid": "Düzgün e-poçt ünvanı daxil edin",
       "projectTypeRequired": "Layihə növü seçin",
+      "phoneRequired": "Telefon nömrəsi tələb olunur",
       "messageMin": "Mesaj ən azı 20 simvol olmalıdır"
     },
     "projectTypes": {
