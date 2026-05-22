@@ -64,6 +64,37 @@ export default function CaseStudiesPage() {
   const handleSave = async () => {
     if (!editing) return
     setSaveError(null)
+
+    // Client-side validation — switch to the tab that has missing fields
+    const missingBasic = []
+    if (!editing.title?.trim()) missingBasic.push('Title')
+    if (!editing.role?.trim()) missingBasic.push('Role')
+    if (!editing.startDate) missingBasic.push('Start date')
+    if (!editing.summary?.trim()) missingBasic.push('Summary')
+    if (missingBasic.length) {
+      setActiveTab('basic')
+      setSaveError(`"Əsas" tabda məcburi sahələr boşdur: ${missingBasic.join(', ')}`)
+      return
+    }
+
+    const missingContent = []
+    if (!editing.problem?.trim()) missingContent.push('Problem')
+    if (!editing.myRole?.trim()) missingContent.push('My Role')
+    if (!editing.approach?.trim()) missingContent.push('Approach')
+    if (!editing.outcome?.trim()) missingContent.push('Outcome')
+    if (missingContent.length) {
+      setActiveTab('content')
+      setContentLangTab('en')
+      setSaveError(`"Məzmun" tabda məcburi sahələr boşdur: ${missingContent.join(', ')}`)
+      return
+    }
+
+    if (!editing.domain?.trim()) {
+      setActiveTab('meta')
+      setSaveError('"Media & Meta" tabda Domain/Industry sahəsi məcburidir')
+      return
+    }
+
     setSaving(true)
     try {
       if (editingId) {
