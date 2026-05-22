@@ -2,11 +2,12 @@
 
 import { usePathname, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { Menu, X, Globe } from 'lucide-react'
+import { Menu, X, Globe, Sun, Moon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useTranslations, useLocale } from 'next-intl'
 import { Link } from '@/lib/navigation'
 import { routing } from '@/i18n/routing'
+import { useTheme } from '@/components/ThemeProvider'
 
 const LOCALE_LABELS: Record<string, string> = { en: 'EN', az: 'AZ', ru: 'RU' }
 
@@ -15,6 +16,7 @@ export default function Navbar() {
   const locale = useLocale()
   const pathname = usePathname()
   const router = useRouter()
+  const { theme, toggle: toggleTheme } = useTheme()
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [langOpen, setLangOpen] = useState(false)
@@ -82,6 +84,13 @@ export default function Navbar() {
             <Link href="/contact" className="btn-accent text-xs py-2 px-5">
               {t('letsTalk')}
             </Link>
+            <button
+              onClick={toggleTheme}
+              className="flex items-center justify-center w-8 h-8 rounded-md border border-border hover:border-border-2 text-muted hover:text-fg transition-colors"
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+            </button>
             <div className="relative">
               <button
                 onClick={() => setLangOpen(!langOpen)}
@@ -137,7 +146,7 @@ export default function Navbar() {
             <Link href="/contact" className="btn-accent inline-flex mt-2 text-sm">
               {t('letsTalk')}
             </Link>
-            <div className="flex gap-2 pt-2 border-t border-border">
+            <div className="flex items-center gap-2 pt-2 border-t border-border">
               {(routing.locales as readonly string[]).map((loc) => (
                 <button
                   key={loc}
@@ -152,6 +161,13 @@ export default function Navbar() {
                   {LOCALE_LABELS[loc]}
                 </button>
               ))}
+              <button
+                onClick={toggleTheme}
+                className="ml-auto flex items-center justify-center w-8 h-8 rounded-md border border-border text-muted hover:text-fg transition-colors"
+                aria-label="Toggle theme"
+              >
+                {theme === 'dark' ? <Sun size={15} /> : <Moon size={15} />}
+              </button>
             </div>
           </div>
         </div>

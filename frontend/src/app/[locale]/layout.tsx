@@ -7,6 +7,7 @@ import { getMessages, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing } from '@/i18n/routing'
 import CursorTrail from '@/components/CursorTrail'
+import { ThemeProvider } from '@/components/ThemeProvider'
 import '../globals.css'
 
 const fraunces = Fraunces({
@@ -63,10 +64,16 @@ export default async function LocaleLayout({
       lang={locale}
       className={`dark ${fraunces.variable} ${GeistSans.variable} ${GeistMono.variable}`}
     >
+      <head>
+        {/* Prevent flash of wrong theme */}
+        <script dangerouslySetInnerHTML={{ __html: `(function(){var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.classList.remove('dark');document.documentElement.classList.add('light');}})();` }} />
+      </head>
       <body className={GeistSans.className}>
         <NextIntlClientProvider messages={messages}>
-          <CursorTrail />
-          {children}
+          <ThemeProvider>
+            <CursorTrail />
+            {children}
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>

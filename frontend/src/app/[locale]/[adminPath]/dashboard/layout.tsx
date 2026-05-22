@@ -60,7 +60,7 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen flex" style={{ backgroundColor: 'var(--bg)' }}>
+    <div className="force-dark min-h-screen flex" style={{ backgroundColor: 'var(--bg)' }}>
       <aside
         className="w-60 shrink-0 flex flex-col border-r"
         style={{ backgroundColor: 'var(--surface)', borderColor: 'var(--border)' }}
