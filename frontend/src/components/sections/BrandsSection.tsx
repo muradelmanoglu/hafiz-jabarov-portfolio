@@ -11,8 +11,9 @@ export default function BrandsSection({ companies = [] }: { companies?: Company[
   const logos = companies.filter((c) => c.logoUrl)
   if (logos.length === 0) return null
 
-  // Duplicate for seamless marquee loop
-  const track = [...logos, ...logos]
+  // Repeat enough times so the strip is always wider than the viewport
+  const repeat = Math.max(4, Math.ceil(20 / logos.length))
+  const track = Array.from({ length: repeat }, () => logos).flat()
 
   return (
     <section className="border-t border-border py-10 overflow-hidden">
@@ -27,17 +28,8 @@ export default function BrandsSection({ companies = [] }: { companies?: Company[
         </motion.p>
       </div>
 
-      <div className="relative">
-        <motion.div
-          className="flex gap-12 items-center"
-          animate={{ x: ['0%', '-50%'] }}
-          transition={{
-            duration: logos.length * 3,
-            ease: 'linear',
-            repeat: Infinity,
-          }}
-          style={{ width: 'max-content' }}
-        >
+      <div className="relative w-full overflow-hidden">
+        <div className="flex w-max animate-marquee gap-12 items-center">
           {track.map((company, i) => (
             <div
               key={`${company.id}-${i}`}
@@ -60,10 +52,7 @@ export default function BrandsSection({ companies = [] }: { companies?: Company[
                   />
                 </a>
               ) : (
-                <div
-                  className="w-full h-full relative opacity-50"
-                  title={company.name}
-                >
+                <div className="w-full h-full relative opacity-50" title={company.name}>
                   <Image
                     src={company.logoUrl!}
                     alt={company.name}
@@ -75,7 +64,7 @@ export default function BrandsSection({ companies = [] }: { companies?: Company[
               )}
             </div>
           ))}
-        </motion.div>
+        </div>
       </div>
     </section>
   )

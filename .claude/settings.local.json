@@ -31,7 +31,8 @@
       "PowerShell(Get-Process -Id 31468)",
       "PowerShell(Get-Process | Where-Object { $_.Id -eq 31468 })",
       "Bash(xargs ls *)",
-      "Bash(awk '{print $NF}')"
+      "Bash(awk '{print $NF}')",
+      "mcp__Claude_in_Chrome__tabs_context_mcp"
     ]
   }
 }
